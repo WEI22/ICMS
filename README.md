@@ -5,6 +5,7 @@ Intelligence Crop Monitoring System
 
 1. Train custom datasets [link](https://medium.com/analytics-vidhya/train-a-custom-yolov4-tiny-object-detector-using-google-colab-b58be08c9593)
 2. Convert to tensorflow framework using [tensorflow-yolov4-tflite](https://github.com/hunglc007/tensorflow-yolov4-tflite)
+3. Copy the corrected version of [utils.py](pest_detection/utils.py) to ./tensorflow-yolov4-tflite/core/
 
 ## Useful commands
 ```
