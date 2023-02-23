@@ -1,0 +1,327 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- mobile metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <!-- site metas -->
+    <title>ICMS</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <!-- style css -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- Responsive-->
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <!-- fevicon -->
+    <link rel="icon" href="{% static 'images/fevicon.png' %}" type="image/gif" />
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/jquery.mCustomScrollbar.min.css' %}">
+    <!-- Tweaks for older IEs-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+</head>
+<!-- body -->
+
+
+
+<body class="main-layout ">
+    <!-- base -->
+        <header>
+        <!-- base inner -->
+        <div class="header">
+            <div class="container">
+                {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                            {{ message }}
+                    </div>
+                {% endfor %}
+                {% endif %}
+                <div class="row">
+                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col logo_section">
+<!--                        TODO: move up-->
+                        <div class="full">
+                            <div class="center-desk">
+                                <div class="logo">
+                                    <a href="{% url 'web-home' %}"><img src="{% static 'images/logo1.png' %}" alt="#"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10">
+                        <div class="location_icon_bottum_tt">
+                            <ul>
+                                <li><img src="{% static 'icon/loc1.png' %}" style="font-size: 20px;"/>Universiti Malaya</li>
+<!--                                <li><img src="{% static 'icon/email1.png' %}" />braheem69420@gmail.com</li>-->
+                                {% if user.is_authenticated %}
+                                    <li>
+                                        <i class="fa fa-user" style="font-size: 20px;"></i>
+                                        <a class="nav__item nav-link" href="{% url 'web-profile' %}" style="display: inline;color:rgb(255, 255, 255); font-size: 25px; " >{{ user.username }}</a>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-right-from-bracket" style="font-size:20px;"></i>
+                                        <a class="nav__item nav-link" href="{% url 'web-logout' %}" style="display: inline;color:rgb(255, 255, 255); font-size: 20px;" >Logout</a>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        <a class="nav__item nav-link" href="{% url 'web-create-account' %}" style="font-size: 20px;color:rgb(255, 255, 255);" >Register</a>
+                                    </li>
+                                    <li>
+                                        <a class="nav__item nav-link" href="{% url 'web-login' %}" style="font-size: 20px;color:rgb(255, 255, 255);" >Login</a>
+                                    </li>
+<!--                                    <a href="{% url 'web-login' %}" ><button class="form__button" type="login">Log in/ Sign up</button></a>-->
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 location_icon_bottum">
+                       <div class="row">
+                            <div class="col-md-10 ">
+                                <div class="menu-area">
+                                    <div class="limit-box">
+                                        <nav class="main-menu">
+                                            <ul class="menu-area-main">
+                                                <li class="active"> <a href="{% url 'web-home' %}">Home</a> </li>
+                                                <li><a href="#about">About Us</a> </li>
+                                                <li><a href="{% url 'web-common-disease' %}">Common Pests</a></li>
+                                                <li><a href="#hworks">How It Works</a></li>
+                                                {% if user.is_authenticated %}
+                                                    <li><a href="{% url 'web-upload-data' %}">Upload Data</a></li>
+<!--                                                TODO: remove upload data, only available after login-->
+                                                {% else %}
+                                                    <li><a href="{% url 'web-login' %}">Upload Data</a></li>
+                                                {% endif %}
+                                                <li><a href="#contact">Contact Us</a></li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                       </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--        TODO: message box-->
+        <!-- end base inner -->
+    </header>
+
+    <div id="article1" class="about" style="padding-top: 60px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 co-sm-l2"> 
+                    <div class="about_box">
+                        <h2>5 most Common Plant Pests & Suggested Solutions<br><strong class="black">By ICMS</strong></h2>
+                        <p>Healthy plants are able to tolerate a few pests, but if too many bugs decide to take up residence on your plants, most are easily controlled with simple, safe solutions. The first step is to know exactly what pests you’re dealing with.
+                            <br><br>Here are 5 of the most common plant pests, and how you can keep them in check. ICMS is here to help!</p>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 co-sm-l2">
+                    <div class="article1_img">
+                        <figure><img src="{% static 'images/about2.png' %}" alt="img" /></figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- product -->
+    <div id="product" class="product">
+        <div class="container">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="title">
+                            <h2>Pest Species <strong class="black"> Covered</strong></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                            <div class="product_box">
+                                <figure><img src="{% static 'images/product_img1.jpg' %}" alt="#" />
+                                    <h3>Grasshoper </h3></figure>
+                            </div>
+                        </div>
+                        <div class="col-xl-7 col-lg-6 col-md-6 co-sm-l2">
+                            <div class="product_box">
+                            <h2><b><u>Grasshoppers</u></b> are a common garden pest that, in large numbers, can devastate entire crops. 
+                                If grasshoppers are targeting plants in your garden, consider dusting the leaves and stems of those plants with <b>all-purpose flour
+                                 or kaolin clay,</b> 
+                                which will stick to the insects’ mouthparts and render them unable to eat.
+                                <br><br> If your grasshopper numbers are still out of control,
+                                you can try <b>Chlorpyrifos + Bifenthrin, or Chlorpyrifos + Zeta-cypermethrin.</b>
+                                <br><br>
+                                You can also watch 
+                                <a href="https://www.youtube.com/watch?v=4Ah2DyEyaKw&ab_channel=Gardenerd"> <u>this youtube video</u></a> to learn more on how 
+                                to get rid of grasshoper at your garden!<br><br><br><br></div>
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xl-7 col-lg-6 col-md-6 co-sm-l2">
+                            <div class="about_box"></div>
+                            <h2><b><u>Whiteflies</u></b> are yet another type of sap-sucking pest and a small numbers are relatively harmless but large infestations can cause yellow or
+                                 dry leaves that may fall off the plants. Like other sap-sucking pests, the 
+                                sweet substance created by whiteflies attracts ants and sooty mold. <br><br>To control whiteflies, try <b>sticky traps and insecticidal soap or neem oil</b>. 
+                                <br><br><a href="https://www.youtube.com/watch?v=EmAfkwATaRc&ab_channel=ADallasBackyardGarden"> <u>Watch this youtube video</u></a> to learn more on how 
+                                to learn how to make yellow sticky traps at home for free!<br><br><br><br>
+                            </h2>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                            <div class="product_box">
+                                <figure><img src="{% static 'images/pest4.jpg' %}" alt="#" />
+                                    <h3>Whiteflies  </h3>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                            <div class="product_box">
+                                <figure><img src="{% static 'images/pest3.jpg' %}" alt="#" />
+                                    <h3>Stem Borer  </h3>
+                                </figure>
+                            </div>
+                        </div>
+                        <div class="col-xl-7 col-lg-6 col-md-6 co-sm-l2">
+                            <div class="about_box"></div>
+                            <h2><b><u>Stem borers</u></b> can destroy rice at any stage of the plant from seedling to maturity.
+                                They feed upon tillers and causes deadhearts or drying of
+                                 the central tiller, during vegetative stage; and causes whiteheads at reproductive stage.
+                                <br><br>To confirm stem borer damage, visually inspect rice crop for deadhearts in the vegetative stages and whiteheads in reproductive stages.
+                                 Stems can be pulled and dissected for larvae and pupae for confirmation of stem borer damage.<br> <b>insecticide chlorantraniliprole 0.4% G</b>
+                                 is a great in treating stem borers.
+                                <br> <br>To learn more about stem borers,
+                                <a href="http://www.knowledgebank.irri.org/training/fact-sheets/pest-management/insects/item/stem-borer"> <u>this article</u></a> to learn more !<br><br><br><br>
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xl-7 col-lg-6 col-md-6 co-sm-l2">
+                            <div class="about_box"></div>
+                            <h2><b><i>Mealybugs</i></b> are common both indoors and outdoors, where they cause stunted growth, withering and yellowing of plants. 
+                                The pests are easily recognized by the cottony protective covering. 
+                                <br><br>According to 
+                                <a href="https://www.youtube.com/watch?v=BmLNAPT0gxw&ab_channel=GARDENTIPS"> <u>this youtube video</u></a> , <b>insecticidal soaps, horticultural oil, or neem oil insecticides</b> applied directly on mealybugs can provide some suppression
+                                andlight infestations on indoor plants can also be removed with a  <b>toothpick or a cotton swab dipped in rubbing alcohol</b>.
+                                <br><br><br><br>
+                            </h2>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                            <div class="product_box">
+                                <figure><img src="{% static 'images/pest5.jpg' %}" alt="#" />
+                                    <h3>Mealybugs  </h3>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                            <div class="product_box">
+                                <figure><img src="{% static 'images/pest6.jpg' %}" alt="#" />
+                                    <h3>Cutworms </h3>
+                                </figure>
+                            </div>
+                        </div>
+                        <div class="col-xl-7 col-lg-6 col-md-6 co-sm-l2">
+                            <div class="about_box"></div>
+                            <h2><b><i>Cutworms</i></b> are the larval stage of certain moths. The destructive pests hide under leaves or other plant debris, 
+                                emerging to lay masses of eggs on plants. They eat nearly anything in their paths, often cutting through stems of young plants at 
+                                ground level. <br><br>You can <b>pick off the pests by hand</b> in late afternoon or evening and <b>create barriers with cardboard collars or gritty substances</b> like eggshells, 
+                                coffee grounds, or diatomaceous earth. <br><br> If there is a severe problem, pesticide can be applied to the stems or leaves (for climbing cutworms). It is best to apply product in the evening, before the cutworms come out for feeding. 
+                                Examples of common pesticides effective against cutworms are <b>carbaryl, cyfluthrin and permethrin.</b>
+                                Watch <a href="https://www.youtube.com/watch?v=4Ah2DyEyaKw&ab_channel=Gardenerd"> <u>this youtube video</u></a> to learn more!<br><br><br><br>
+                            </h2>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--  footer -->
+    <footr>
+        <div class="footer top_layer ">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-xl-2 col-lg-3 col-md-6 col-sm-12">
+                        <div class="address">
+                            <p> <img src="{% static 'images/logo1.png' %}" alt="logo" /> </p>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                        <div class="address">
+                            <h3>Team Members</h3>
+                            <ul class="Links_footer"> 
+                                <li><img src="{% static 'icon/3.png' %}" alt="#" /> <a href="#">Lim Hong Wei</a> </li>
+                                <li><img src="{% static 'icon/3.png' %}" alt="#" /> <a href="#">Khaw Lin Koon</a> </li>
+                                <li><img src="{% static 'icon/3.png' %}" alt="#" /> <a href="#">Tan Xin Xiu</a> </li>
+                                <li><img src="{% static 'icon/3.png' %}" alt="#" /> <a href="#">Chin Kai Li</a> </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                        <div class="address">
+                            <h3>Subcribe email</h3>
+                            <p>Get notified for the latest updates & features! </p>
+                            <input class="form-control" placeholder="Your Email" type="type" name="Your Email">
+                            <button class="submit-btn">Submit</button>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-3 col-md-6 col-sm-12">
+                        <div class="address">
+                            <h3>Contact Us</h3>
+
+                            <ul class="loca">
+                                <li>
+                                    <a href="#"><img src="{% static 'icon/loc.png' %}" alt="#" /></a>   Universiti Malaya
+                                    <br>   Malaysia </li>
+                                <li>
+                                    <a href="#"><img src="{% static 'icon/email.png' %}" alt="#" /></a>braheem69420@gmail.com</li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+     
+        <div class="copyright">
+            <div class="container">
+                <p><b>--- Integrated Design Project (IDP) 2022 by ICMS for 
+                     <a href="https://ee.um.edu.my/"> Department of Electrical Engineering, Universiti Malaya</b></a> ---</p>
+           
+        </div>
+        </div>
+    </footr>
+
+    <!-- end footer -->
