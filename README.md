@@ -29,6 +29,20 @@ To launch server:
 python manage.py runserver
 ```
 
+# GUI
+
+Make sure PyQt5, Pillow, passlib has been installed
+
+```
+pip install PyQt5 passlib Pillow
+```
+
+To launch:
+
+```
+python main.py
+```
+
 # Credits
 
 ## References
