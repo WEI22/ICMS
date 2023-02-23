@@ -15,6 +15,20 @@ python detect.py --weights ./checkpoints/yolov4-tiny-416 --size 416 --model yolo
 ```
 # SSD (Crop disease)
 
+# Website
+
+Make sure Django has been installed
+
+```
+pip install Django
+```
+
+To launch server:
+
+```
+python manage.py runserver
+```
+
 # Credits
 
 ## References
