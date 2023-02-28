@@ -14,7 +14,10 @@ python save_model.py --weights ./data/yolov4-tiny.weights --output ./checkpoints
 python detect.py --weights ./checkpoints/yolov4-tiny-416 --size 416 --model yolov4 --image ./data/kite.jpg --tiny
 
 ```
-# SSD (Crop disease)
+# MobileNet SSD v2 (Crop disease)
+
+1. Train custom datasets [link](https://medium.com/analytics-vidhya/training-a-model-for-custom-object-detection-tf-2-x-on-google-colab-4507f2cc6b80#6dfc)
+2. Deploy the model (In progress)
 
 # Website
 
@@ -50,6 +53,9 @@ python main.py
 * [TRAIN A CUSTOM YOLOv4-tiny OBJECT DETECTOR USING GOOGLE COLAB](https://medium.com/analytics-vidhya/train-a-custom-yolov4-tiny-object-detector-using-google-colab-b58be08c9593)
 * [darknet](https://github.com/AlexeyAB/darknet#yolo-v4-in-other-frameworks)
 * [tensorflow-yolov4-tflite](https://github.com/hunglc007/tensorflow-yolov4-tflite)
+* [Training a model for custom object detection (TF 2.x) on Google Colab](https://medium.com/analytics-vidhya/training-a-model-for-custom-object-detection-tf-2-x-on-google-colab-4507f2cc6b80#6dfc)
+* [Tensorflow Object Detection API](https://github.com/tensorflow/models/)
 
 ## Datasets
 * [yolo-custome-925](https://universe.roboflow.com/nirmani/yolo-custome-925)
+* [PlantDoc](https://universe.roboflow.com/joseph-nelson/plantdoc)
