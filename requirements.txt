@@ -4,3 +4,4 @@ Django
 PyQt5
 Pillow
 passlib
+easydict
