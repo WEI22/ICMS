@@ -3,6 +3,8 @@ Intelligence Crop Monitoring System
 
 # Yolo (Pest detection)
 
+Colab: [link](https://colab.research.google.com/drive/1s9fJ6iinkrNUkYxBil2mZuapegFuX0I7?usp=sharing)
+
 1. Train custom datasets [link](https://medium.com/analytics-vidhya/train-a-custom-yolov4-tiny-object-detector-using-google-colab-b58be08c9593)
 2. Convert to tensorflow framework using [tensorflow-yolov4-tflite](https://github.com/hunglc007/tensorflow-yolov4-tflite)
 3. Copy the corrected version of [utils.py](pest_detection/utils.py) to ./tensorflow-yolov4-tflite/core/
@@ -15,6 +17,10 @@ python detect.py --weights ./checkpoints/yolov4-tiny-416 --size 416 --model yolo
 
 ```
 # MobileNet SSD v2 (Crop disease)
+
+Colab:
+1. [Yolo](https://colab.research.google.com/drive/1x9S9S_i2aMch_nu5KkL-a_TUmHIQCZhq?usp=sharing)
+2. [SSD](https://colab.research.google.com/drive/1LlZ4-69XQk1XzIrjd7hI5QX1RCxKdbg-?usp=sharing)
 
 1. Train custom datasets [link](https://medium.com/analytics-vidhya/training-a-model-for-custom-object-detection-tf-2-x-on-google-colab-4507f2cc6b80#6dfc)
 2. Deploy the model (In progress)
