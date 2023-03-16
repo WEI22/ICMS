@@ -6,6 +6,10 @@ if len(physical_devices) > 0:
     tf.config.experimental.set_memory_growth(physical_devices[0], True)
 from absl import app, flags, logging
 from absl.flags import FLAGS
+
+import sys
+sys.path.insert(0, r"C:\Users\User\Documents\UM\Year 3\Sem 1\KIX2001\Crop Monitoring System\tensorflow-yolov4-tflite")
+
 import core.utils as utils
 from core.yolov4 import filter_boxes
 from tensorflow.python.saved_model import tag_constants
