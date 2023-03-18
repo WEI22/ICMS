@@ -8,7 +8,7 @@ from absl import app, flags, logging
 from absl.flags import FLAGS
 
 import sys
-sys.path.insert(0, r"C:\Users\User\Documents\UM\Year 3\Sem 1\KIX2001\Crop Monitoring System\tensorflow-yolov4-tflite")
+sys.path.insert(0, r"/home/pi/ICMS/tools/tensorflow-yolov4-tflite")
 
 import core.utils as utils
 from core.yolov4 import filter_boxes
@@ -21,7 +21,7 @@ def main(_argv):
 
     vid = cv2.VideoCapture(0)
 
-    saved_model_loaded = tf.saved_model.load(r"C:\Users\User\Documents\UM\Year 3\Sem 1\KIX2001\Crop Monitoring System\pest_detection\yolov4_tiny\checkpoints", tags=[tag_constants.SERVING])
+    saved_model_loaded = tf.saved_model.load(r"/home/pi/ICMS/pest_detection/checkpoints", tags=[tag_constants.SERVING])
     infer = saved_model_loaded.signatures['serving_default']
 
     frame_id = 0
