@@ -5,3 +5,4 @@ PyQt5
 Pillow
 passlib
 easydict
+matplotlib
