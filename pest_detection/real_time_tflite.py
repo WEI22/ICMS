@@ -19,11 +19,15 @@ import numpy as np
 
 def main(_argv):
 
-    vid = cv2.VideoCapture(0)
+    vid = cv2.VideoCapture("http://192.168.100.42:4747/video")
 
-    saved_model_loaded = tf.saved_model.load(r"/home/pi/ICMS/pest_detection/checkpoints", tags=[tag_constants.SERVING])
-    infer = saved_model_loaded.signatures['serving_default']
-
+    interpreter = tf.lite.Interpreter(model_path=r"/home/pi/ICMS/pest_detection/tensorflow_lite_weights/yolov4-int8.tflite")
+    interpreter.allocate_tensors()
+    input_details = interpreter.get_input_details()
+    output_details = interpreter.get_output_details()
+    print(input_details)
+    print(output_details)
+    
     frame_id = 0
     while True:
         return_value, frame = vid.read()
@@ -42,11 +46,10 @@ def main(_argv):
         image_data = image_data[np.newaxis, ...].astype(np.float32)
         prev_time = time.time()
 
-        batch_data = tf.constant(image_data)
-        pred_bbox = infer(batch_data)
-        for key, value in pred_bbox.items():
-            boxes = value[:, :, 0:4]
-            pred_conf = value[:, :, 4:]
+        interpreter.set_tensor(input_details[0]['index'], image_data)
+        interpreter.invoke()
+        pred = [interpreter.get_tensor(output_details[i]['index']) for i in range(len(output_details))]
+        boxes, pred_conf = filter_boxes(pred[0], pred[1], score_threshold=0.25, input_shape=tf.constant([416, 416]))
 
         boxes, scores, classes, valid_detections = tf.image.combined_non_max_suppression(
             boxes=tf.reshape(boxes, (tf.shape(boxes)[0], -1, 1, 4)),
