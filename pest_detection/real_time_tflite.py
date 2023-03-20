@@ -16,11 +16,16 @@ from tensorflow.python.saved_model import tag_constants
 from PIL import Image
 import cv2
 import numpy as np
+from picamera2 import Picamera2
+import time
 
 def main(_argv):
-
-    vid = cv2.VideoCapture("http://192.168.100.42:4747/video")
-
+    camera = Picamera2()
+    camera.video_configuration.main.format = "RGB888"
+    camera.configure("video")
+    camera.start()
+    time.sleep(1)
+    
     interpreter = tf.lite.Interpreter(model_path=r"/home/pi/ICMS/pest_detection/tensorflow_lite_weights/yolov4-int8.tflite")
     interpreter.allocate_tensors()
     input_details = interpreter.get_input_details()
@@ -30,15 +35,7 @@ def main(_argv):
     
     frame_id = 0
     while True:
-        return_value, frame = vid.read()
-        if return_value:
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            image = Image.fromarray(frame)
-        else:
-            if frame_id == vid.get(cv2.CAP_PROP_FRAME_COUNT):
-                print("Video processing complete")
-                break
-            raise ValueError("No image! Try with another video format")
+        frame = camera.capture_array("main")
 
         frame_size = frame.shape[:2]
         image_data = cv2.resize(frame, (416, 416))
@@ -70,7 +67,7 @@ def main(_argv):
 
         result = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         cv2.namedWindow("result", cv2.WINDOW_AUTOSIZE)
-        cv2.imshow("result", result)
+        cv2.imshow("result", image)
         if cv2.waitKey(1) & 0xFF == ord('q'): break
 
         frame_id += 1
