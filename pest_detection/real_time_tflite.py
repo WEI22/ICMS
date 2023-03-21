@@ -21,12 +21,12 @@ import time
 
 def main(_argv):
     camera = Picamera2()
-    camera.video_configuration.main.format = "RGB888"
+    camera.video_configuration.main.format = "BGR888"
     camera.configure("video")
     camera.start()
     time.sleep(1)
     
-    interpreter = tf.lite.Interpreter(model_path=r"/home/pi/ICMS/pest_detection/tensorflow_lite_weights/yolov4-int8.tflite")
+    interpreter = tf.lite.Interpreter(model_path=r"/home/pi/ICMS/pest_detection/tensorflow_lite_weights/yolov4-fp32.tflite")
     interpreter.allocate_tensors()
     input_details = interpreter.get_input_details()
     output_details = interpreter.get_output_details()
@@ -67,7 +67,7 @@ def main(_argv):
 
         result = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         cv2.namedWindow("result", cv2.WINDOW_AUTOSIZE)
-        cv2.imshow("result", image)
+        cv2.imshow("result", result)
         if cv2.waitKey(1) & 0xFF == ord('q'): break
 
         frame_id += 1
