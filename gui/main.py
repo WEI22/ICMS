@@ -19,11 +19,11 @@ import User
 import Edit
 
 # Global Varibles
-dir_GUI = os.getcwd();
+dir_GUI = os.getcwd()
 dir_WEBUI = dir_GUI[:dir_GUI.rfind('\\')]
-db_path = dir_WEBUI + '\\WEBUI\\db.sqlite3'
-media_path = dir_WEBUI + '\\WEBUI\\media\\images'
-image_path = dir_GUI + '\\Image\\Saved';
+db_path = "/home/pi/ICMS/webui/db.sqlite3"
+media_path = "/home/pi/ICMS/webui/media"
+image_path = "/home/pi/ICMS/gui/Image/Saved"
 login_status = False
 current_mode = "Add Data"
 user_id = None
