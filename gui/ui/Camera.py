@@ -68,8 +68,7 @@ class Ui_Dialog(object):
         self.title_upload_img.setObjectName("title_upload_img")
         self.verticalLayout_2.addWidget(self.title_upload_img)
         self.widget_2 = QtWidgets.QWidget(Dialog)
-        self.widget_2.setStyleSheet("background-color: rgb(0, 0, 0);\n"
-"")
+        self.widget_2.setStyleSheet("background-color: rgb(0, 0, 0);\n")
         self.widget_2.setObjectName("widget_2")
         self.verticalLayout_2.addWidget(self.widget_2)
         self.verticalLayout_2.setStretch(0, 1)
