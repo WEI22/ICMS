@@ -31,7 +31,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if name in self.m_pages:
             widget = self.m_pages[name]
             self.stacked_widget.setCurrentWidget(widget)
-            self.showMaximized()
+            # self.showMaximized()
             self.setWindowTitle(widget.windowTitle())
 
 if __name__ == "__main__":

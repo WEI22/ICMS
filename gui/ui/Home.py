@@ -120,6 +120,6 @@ class Ui_Dialog(object):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Login"))
         self.camera_video.setText(_translate("Dialog", "Video here"))
-        self.camera_capture.setText(_translate("Dialog", "Capture!"))
-        self.camera_real.setText(_translate("Dialog", "Real Time?"))
+        self.camera_capture.setText(_translate("Dialog", "Capture"))
+        self.camera_real.setText(_translate("Dialog", "Real Time"))
 from core.clickableLabel import ClickableLabel

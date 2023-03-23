@@ -23,7 +23,6 @@ def main(_argv):
 
     saved_model_loaded = tf.saved_model.load(r"C:\Users\User\Documents\UM\Year 3\Sem 1\KIX2001\Crop Monitoring System\pest_detection\yolov4_tiny\checkpoints", tags=[tag_constants.SERVING])
     infer = saved_model_loaded.signatures['serving_default']
-
     frame_id = 0
     while True:
         return_value, frame = vid.read()
