@@ -6,3 +6,4 @@ Pillow
 passlib
 easydict
 matplotlib
+flatbuffers==23.3.3
