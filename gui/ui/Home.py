@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'Home.ui'
+# Form implementation generated from reading ui file 'C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\gui\src\Home.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -47,7 +47,7 @@ class Ui_Dialog(object):
         self.sidebar_home.setStyleSheet("background-color: rgb(0, 0, 0);")
         self.sidebar_home.setFrameShadow(QtWidgets.QFrame.Plain)
         self.sidebar_home.setText("")
-        self.sidebar_home.setPixmap(QtGui.QPixmap("Image/Register/house.png"))
+        self.sidebar_home.setPixmap(QtGui.QPixmap("Image/Register/home.png"))
         self.sidebar_home.setScaledContents(False)
         self.sidebar_home.setAlignment(QtCore.Qt.AlignCenter)
         self.sidebar_home.setObjectName("sidebar_home")
@@ -63,7 +63,7 @@ class Ui_Dialog(object):
         self.sidebar_logout.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.sidebar_logout.setStyleSheet("background-color: rgb(0, 0, 0);")
         self.sidebar_logout.setText("")
-        self.sidebar_logout.setPixmap(QtGui.QPixmap("Image/Register/download.png"))
+        self.sidebar_logout.setPixmap(QtGui.QPixmap("Image/Register/exit.png"))
         self.sidebar_logout.setAlignment(QtCore.Qt.AlignCenter)
         self.sidebar_logout.setObjectName("sidebar_logout")
         self.verticalLayout_2.addWidget(self.sidebar_logout)
@@ -83,6 +83,7 @@ class Ui_Dialog(object):
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.camera_video = QtWidgets.QLabel(Dialog)
+        self.camera_video.setText("")
         self.camera_video.setAlignment(QtCore.Qt.AlignCenter)
         self.camera_video.setObjectName("camera_video")
         self.horizontalLayout.addWidget(self.camera_video)
@@ -94,19 +95,27 @@ class Ui_Dialog(object):
         self.widget_4.setObjectName("widget_4")
         self.verticalLayout.addWidget(self.widget_4)
         self.camera_capture = QtWidgets.QPushButton(Dialog)
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.camera_capture.setFont(font)
         self.camera_capture.setObjectName("camera_capture")
         self.verticalLayout.addWidget(self.camera_capture)
+        self.widget_5 = QtWidgets.QWidget(Dialog)
+        self.widget_5.setObjectName("widget_5")
+        self.verticalLayout.addWidget(self.widget_5)
+        self.camera_real = QtWidgets.QCheckBox(Dialog)
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.camera_real.setFont(font)
+        self.camera_real.setObjectName("camera_real")
+        self.verticalLayout.addWidget(self.camera_real)
         self.widget_3 = QtWidgets.QWidget(Dialog)
         self.widget_3.setEnabled(True)
         self.widget_3.setObjectName("widget_3")
         self.verticalLayout.addWidget(self.widget_3)
-        self.camera_real = QtWidgets.QCheckBox(Dialog)
-        self.camera_real.setObjectName("camera_real")
-        self.verticalLayout.addWidget(self.camera_real)
-        self.verticalLayout.setStretch(0, 4)
-        self.verticalLayout.setStretch(1, 5)
-        self.verticalLayout.setStretch(2, 3)
-        self.verticalLayout.setStretch(3, 1)
+        self.verticalLayout.setStretch(0, 2)
+        self.verticalLayout.setStretch(2, 1)
+        self.verticalLayout.setStretch(4, 5)
         self.horizontalLayout.addLayout(self.verticalLayout)
         self.horizontalLayout.setStretch(0, 5)
         self.horizontalLayout_2.addLayout(self.horizontalLayout)
@@ -119,7 +128,6 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Login"))
-        self.camera_video.setText(_translate("Dialog", "Video here"))
         self.camera_capture.setText(_translate("Dialog", "Capture"))
         self.camera_real.setText(_translate("Dialog", "Real Time"))
 from core.clickableLabel import ClickableLabel

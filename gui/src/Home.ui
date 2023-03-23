@@ -102,7 +102,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>Image/Register/house.png</pixmap>
+        <pixmap>../Image/Register/home.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -121,7 +121,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>Image/Register/search.png</pixmap>
+        <pixmap>../Image/Register/search.png</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -140,7 +140,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>Image/Register/download.png</pixmap>
+        <pixmap>../Image/Register/exit.png</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -165,7 +165,7 @@
      <item>
       <widget class="QLabel" name="camera_video">
        <property name="text">
-        <string>Video here</string>
+        <string/>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -173,7 +173,7 @@
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout" stretch="4,5,3,1">
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="2,0,1,0,5">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -194,8 +194,28 @@
        </item>
        <item>
         <widget class="QPushButton" name="camera_capture">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
          <property name="text">
-          <string>Capture!</string>
+          <string>Capture</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="widget_5" native="true"/>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="camera_real">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Real Time</string>
          </property>
         </widget>
        </item>
@@ -203,13 +223,6 @@
         <widget class="QWidget" name="widget_3" native="true">
          <property name="enabled">
           <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="camera_real">
-         <property name="text">
-          <string>Real Time?</string>
          </property>
         </widget>
        </item>

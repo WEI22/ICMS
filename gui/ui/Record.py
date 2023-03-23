@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'Record.ui'
+# Form implementation generated from reading ui file 'C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\gui\src\Record.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -30,7 +30,7 @@ class Ui_Dialog(object):
         self.logo.setEnabled(True)
         self.logo.setStyleSheet("background-color: rgb(0, 0, 0);")
         self.logo.setText("")
-        self.logo.setPixmap(QtGui.QPixmap("Image/Register/Logo.png"))
+        self.logo.setPixmap(QtGui.QPixmap("C:\\Users\\User\\Documents\\UM\\Year 3\\Sem 2\\KIX3001\\ICMS\\gui\\src\\Image/Register/Logo.png"))
         self.logo.setScaledContents(False)
         self.logo.setAlignment(QtCore.Qt.AlignCenter)
         self.logo.setObjectName("logo")
@@ -46,7 +46,7 @@ class Ui_Dialog(object):
         self.sidebar_home.setStyleSheet("background-color: rgb(0, 0, 0);")
         self.sidebar_home.setFrameShadow(QtWidgets.QFrame.Plain)
         self.sidebar_home.setText("")
-        self.sidebar_home.setPixmap(QtGui.QPixmap("Image/Register/house.png"))
+        self.sidebar_home.setPixmap(QtGui.QPixmap("C:\\Users\\User\\Documents\\UM\\Year 3\\Sem 2\\KIX3001\\ICMS\\gui\\src\\../Image/Register/home.png"))
         self.sidebar_home.setScaledContents(False)
         self.sidebar_home.setAlignment(QtCore.Qt.AlignCenter)
         self.sidebar_home.setObjectName("sidebar_home")
@@ -62,7 +62,7 @@ class Ui_Dialog(object):
         self.sidebar_logout.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.sidebar_logout.setStyleSheet("background-color: rgb(0, 0, 0);")
         self.sidebar_logout.setText("")
-        self.sidebar_logout.setPixmap(QtGui.QPixmap("Image/Register/download.png"))
+        self.sidebar_logout.setPixmap(QtGui.QPixmap("Image/Register/exit.png"))
         self.sidebar_logout.setAlignment(QtCore.Qt.AlignCenter)
         self.sidebar_logout.setObjectName("sidebar_logout")
         self.verticalLayout_2.addWidget(self.sidebar_logout)

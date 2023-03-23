@@ -102,7 +102,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>Image/Register/house.png</pixmap>
+        <pixmap>../Image/Register/home.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -121,7 +121,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>Image/Register/search.png</pixmap>
+        <pixmap>../Image/Register/search.png</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -140,7 +140,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>Image/Register/download.png</pixmap>
+        <pixmap>../Image/Register/exit.png</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

@@ -46,7 +46,6 @@ class WindowHome(PageWindow):
         ret, frame = self.cap.read()
 
         if self.ui.camera_real.isChecked():
-            print("hi")
             image_data = cv2.resize(frame, (416, 416))
             image_data = image_data / 255.
             image_data = image_data[np.newaxis, ...].astype(np.float32)
