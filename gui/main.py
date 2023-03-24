@@ -1,6 +1,6 @@
 import os
 import sys
-from core import PageWindow, Home, Register, Record, Upload
+from core import PageWindow, Home, Register, Record, Upload, Logout
 from PyQt5 import QtWidgets, QtCore
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -15,7 +15,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.register(Register.WindowRegister(), 'register')
         self.register(Home.WindowHome(), 'home')
         self.register(Record.WindowRecord(), 'record')
-        self.register(Upload.WindowUpload(), 'logout')
         
         # Login page (Remember me option)
         self.goto('register')

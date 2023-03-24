@@ -31,7 +31,7 @@ class Ui_Dialog(object):
         self.logo.setEnabled(True)
         self.logo.setStyleSheet("background-color: rgb(0, 0, 0);")
         self.logo.setText("")
-        self.logo.setPixmap(QtGui.QPixmap("Image/Register/Logo.png"))
+        self.logo.setPixmap(QtGui.QPixmap("Image/Register/ICMS.png"))
         self.logo.setScaledContents(False)
         self.logo.setAlignment(QtCore.Qt.AlignCenter)
         self.logo.setObjectName("logo")

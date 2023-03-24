@@ -58,7 +58,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>Image/Register/Logo.png</pixmap>
+        <pixmap>../Image/Register/ICMS.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -335,7 +335,7 @@ border: 2px solid black</string>
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>849</width>
+          <width>843</width>
           <height>554</height>
          </rect>
         </property>
