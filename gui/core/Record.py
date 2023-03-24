@@ -16,3 +16,7 @@ class WindowRecord(PageWindow.PageWindow):
         self.ui = Record.Ui_Dialog()
         self.ui.setupUi(self)
         self.sidebar()
+
+        self.setupLogoutMsgBox()
+
+        self.ui.sidebar_logout.clicked.connect(self.logout)

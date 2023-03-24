@@ -20,3 +20,16 @@ class PageWindow(QtWidgets.QDialog):
 
     def recordClicked(self):
         self.goto('record')
+
+    def setupLogoutMsgBox(self):
+        self.logout_msgbox = QtWidgets.QMessageBox()
+        self.logout_msgbox.setWindowTitle("Logout")
+        self.logout_msgbox.setText("Are you sure?")
+        self.logout_msgbox.setIcon(QtWidgets.QMessageBox.Question)
+        self.logout_msgbox.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        self.logout_msgbox.setDefaultButton(QtWidgets.QMessageBox.No)
+
+    def logout(self):
+        respond = self.logout_msgbox.exec_()
+        if respond == QtWidgets.QMessageBox.Yes:
+            self.goto("register")

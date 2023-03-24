@@ -1,33 +1,35 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
+from ui import Home
+from core.PageWindow import PageWindow
+
 import os
 import sys
 
-CURRENT_DIR = os.getcwd()
-BASE_DIR = os.path.dirname(CURRENT_DIR)
-sys.path.insert(0, BASE_DIR)
-from core.PageWindow import PageWindow
-
-MODEL_PATH = r"C:\Users\User\Documents\UM\Year 3\Sem 1\KIX2001\Crop Monitoring System\pest_detection\yolov4_tiny\checkpoints"
-CLASSES_PATH = r"C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\pest_detection\obj.names"
-
-import tools.utils as utils
-from tools.yolov4 import filter_boxes
-from tools.config import cfg
-
-from ui import Home
 import cv2
 import numpy as np
 import tensorflow as tf
 from tensorflow.python.saved_model import tag_constants
 
+CURRENT_DIR = os.getcwd()
+BASE_DIR = os.path.dirname(CURRENT_DIR)
+sys.path.insert(0, BASE_DIR)
+
+MODEL_PATH = r"C:\Users\User\Documents\UM\Year 3\Sem 1\KIX2001\Crop Monitoring System\pest_detection\yolov4_tiny\checkpoints"
+CLASSES_PATH = r"C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\pest_detection\obj.names"
+
+import tools.utils as utils
+
 class WindowHome(PageWindow):
     def __init__(self, parent = None):
-        QtWidgets.QWidget.__init__(self,parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.ui = Home.Ui_Dialog()
         self.ui.setupUi(self)
         self.sidebar()
 
+        self.setupLogoutMsgBox()
+
         self.ui.camera_capture.clicked.connect(self.capture)
+        self.ui.sidebar_logout.clicked.connect(self.logout)
         
         self.model = tf.saved_model.load(MODEL_PATH, tags=[tag_constants.SERVING])
         self.infer = self.model.signatures['serving_default']

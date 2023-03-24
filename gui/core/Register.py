@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.Qt import QUrl, QDesktopServices
 from core import PageWindow
 import os
@@ -36,6 +36,7 @@ class WindowRegister(PageWindow.PageWindow):
         self.ui.login_password_text.returnPressed.connect(self.login)
         self.ui.signup_link.clicked.connect(self.signup)
         self.ui.show_password.clicked.connect(self.showPassword)
+        self.ui.login_msg_register.clicked.connect(self.signup)
 
     def login(self):
         cur = self.con.cursor()
@@ -49,9 +50,16 @@ class WindowRegister(PageWindow.PageWindow):
             password_from_db = cur.execute(f"SELECT password1 FROM web_user WHERE username='{user}'").fetchone()
 
         if password_from_db and password == password_from_db[0]:
+            self.ui.login_email_text.setText("")
+            self.ui.login_password_text.setText("")
+            self.ui.login_msg_register.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
             self.homeClicked()
-        else:
-            pass
+        elif password_from_db is None:
+            self.ui.login_msg.setText("Cannot find your email/username! ")
+            self.ui.login_msg_register.setText("Register here")
+            self.ui.login_msg_register.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        elif password != password_from_db:
+            self.ui.login_msg.setText("Wrong password")
 
     def signup(self):
         url = QUrl(SIGNUP_URL)

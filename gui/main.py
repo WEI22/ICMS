@@ -1,6 +1,6 @@
 import os
 import sys
-from core import PageWindow, Home, Register, Record, Upload, Logout
+from core import PageWindow, Home, Register, Record, Upload
 from PyQt5 import QtWidgets, QtCore
 
 class MainWindow(QtWidgets.QMainWindow):
