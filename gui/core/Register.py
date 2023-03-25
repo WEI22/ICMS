@@ -1,3 +1,5 @@
+import sqlite3
+
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.Qt import QUrl, QDesktopServices
 from core import PageWindow
@@ -22,12 +24,15 @@ class WindowRegister(PageWindow.PageWindow):
         self.ui.setupUi(self)
         self.sidebar()
 
-        self.con = mysql.connector.connect(
-            host='localhost',
-            user='root',
-            password='@WeI20010622#',
-            database='db'
-        )
+        # self.con = mysql.connector.connect(
+        #     host='localhost',
+        #     user='root',
+        #     password='@WeI20010622#',
+        #     database='db'
+        # )
+
+        self.con = sqlite3.connect("C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\webui\db.sqlite3")
+
         self.REFRESH = mysql.connector.RefreshOption.LOG | mysql.connector.RefreshOption.THREADS | mysql.connector.RefreshOption.GRANT
 
         self.ui.sidebar_home.setEnabled(False)
@@ -51,11 +56,13 @@ class WindowRegister(PageWindow.PageWindow):
         password = self.ui.login_password_text.text()
 
         if re.match(EMAIL_REGEX, user):
-            cur.execute(f"SELECT password1 FROM web_user WHERE email='{user}';")
-            password_from_db = cur.fetchone()
+            # cur.execute(f"SELECT password1 FROM web_user WHERE email='{user}';")
+            # password_from_db = cur.fetchone()
+            password_from_db = cur.execute(f"SELECT password1 FROM web_user WHERE email='{user}';").fetchone()
         else:
-            cur.execute(f"SELECT password1 FROM web_user WHERE username='{user}';")
-            password_from_db = cur.fetchone()
+            # cur.execute(f"SELECT password1 FROM web_user WHERE username='{user}';")
+            # password_from_db = cur.fetchone()
+            password_from_db = cur.execute(f"SELECT password1 FROM web_user WHERE username='{user}';").fetchone()
 
         if password_from_db and password == password_from_db[0]:
             self.ui.login_password_text.setText("")
