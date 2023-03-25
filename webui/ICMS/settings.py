@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-=fb42%#e5*(sae9ho(-0h*4d&xpsac6x)dnzzk4-_2t3o4r*3p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.100.43']
+ALLOWED_HOSTS = ['127.0.0.1',
+                 '192.168.100.43']
 
 
 # Application definition
@@ -77,8 +78,12 @@ WSGI_APPLICATION = 'ICMS.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'db',
+        'USER': 'root',
+        'PASSWORD': '@WeI20010622#',
+        'HOST': 'localhost',
+        'PORT': '3306'
     }
 }
 

@@ -51,6 +51,7 @@ class Ui_Dialog(object):
         self.sidebar_home.setScaledContents(False)
         self.sidebar_home.setAlignment(QtCore.Qt.AlignCenter)
         self.sidebar_home.setObjectName("sidebar_home")
+        self.sidebar_home.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.verticalLayout_2.addWidget(self.sidebar_home)
         self.sidebar_record = ClickableLabel(Dialog)
         self.sidebar_record.setStyleSheet("background-color: rgb(0, 0, 0);")
@@ -58,6 +59,7 @@ class Ui_Dialog(object):
         self.sidebar_record.setPixmap(QtGui.QPixmap("Image/Register/search.png"))
         self.sidebar_record.setAlignment(QtCore.Qt.AlignCenter)
         self.sidebar_record.setObjectName("sidebar_record")
+        self.sidebar_record.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.verticalLayout_2.addWidget(self.sidebar_record)
         self.sidebar_logout = ClickableLabel(Dialog)
         self.sidebar_logout.setLayoutDirection(QtCore.Qt.LeftToRight)
@@ -66,6 +68,7 @@ class Ui_Dialog(object):
         self.sidebar_logout.setPixmap(QtGui.QPixmap("Image/Register/exit.png"))
         self.sidebar_logout.setAlignment(QtCore.Qt.AlignCenter)
         self.sidebar_logout.setObjectName("sidebar_logout")
+        self.sidebar_logout.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.verticalLayout_2.addWidget(self.sidebar_logout)
         self.widget_2 = QtWidgets.QWidget(Dialog)
         self.widget_2.setStyleSheet("background-color: rgb(0, 0, 0);\n"
