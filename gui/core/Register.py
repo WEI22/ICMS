@@ -31,7 +31,7 @@ class WindowRegister(PageWindow.PageWindow):
         #     database='db'
         # )
 
-        self.con = sqlite3.connect("C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\webui\db.sqlite3")
+        self.con = sqlite3.connect("/home/pi/ICMS/webui/db.sqlite3")
 
         self.REFRESH = mysql.connector.RefreshOption.LOG | mysql.connector.RefreshOption.THREADS | mysql.connector.RefreshOption.GRANT
 
@@ -49,7 +49,7 @@ class WindowRegister(PageWindow.PageWindow):
         self.ui.login_msg_register.clicked.connect(self.signup)
 
     def login(self):
-        self.con.cmd_refresh(self.REFRESH)
+        # self.con.cmd_refresh(self.REFRESH)
         cur = self.con.cursor()
 
         user = self.ui.login_email_text.text()
