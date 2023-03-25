@@ -20,29 +20,33 @@ from picamera2 import Picamera2
 import time
 
 def main(_argv):
-
     camera = Picamera2()
-    camera.video_configuration.main.format = "RGB888"
+    camera.video_configuration.main.format = "BGR888"
     camera.configure("video")
     camera.start()
     time.sleep(1)
-
-    saved_model_loaded = tf.saved_model.load(r"/home/pi/ICMS/pest_detection/checkpoints", tags=[tag_constants.SERVING])
-    infer = saved_model_loaded.signatures['serving_default']
+    
+    interpreter = tf.lite.Interpreter(model_path=r"/home/pi/ICMS/pest_detection/tensorflow_lite_weights/yolov4-fp32.tflite")
+    interpreter.allocate_tensors()
+    input_details = interpreter.get_input_details()
+    output_details = interpreter.get_output_details()
+    print(input_details)
+    print(output_details)
+    
     frame_id = 0
     while True:
         frame = camera.capture_array("main")
+
         frame_size = frame.shape[:2]
         image_data = cv2.resize(frame, (416, 416))
         image_data = image_data / 255.
         image_data = image_data[np.newaxis, ...].astype(np.float32)
         prev_time = time.time()
 
-        batch_data = tf.constant(image_data)
-        pred_bbox = infer(batch_data)
-        for key, value in pred_bbox.items():
-            boxes = value[:, :, 0:4]
-            pred_conf = value[:, :, 4:]
+        interpreter.set_tensor(input_details[0]['index'], image_data)
+        interpreter.invoke()
+        pred = [interpreter.get_tensor(output_details[i]['index']) for i in range(len(output_details))]
+        boxes, pred_conf = filter_boxes(pred[0], pred[1], score_threshold=0.25, input_shape=tf.constant([416, 416]))
 
         boxes, scores, classes, valid_detections = tf.image.combined_non_max_suppression(
             boxes=tf.reshape(boxes, (tf.shape(boxes)[0], -1, 1, 4)),
@@ -63,7 +67,7 @@ def main(_argv):
 
         result = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         cv2.namedWindow("result", cv2.WINDOW_AUTOSIZE)
-        cv2.imshow("result", image)
+        cv2.imshow("result", result)
         if cv2.waitKey(1) & 0xFF == ord('q'): break
 
         frame_id += 1
