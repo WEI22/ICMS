@@ -7,3 +7,4 @@ passlib
 easydict
 matplotlib
 flatbuffers==23.3.3
+mysql-connector-python

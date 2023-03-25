@@ -29,7 +29,6 @@ def main(_argv):
 
     saved_model_loaded = tf.saved_model.load(r"/home/pi/ICMS/pest_detection/checkpoints", tags=[tag_constants.SERVING])
     infer = saved_model_loaded.signatures['serving_default']
-
     frame_id = 0
     while True:
         frame = camera.capture_array("main")
