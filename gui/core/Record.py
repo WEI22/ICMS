@@ -3,6 +3,7 @@ from core import PageWindow
 import os
 import sys
 import sqlite3
+# import psycopg2
 from core.clickableLabel import ClickableLabel
 
 CURRENT_DIR = os.getcwd()
@@ -20,23 +21,36 @@ class WindowRecord(PageWindow.PageWindow):
 
         self.setupLogoutMsgBox()
         self.con = sqlite3.connect(r"C:\Users\User\Desktop\Github\ICMS\webui\db.sqlite3")
-        self.record = {'img':[], 'time':[], 'pest':[], 'loc':[]}
-        self.tableElement = {'img':[], 'time':[], 'pest':[], 'loc':[]}
+        # self.con = psycopg2.connect(
+        #     host='192.168.100.43',
+        #     user='postgres',
+        #     password='1234',
+        #     database='db',
+        #     port='5432'
+        # )
+        self.record = {'img': [], 'time': [], 'pest': [], 'loc': []}
+        self.tableElement = {'img': [], 'time': [], 'pest': [], 'loc': []}
         self.retrieve()
         self.update()
 
         self.ui.sidebar_logout.clicked.connect(self.logout)
     
     def retrieve(self):
-        imgs = [img[0] for img in self.con.execute("SELECT image FROM web_image ORDER BY time_created")]
-        times = [time[0] for time in self.con.execute("SELECT date_created FROM web_image ORDER BY time_created")]
-        pests = [pest[0] for pest in self.con.execute("SELECT pest FROM web_image ORDER BY time_created")]
-        locs = [loc[0] for loc in self.con.execute("SELECT location FROM web_image ORDER BY time_created")]
-        
+        cur = self.con.cursor()
+        if cur.execute("SELECT image FROM web_image") != None:
+            imgs = [img[0] for img in cur.execute("SELECT image FROM web_image ORDER BY time_created")]
+            times = [time[0] for time in cur.execute("SELECT date_created FROM web_image ORDER BY time_created")]
+            pests = [pest[0] for pest in cur.execute("SELECT pest FROM web_image ORDER BY time_created")]
+            locs = [loc[0] for loc in cur.execute("SELECT location FROM web_image ORDER BY time_created")]
+        else:
+            imgs = []
+            times = []
+            pests = []
+            locs = []
         self.record = {'img': imgs, 'time': times, 'pest': pests, 'loc': locs}
         
     def update(self):
-        labels = ['img','time','pest','loc']
+        labels = ['img', 'time', 'pest', 'loc']
         for i in range(len(self.record['img'])):
             self.addLine(i+1)
             for label in labels:

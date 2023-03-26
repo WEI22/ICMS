@@ -25,7 +25,7 @@ class WindowRegister(PageWindow.PageWindow):
         self.sidebar()
 
         self.con = psycopg2.connect(
-            host='localhost',
+            host='192.168.100.43',
             user='postgres',
             password='1234',
             database='db',
