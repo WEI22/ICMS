@@ -6,7 +6,7 @@ from core import PageWindow
 import os
 import sys
 import re
-import mysql.connector
+import psycopg2
 
 EMAIL_REGEX = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 SIGNUP_URL = "http://192.168.100.43:8000/create-account/"
@@ -24,16 +24,17 @@ class WindowRegister(PageWindow.PageWindow):
         self.ui.setupUi(self)
         self.sidebar()
 
-        # self.con = mysql.connector.connect(
-        #     host='localhost',
-        #     user='root',
-        #     password='@WeI20010622#',
-        #     database='db'
-        # )
+        self.con = psycopg2.connect(
+                database="db",
+                host="192.168.100.43",
+                user="postgres",
+                password="1234",
+                port="5432"
+                )
 
-        self.con = sqlite3.connect("/home/pi/ICMS/webui/db.sqlite3")
+        # self.con = sqlite3.connect("/home/pi/ICMS/webui/db.sqlite3")
 
-        self.REFRESH = mysql.connector.RefreshOption.LOG | mysql.connector.RefreshOption.THREADS | mysql.connector.RefreshOption.GRANT
+        # self.REFRESH = mysql.connector.RefreshOption.LOG | mysql.connector.RefreshOption.THREADS | mysql.connector.RefreshOption.GRANT
 
         self.ui.sidebar_home.setEnabled(False)
         self.ui.sidebar_record.setEnabled(False)
@@ -56,13 +57,13 @@ class WindowRegister(PageWindow.PageWindow):
         password = self.ui.login_password_text.text()
 
         if re.match(EMAIL_REGEX, user):
-            # cur.execute(f"SELECT password1 FROM web_user WHERE email='{user}';")
-            # password_from_db = cur.fetchone()
-            password_from_db = cur.execute(f"SELECT password1 FROM web_user WHERE email='{user}';").fetchone()
+            cur.execute(f"SELECT password1 FROM web_user WHERE email='{user}';")
+            password_from_db = cur.fetchone()
+            # password_from_db = cur.execute(f"SELECT password1 FROM web_user WHERE email='{user}';").fetchone()
         else:
-            # cur.execute(f"SELECT password1 FROM web_user WHERE username='{user}';")
-            # password_from_db = cur.fetchone()
-            password_from_db = cur.execute(f"SELECT password1 FROM web_user WHERE username='{user}';").fetchone()
+            cur.execute(f"SELECT password1 FROM web_user WHERE username='{user}';")
+            password_from_db = cur.fetchone()
+            # password_from_db = cur.execute(f"SELECT password1 FROM web_user WHERE username='{user}';").fetchone()
 
         if password_from_db and password == password_from_db[0]:
             self.ui.login_password_text.setText("")
