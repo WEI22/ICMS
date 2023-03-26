@@ -28,12 +28,14 @@ class WindowRecord(PageWindow.PageWindow):
         #     database='db',
         #     port='5432'
         # )
-        self.record = {'img': [], 'time': [], 'pest': [], 'loc': []}
-        self.tableElement = {'img': [], 'time': [], 'pest': [], 'loc': []}
+        self.recordFull = {'img':[], 'time':[], 'pest':[], 'loc':[]}
+        self.record = {'img':[], 'time':[], 'pest':[], 'loc':[]}
+        self.tableElement = {'img':[], 'time':[], 'pest':[], 'loc':[], 'layout':[]}
         self.retrieve()
         self.update()
 
         self.ui.sidebar_logout.clicked.connect(self.logout)
+        self.ui.record_search_btn.clicked.connect(self.searchClicked)
     
     def retrieve(self):
         cur = self.con.cursor()
@@ -47,9 +49,12 @@ class WindowRecord(PageWindow.PageWindow):
             times = []
             pests = []
             locs = []
+
+        self.recordFull = {'img': imgs, 'time': times, 'pest': pests, 'loc': locs}
         self.record = {'img': imgs, 'time': times, 'pest': pests, 'loc': locs}
         
     def update(self):
+        self.tableElement = {'img':[], 'time':[], 'pest':[], 'loc':[], 'layout':[]}
         labels = ['img', 'time', 'pest', 'loc']
         for i in range(len(self.record['img'])):
             self.addLine(i+1)
@@ -114,6 +119,7 @@ class WindowRecord(PageWindow.PageWindow):
         self.tableElement['time'].append(time)
         self.tableElement['pest'].append(pest)
         self.tableElement['loc'].append(loc)
+        self.tableElement['layout'].append(horizontalLayout)
         
     def imageClicked(self,imagePath):
         dialog = QtWidgets.QDialog()
@@ -126,3 +132,24 @@ class WindowRecord(PageWindow.PageWindow):
         dialog.setWindowFlag(QtCore.Qt.WindowContextHelpButtonHint,False)
         dialog.exec_()
         
+    def searchClicked(self):
+        self.delete()
+        labels = ['time','pest','loc']
+        search_text = str(self.ui.record_search.text())
+        self.showId = [False for i in range(len(self.recordFull['time']))]
+        self.record = {'img':[], 'time':[], 'pest':[], 'loc':[]}
+        for i in range(len(self.recordFull['time'])):
+            for label in labels:
+                if search_text in str(self.recordFull[label][i]):
+                    self.showId[i] = True
+        labels = ['img','time','pest','loc']
+        for i in range(len(self.recordFull['time'])):
+            if self.showId[i]:
+                for label in labels:
+                    self.record[label].append(self.recordFull[label][i])
+        self.update()
+        
+    def delete(self):
+        for layout in self.tableElement['layout']:
+            while layout.count():
+                layout.takeAt(0).widget().deleteLater()
