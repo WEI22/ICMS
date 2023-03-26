@@ -1,3 +1,5 @@
+import sqlite3
+
 from PyQt5 import QtWidgets, QtGui, QtCore
 from ui import Home
 from core.PageWindow import PageWindow
@@ -5,6 +7,7 @@ from core.PageWindow import PageWindow
 import os
 import sys
 
+import psycopg2
 import cv2
 import numpy as np
 import tensorflow as tf
@@ -30,7 +33,16 @@ class WindowHome(PageWindow):
 
         self.ui.camera_capture.clicked.connect(self.capture)
         self.ui.sidebar_logout.clicked.connect(self.logout)
-        
+
+        self.con = psycopg2.connect(
+            host='192.168.100.43',
+            user='postgres',
+            password='1234',
+            database='db',
+            port='5432'
+        )
+        # self.con = sqlite3.connect(r"C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\gui\db.sqlite3")
+
         self.model = tf.saved_model.load(MODEL_PATH, tags=[tag_constants.SERVING])
         self.infer = self.model.signatures['serving_default']
         with open(CLASSES_PATH, "r") as f:
@@ -55,13 +67,17 @@ class WindowHome(PageWindow):
             frame, _ = self.detect(frame)
 
         if self.isCapturing:
+            cur = self.con.cursor()
             if not self.isDetecting:
                 detected_img, pred_bbox = self.detect(frame) # boxes, scores, classes, valid_detections
-                class_indexes = pred_bbox[2][0][:4]
                 num_detections = int(pred_bbox[3][0])
+                class_indexes = pred_bbox[2][0][:num_detections]
 
-                for i in range(num_detections):
-                    print(self.classes[int(class_indexes[i])])
+                classes = "\n".join([self.classes[int(i)] for i in class_indexes])
+                img = ('saved\img_%05d.jpg' % self.ith_frame)
+                sql_query = f"INSERT INTO web_image VALUES(NULL, '{classes}', '', '', '', '', '', '{img}', '', '')"
+                cur.execute(sql_query)
+                self.con.commit()
                 cv2.imwrite('saved\img_%05d.jpg' % self.ith_frame, frame)
 
             cv2.imwrite('saved\original\img_%05d.jpg' % self.ith_frame, frame)

@@ -57,12 +57,12 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv) 
     # myapp = MainWindow()
     # myapp.show()
-    splash = SplashScreen()
-    splash.show()
-    splash.progress()
+    # splash = SplashScreen()
+    # splash.show()
+    # splash.progress()
 
     myapp = MainWindow()
     myapp.show()
 
-    splash.finish(myapp)
+    # splash.finish(myapp)
     sys.exit(app.exec_())

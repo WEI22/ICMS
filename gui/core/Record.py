@@ -3,7 +3,7 @@ from core import PageWindow
 import os
 import sys
 import sqlite3
-# import psycopg2
+import psycopg2
 from core.clickableLabel import ClickableLabel
 
 CURRENT_DIR = os.getcwd()
@@ -14,13 +14,13 @@ from ui import Record
 
 class WindowRecord(PageWindow.PageWindow):
     def __init__(self, parent = None):
-        QtWidgets.QWidget.__init__(self,parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.ui = Record.Ui_Dialog()
         self.ui.setupUi(self)
         self.sidebar()
 
         self.setupLogoutMsgBox()
-        self.con = sqlite3.connect(r"C:\Users\User\Desktop\Github\ICMS\webui\db.sqlite3")
+        self.con = sqlite3.connect(r"C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\gui\db.sqlite3")
         # self.con = psycopg2.connect(
         #     host='192.168.100.43',
         #     user='postgres',
@@ -36,6 +36,7 @@ class WindowRecord(PageWindow.PageWindow):
 
         self.ui.sidebar_logout.clicked.connect(self.logout)
         self.ui.record_search_btn.clicked.connect(self.searchClicked)
+        self.ui.record_search.returnPressed.connect(self.searchClicked)
     
     def retrieve(self):
         cur = self.con.cursor()
