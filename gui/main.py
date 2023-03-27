@@ -31,10 +31,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(self.stacked_widget)
         
         self.m_pages = {}
+
+        self.window_register = Register.WindowRegister()
+        self.window_home = Home.WindowHome()
+        self.window_record = Record.WindowRecord()
         
-        self.register(Register.WindowRegister(), 'register')
-        self.register(Home.WindowHome(), 'home')
-        self.register(Record.WindowRecord(), 'record')
+        self.register(self.window_register, 'register')
+        self.register(self.window_home, 'home')
+        self.register(self.window_record, 'record')
         
         # Login page (Remember me option)
         self.goto('register')
@@ -43,6 +47,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.m_pages[name] = widget
         self.stacked_widget.addWidget(widget)
         if isinstance(widget, PageWindow.PageWindow):
+            # self.window_record.con.commit()
+            # self.window_record.retrieve()
+            # self.window_record.update()
             widget.gotoSignal.connect(self.goto)
             
     @QtCore.pyqtSlot(str)

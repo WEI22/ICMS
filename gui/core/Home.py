@@ -1,12 +1,10 @@
-import sqlite3
-
 from PyQt5 import QtWidgets, QtGui, QtCore
 from ui import Home
 from core.PageWindow import PageWindow
 
 import os
 import sys
-import datetime
+from datetime import datetime
 
 import psycopg2
 import cv2
@@ -24,8 +22,10 @@ CLASSES_PATH = r"C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\pest_detec
 import tools.utils as utils
 
 class WindowHome(PageWindow):
-    def __init__(self, parent = None):
+
+    def __init__(self, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
+        PageWindow.__init__(self)
         self.ui = Home.Ui_Dialog()
         self.ui.setupUi(self)
         self.sidebar()
@@ -35,19 +35,20 @@ class WindowHome(PageWindow):
         self.ui.camera_capture.clicked.connect(self.capture)
         self.ui.sidebar_logout.clicked.connect(self.logout)
 
-#         self.con = psycopg2.connect(
-#             host='192.168.100.43',
-#             user='postgres',
-#             password='1234',
-#             database='db',
-#             port='5432'
-#         )
-        self.con = sqlite3.connect(r"C:\Users\User\Desktop\Github\ICMS\webui\db.sqlite3")
+        self.con = psycopg2.connect(
+            host='192.168.100.43',
+            user='postgres',
+            password='1234',
+            database='db',
+            port='5432'
+        )
+        self.con.set_session()
+        # self.con = sqlite3.connect(r"C:\Users\User\Desktop\Github\ICMS\webui\db.sqlite3")
         
-#         self.model = tf.saved_model.load(MODEL_PATH, tags=[tag_constants.SERVING])
-#         self.infer = self.model.signatures['serving_default']
-#         with open(CLASSES_PATH, "r") as f:
-#             self.classes = list(map(lambda x: str(x).replace("\n", ""), f.readlines()))
+        self.model = tf.saved_model.load(MODEL_PATH, tags=[tag_constants.SERVING])
+        self.infer = self.model.signatures['serving_default']
+        with open(CLASSES_PATH, "r") as f:
+            self.classes = list(map(lambda x: str(x).replace("\n", ""), f.readlines()))
 
         self.fps = 10
         self.cap = cv2.VideoCapture(0)
@@ -65,26 +66,27 @@ class WindowHome(PageWindow):
         ret, frame = self.cap.read()
 
         if self.ui.camera_real.isChecked():
-            pass
-#             frame, _ = self.detect(frame)
+            frame, _ = self.detect(frame)
 
-#         if self.isCapturing:
-#             cur = self.con.cursor()
-#             if not self.isDetecting:
-#                 detected_img, pred_bbox = self.detect(frame) # boxes, scores, classes, valid_detections
-#                 num_detections = int(pred_bbox[3][0])
-#                 class_indexes = pred_bbox[2][0][:num_detections]
-
-#                 classes = "\n".join([self.classes[int(i)] for i in class_indexes])
-#                 img = ('saved\img_%05d.jpg' % self.ith_frame)
-#                 date = datetime.now().strftime("%Y-%m-%d")
-#                 time = datetime.now().strftime("%H:%M:%S")
-#                 sql_query = f"INSERT INTO web_image VALUES(NULL, '{classes}', '', '', '', '', '', '{img}', '{date}', '{time}')"
-#                 cur.execute(sql_query)
-#                 self.con.commit()
-#                 cv2.imwrite('saved\img_%05d.jpg' % self.ith_frame, frame)
-
+        if self.isCapturing:
             cv2.imwrite('.\saved\original\img_%05d.jpg' % self.ith_frame, frame)
+            cur = self.con.cursor()
+            if not self.isDetecting:
+                detected_img, pred_bbox = self.detect(frame) # boxes, scores, classes, valid_detections
+                num_detections = int(pred_bbox[3][0])
+                class_indexes = pred_bbox[2][0][:num_detections]
+
+                classes = "\n".join([self.classes[int(i)] for i in class_indexes])
+                img = ('saved\img_%05d.jpg' % self.ith_frame)
+                today = datetime.now()
+                sql_query = f"INSERT INTO web_image VALUES(DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                try:
+                    cur.execute(sql_query, (classes, '', 0, '', 0, 0, img, today.date(), today.time()))
+                except Exception as e:
+                    print(e)
+                self.con.commit()
+                cv2.imwrite('saved\img_%05d.jpg' % self.ith_frame, frame)
+
             self.ith_frame += 1
             self.isCapturing = False
 

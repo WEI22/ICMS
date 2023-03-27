@@ -20,19 +20,18 @@ class WindowRecord(PageWindow.PageWindow):
         self.sidebar()
 
         self.setupLogoutMsgBox()
-        self.con = sqlite3.connect(r"C:\Users\User\Desktop\Github\ICMS\webui\db.sqlite3")
-        # self.con = psycopg2.connect(
-        #     host='192.168.100.43',
-        #     user='postgres',
-        #     password='1234',
-        #     database='db',
-        #     port='5432'
-        # )
-        self.recordFull = {'img':[], 'time':[], 'pest':[], 'loc':[]}
-        self.record = {'img':[], 'time':[], 'pest':[], 'loc':[]}
-        self.tableElement = {'img':[], 'time':[], 'pest':[], 'loc':[], 'layout':[]}
-        self.retrieve()
-        self.update()
+        # self.con = sqlite3.connect(r"C:\Users\User\Desktop\Github\ICMS\webui\db.sqlite3")
+        self.con = psycopg2.connect(
+            host='192.168.100.43',
+            user='postgres',
+            password='1234',
+            database='db',
+            port='5432'
+        )
+        self.recordFull = {'img': [], 'time': [], 'pest': [], 'loc': []}
+        self.record = {'img': [], 'time': [], 'pest': [], 'loc': []}
+        self.tableElement = {'img': [], 'time': [], 'pest': [], 'loc': [], 'layout': []}
+        self.start()
 
         self.ui.sidebar_logout.clicked.connect(self.logout)
         self.ui.record_search_btn.clicked.connect(self.searchClicked)
@@ -40,14 +39,15 @@ class WindowRecord(PageWindow.PageWindow):
     
     def retrieve(self):
         cur = self.con.cursor()
-        if cur.execute("SELECT image FROM web_image") != None:
-            imgs = [img[0] for img in cur.execute("SELECT image FROM web_image ORDER BY time_created")]
-            dates = [date[0] for date in cur.execute("SELECT date_created FROM web_image ORDER BY time_created")]
+        if self.getData("image") != None:
+            cur.execute("SELECT image FROM web_image ORDER BY time_created")
+            imgs = [img[0] for img in self.getData("image")]
+            dates = [date[0] for date in self.getData("date_created")]
             times = []
-            for i,time in enumerate(cur.execute("SELECT time_created FROM web_image ORDER BY time_created")):
+            for i, time in enumerate(self.getData("time_created")):
                 times.append(str(dates[i]) + '\n' + str(time[0])[:8])
-            pests = [pest[0] for pest in cur.execute("SELECT pest FROM web_image ORDER BY time_created")]
-            locs = [loc[0] for loc in cur.execute("SELECT location FROM web_image ORDER BY time_created")]
+            pests = [pest[0] for pest in self.getData("pest")]
+            locs = [loc[0] for loc in self.getData("location")]
         else:
             imgs = []
             times = []
@@ -56,9 +56,11 @@ class WindowRecord(PageWindow.PageWindow):
 
         self.recordFull = {'img': imgs, 'time': times, 'pest': pests, 'loc': locs}
         self.record = {'img': imgs, 'time': times, 'pest': pests, 'loc': locs}
+        self.update()
         
     def update(self):
-        self.tableElement = {'img':[], 'time':[], 'pest':[], 'loc':[], 'layout':[]}
+        self.delete()
+        self.tableElement = {'img': [], 'time': [], 'pest': [], 'loc': [], 'layout': []}
         labels = ['img', 'time', 'pest', 'loc']
         if 10-len(self.record['img']) > 0:
             for i in range(10-len(self.record['img'])):
@@ -77,9 +79,8 @@ class WindowRecord(PageWindow.PageWindow):
                 
         for i in range(len(self.record['img'])):
             self.tableElement['img'][i].clicked.connect(lambda i=i: self.imageClicked(self.record['img'][i]) )
-                    
-                    
-    def addLine(self,i):
+
+    def addLine(self, i):
         horizontalLayout = QtWidgets.QHBoxLayout()
         horizontalLayout.setSpacing(0)
         horizontalLayout.setObjectName("record_table%d"%i)
@@ -132,7 +133,7 @@ class WindowRecord(PageWindow.PageWindow):
         self.tableElement['loc'].append(loc)
         self.tableElement['layout'].append(horizontalLayout)
         
-    def addEmptyLine(self,i):
+    def addEmptyLine(self, i):
         horizontalLayout = QtWidgets.QHBoxLayout()
         horizontalLayout.setSpacing(0)
         horizontalLayout.setObjectName("record_table%d"%i)
@@ -182,7 +183,7 @@ class WindowRecord(PageWindow.PageWindow):
         self.tableElement['loc'].append(loc)
         self.tableElement['layout'].append(horizontalLayout)
         
-    def imageClicked(self,imagePath):
+    def imageClicked(self, imagePath):
         dialog = QtWidgets.QDialog()
         layout = QtWidgets.QVBoxLayout()
         label = QtWidgets.QLabel()
@@ -194,7 +195,6 @@ class WindowRecord(PageWindow.PageWindow):
         dialog.exec_()
         
     def searchClicked(self):
-        self.delete()
         labels = ['time','pest','loc']
         search_text = str(self.ui.record_search.text())
         self.showId = [False for i in range(len(self.recordFull['time']))]
@@ -220,3 +220,13 @@ class WindowRecord(PageWindow.PageWindow):
         msgBox = QtWidgets.QMessageBox()
         msgBox.setText("Search successful!!")
         msgBox.exec_()
+
+    def getData(self, column, table="web_image"):
+        cur = self.con.cursor()
+        cur.execute(f"SELECT {column} FROM {table} ORDER BY time_created")
+        return cur.fetchall()
+
+    def start(self):
+        self.timer = QtCore.QTimer()
+        self.timer.timeout.connect(self.retrieve)
+        self.timer.start(1000)
