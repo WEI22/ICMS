@@ -20,7 +20,7 @@ class WindowRecord(PageWindow.PageWindow):
         self.sidebar()
 
         self.setupLogoutMsgBox()
-        self.con = sqlite3.connect(r"C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\gui\db.sqlite3")
+        self.con = sqlite3.connect(r"C:\Users\User\Desktop\Github\ICMS\webui\db.sqlite3")
         # self.con = psycopg2.connect(
         #     host='192.168.100.43',
         #     user='postgres',
@@ -42,7 +42,10 @@ class WindowRecord(PageWindow.PageWindow):
         cur = self.con.cursor()
         if cur.execute("SELECT image FROM web_image") != None:
             imgs = [img[0] for img in cur.execute("SELECT image FROM web_image ORDER BY time_created")]
-            times = [time[0] for time in cur.execute("SELECT date_created FROM web_image ORDER BY time_created")]
+            dates = [date[0] for date in cur.execute("SELECT date_created FROM web_image ORDER BY time_created")]
+            times = []
+            for i,time in enumerate(cur.execute("SELECT time_created FROM web_image ORDER BY time_created")):
+                times.append(str(dates[i]) + '\n' + str(time[0])[:8])
             pests = [pest[0] for pest in cur.execute("SELECT pest FROM web_image ORDER BY time_created")]
             locs = [loc[0] for loc in cur.execute("SELECT location FROM web_image ORDER BY time_created")]
         else:
@@ -57,8 +60,15 @@ class WindowRecord(PageWindow.PageWindow):
     def update(self):
         self.tableElement = {'img':[], 'time':[], 'pest':[], 'loc':[], 'layout':[]}
         labels = ['img', 'time', 'pest', 'loc']
+        if 10-len(self.record['img']) > 0:
+            for i in range(10-len(self.record['img'])):
+                for label in labels:
+                    self.record[label].append('')
         for i in range(len(self.record['img'])):
-            self.addLine(i+1)
+            if self.record['img'][i] == "":
+                self.addEmptyLine(i+1)
+            else:
+                self.addLine(i+1)
             for label in labels:
                 if label != 'img':
                     self.tableElement[label][i].setText(str(self.record[label][i]))
@@ -85,6 +95,56 @@ class WindowRecord(PageWindow.PageWindow):
         image = QtGui.QPixmap("Image/share.png")
         image = image.scaled(24,24,QtCore.Qt.KeepAspectRatio)
         img.setPixmap(image)
+        img.setAlignment(QtCore.Qt.AlignCenter)
+        img.setObjectName("record_table_date%d"%i)
+        horizontalLayout.addWidget(img)
+        
+        time = QtWidgets.QLabel(self.ui.scrollAreaWidgetContents)
+        time.setFont(font)
+        time.setStyleSheet("border: 0.5px solid black")
+        time.setAlignment(QtCore.Qt.AlignCenter)
+        time.setObjectName("record_table_host%d"%i)
+        horizontalLayout.addWidget(time)
+                                
+        pest = QtWidgets.QLabel(self.ui.scrollAreaWidgetContents)
+        pest.setFont(font)
+        pest.setStyleSheet("border: 0.5px solid black")
+        pest.setAlignment(QtCore.Qt.AlignCenter)
+        pest.setObjectName("record_table_pest%d"%i)
+        horizontalLayout.addWidget(pest)
+        
+        loc = QtWidgets.QLabel(self.ui.scrollAreaWidgetContents)
+        loc.setFont(font)
+        loc.setStyleSheet("border: 0.5px solid black")
+        loc.setAlignment(QtCore.Qt.AlignCenter)
+        loc.setObjectName("record_table_total%d"%i)
+        horizontalLayout.addWidget(loc)
+        
+        horizontalLayout.setStretch(0, 1)
+        horizontalLayout.setStretch(1, 1)
+        horizontalLayout.setStretch(2, 1)
+        horizontalLayout.setStretch(3, 1)
+        self.ui.record_table_vertical.addLayout(horizontalLayout)
+        
+        self.tableElement['img'].append(img)
+        self.tableElement['time'].append(time)
+        self.tableElement['pest'].append(pest)
+        self.tableElement['loc'].append(loc)
+        self.tableElement['layout'].append(horizontalLayout)
+        
+    def addEmptyLine(self,i):
+        horizontalLayout = QtWidgets.QHBoxLayout()
+        horizontalLayout.setSpacing(0)
+        horizontalLayout.setObjectName("record_table%d"%i)
+        
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(False)
+        font.setWeight(75)
+        
+        img = ClickableLabel(self.ui.scrollAreaWidgetContents)
+        img.setFont(font)
+        img.setStyleSheet("border: 0.5px solid black")
         img.setAlignment(QtCore.Qt.AlignCenter)
         img.setObjectName("record_table_date%d"%i)
         horizontalLayout.addWidget(img)
@@ -149,8 +209,14 @@ class WindowRecord(PageWindow.PageWindow):
                 for label in labels:
                     self.record[label].append(self.recordFull[label][i])
         self.update()
+#         self.addLoading()
         
     def delete(self):
         for layout in self.tableElement['layout']:
             while layout.count():
                 layout.takeAt(0).widget().deleteLater()
+
+    def addLoading(self):
+        msgBox = QtWidgets.QMessageBox()
+        msgBox.setText("Search successful!!")
+        msgBox.exec_()
