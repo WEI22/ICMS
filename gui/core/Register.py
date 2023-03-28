@@ -49,6 +49,7 @@ class WindowRegister(PageWindow.PageWindow):
 
     def login(self):
         self.con.commit()
+        # self.con.cmd_refresh(self.REFRESH)
         cur = self.con.cursor()
 
         user = self.ui.login_email_text.text()
