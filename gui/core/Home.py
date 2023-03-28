@@ -55,7 +55,6 @@ class WindowHome(PageWindow):
 
         self.isCapturing = False
         self.isDetecting = False
-        self.ith_frame = 1
 
         self.start()
 
@@ -69,7 +68,10 @@ class WindowHome(PageWindow):
             frame, _ = self.detect(frame)
 
         if self.isCapturing:
-            cv2.imwrite('.\saved\original\img_%05d.jpg' % self.ith_frame, frame)
+            today = datetime.now()
+            saved_name = f"img_{datetime.strftime(today, '%d%m%y%H%M%S')}.jpg"
+            cv2.imwrite(f".\\saved\\original\\{saved_name}", frame)
+
             cur = self.con.cursor()
             if not self.isDetecting:
                 detected_img, pred_bbox = self.detect(frame) # boxes, scores, classes, valid_detections
@@ -77,17 +79,14 @@ class WindowHome(PageWindow):
                 class_indexes = pred_bbox[2][0][:num_detections]
 
                 classes = "\n".join([self.classes[int(i)] for i in class_indexes])
-                img = ('saved\img_%05d.jpg' % self.ith_frame)
-                today = datetime.now()
                 sql_query = f"INSERT INTO web_image VALUES(DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                 try:
-                    cur.execute(sql_query, (classes, '', 0, '', 0, 0, img, today.date(), today.time()))
+                    cur.execute(sql_query, (classes, '', 0, '', 0, 0, f"saved\\{saved_name}", today.date(), today.time()))
                 except Exception as e:
                     print(e)
                 self.con.commit()
-                cv2.imwrite('saved\img_%05d.jpg' % self.ith_frame, frame)
+                cv2.imwrite(f"saved\\{saved_name}", frame)
 
-            self.ith_frame += 1
             self.isCapturing = False
 
         # My webcam yields frames in BGR format
