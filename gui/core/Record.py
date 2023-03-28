@@ -40,7 +40,6 @@ class WindowRecord(PageWindow.PageWindow):
     def retrieve(self):
         cur = self.con.cursor()
         if self.getData("image") != None:
-            cur.execute("SELECT image FROM web_image ORDER BY time_created")
             imgs = [img[0] for img in self.getData("image")]
             dates = [date[0] for date in self.getData("date_created")]
             times = []
