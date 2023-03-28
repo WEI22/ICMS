@@ -25,16 +25,14 @@ class WindowRegister(PageWindow.PageWindow):
         self.sidebar()
 
         self.con = psycopg2.connect(
-                database="db",
-                host="192.168.100.43",
-                user="postgres",
-                password="1234",
-                port="5432"
-                )
+            host='192.168.100.43',
+            user='postgres',
+            password='1234',
+            database='db',
+            port='5432'
+        )
 
-        # self.con = sqlite3.connect("/home/pi/ICMS/webui/db.sqlite3")
-
-        # self.REFRESH = mysql.connector.RefreshOption.LOG | mysql.connector.RefreshOption.THREADS | mysql.connector.RefreshOption.GRANT
+        # self.con = sqlite3.connect(r"C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\webui\db.sqlite3")
 
         self.ui.sidebar_home.setEnabled(False)
         self.ui.sidebar_record.setEnabled(False)
@@ -50,6 +48,7 @@ class WindowRegister(PageWindow.PageWindow):
         self.ui.login_msg_register.clicked.connect(self.signup)
 
     def login(self):
+        self.con.commit()
         # self.con.cmd_refresh(self.REFRESH)
         cur = self.con.cursor()
 
