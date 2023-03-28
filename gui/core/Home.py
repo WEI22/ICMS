@@ -4,22 +4,21 @@ from core.PageWindow import PageWindow
 
 import os
 import sys
-import time
 from datetime import datetime
 
 import psycopg2
+from psycopg2.extensions import Binary
 import cv2
 import numpy as np
 import tensorflow as tf
 from tensorflow.python.saved_model import tag_constants
-from picamera2 import Picamera2
 
 CURRENT_DIR = os.getcwd()
 BASE_DIR = os.path.dirname(CURRENT_DIR)
 sys.path.insert(0, BASE_DIR)
 
-MODEL_PATH = r"/home/pi/ICMS/pest_detection/checkpoints"
-CLASSES_PATH = r"/home/pi/ICMS/pest_detection/obj.names"
+MODEL_PATH = r"C:\Users\User\Documents\UM\Year 3\Sem 1\KIX2001\Crop Monitoring System\pest_detection\yolov4_tiny\checkpoints"
+CLASSES_PATH = r"C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\pest_detection\obj.names"
 
 import tools.utils as utils
 
@@ -27,6 +26,7 @@ class WindowHome(PageWindow):
 
     def __init__(self, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
+        PageWindow.__init__(self)
         self.ui = Home.Ui_Dialog()
         self.ui.setupUi(self)
         self.sidebar()
@@ -43,6 +43,14 @@ class WindowHome(PageWindow):
             database='db',
             port='5432'
         )
+        # self.con = psycopg2.connect(
+        #     host='192.168.42.15',
+        #     user='postgres',
+        #     password='1234',
+        #     database='db',
+        #     port='5432'
+        # )
+        self.con.set_session()
         # self.con = sqlite3.connect(r"C:\Users\User\Desktop\Github\ICMS\webui\db.sqlite3")
         
         self.model = tf.saved_model.load(MODEL_PATH, tags=[tag_constants.SERVING])
@@ -51,11 +59,7 @@ class WindowHome(PageWindow):
             self.classes = list(map(lambda x: str(x).replace("\n", ""), f.readlines()))
 
         self.fps = 10
-        self.cap = Picamera2()
-        self.cap.video_configuration.main.format = "RGB888"
-        self.cap.configure("video")
-        self.cap.start()
-        time.sleep(1)
+        self.cap = cv2.VideoCapture(0)
 
         self.isCapturing = False
         self.isDetecting = False
@@ -66,7 +70,7 @@ class WindowHome(PageWindow):
         self.fps = fps
 
     def nextFrameSlot(self):
-        frame = self.cap.capture_array("main")
+        ret, frame = self.cap.read()
 
         if self.ui.camera_real.isChecked():
             frame, _ = self.detect(frame)
@@ -81,11 +85,13 @@ class WindowHome(PageWindow):
                 detected_img, pred_bbox = self.detect(frame) # boxes, scores, classes, valid_detections
                 num_detections = int(pred_bbox[3][0])
                 class_indexes = pred_bbox[2][0][:num_detections]
+                _, img_data = cv2.imencode('.jpg', frame)
+                binary_data = Binary(img_data)
 
                 classes = "\n".join([self.classes[int(i)] for i in class_indexes])
-                sql_query = f"INSERT INTO web_image VALUES(DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                sql_query = f"INSERT INTO web_image VALUES(DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                 try:
-                    cur.execute(sql_query, (classes, '', 0, '', 0, 0, f"saved\\{saved_name}", today.date(), today.time()))
+                    cur.execute(sql_query, (classes, '', 0, '', 0, 0, f"saved\\{saved_name}", binary_data, today.date(), today.time()))
                 except Exception as e:
                     print(e)
                 self.con.commit()
@@ -142,8 +148,3 @@ class WindowHome(PageWindow):
         pred_bbox = [boxes.numpy(), scores.numpy(), classes.numpy(), valid_detections.numpy()]
         frame = utils.draw_bbox(frame, pred_bbox)
         return frame, pred_bbox
-
-if __name__ == '__main__':
-    app = QtGui.QGuiApplication(sys.argv)
-    window = WindowHome()
-    sys.exit(app.exec_())

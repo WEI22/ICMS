@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5.QtGui import QPixmap, QImage
 from core import PageWindow
 import os
 import sys
@@ -28,6 +29,14 @@ class WindowRecord(PageWindow.PageWindow):
             database='db',
             port='5432'
         )
+        # self.con = psycopg2.connect(
+        #     host='192.168.42.15',
+        #     user='postgres',
+        #     password='1234',
+        #     database='db',
+        #     port='5432'
+        # )
+
         self.recordFull = {'img': [], 'time': [], 'pest': [], 'loc': []}
         self.record = {'img': [], 'time': [], 'pest': [], 'loc': []}
         self.tableElement = {'img': [], 'time': [], 'pest': [], 'loc': [], 'layout': []}
@@ -41,6 +50,7 @@ class WindowRecord(PageWindow.PageWindow):
         cur = self.con.cursor()
         if self.getData("image") != None:
             imgs = [img[0] for img in self.getData("image")]
+            imgs_data = [img_data[0] for img_data in self.getData("image_data")]
             dates = [date[0] for date in self.getData("date_created")]
             times = []
             for i, time in enumerate(self.getData("time_created")):
@@ -49,12 +59,13 @@ class WindowRecord(PageWindow.PageWindow):
             locs = [loc[0] for loc in self.getData("location")]
         else:
             imgs = []
+            imgs_data = []
             times = []
             pests = []
             locs = []
 
-        self.recordFull = {'img': imgs, 'time': times, 'pest': pests, 'loc': locs}
-        self.record = {'img': imgs, 'time': times, 'pest': pests, 'loc': locs}
+        self.recordFull = {'img': imgs, 'img_data': imgs_data, 'time': times, 'pest': pests, 'loc': locs}
+        self.record = {'img': imgs, 'img_data': imgs_data, 'time': times, 'pest': pests, 'loc': locs}
         self.update()
         
     def update(self):
@@ -77,7 +88,7 @@ class WindowRecord(PageWindow.PageWindow):
 #                     self.tableElement[label][i].setPixmap(QtGui.QPixmap(str(self.record[label][i])))
                 
         for i in range(len(self.record['img'])):
-            self.tableElement['img'][i].clicked.connect(lambda i=i: self.imageClicked(self.record['img'][i]) )
+            self.tableElement['img'][i].clicked.connect(lambda i=i: self.imageClicked(self.record['img_data'][i]))
 
     def addLine(self, i):
         horizontalLayout = QtWidgets.QHBoxLayout()
@@ -186,15 +197,17 @@ class WindowRecord(PageWindow.PageWindow):
         dialog = QtWidgets.QDialog()
         layout = QtWidgets.QVBoxLayout()
         label = QtWidgets.QLabel()
-        label.setPixmap(QtGui.QPixmap(imagePath))
+        qimage = QImage.fromData(imagePath)
+        pixmap = QPixmap.fromImage(qimage)
+        label.setPixmap(pixmap)
         layout.addWidget(label)
         dialog.setLayout(layout)
-        dialog.setWindowTitle(imagePath[imagePath.rfind('\\')+1:])
+        # dialog.setWindowTitle(imagePath[imagePath.rfind('\\')+1:])
         dialog.setWindowFlag(QtCore.Qt.WindowContextHelpButtonHint,False)
         dialog.exec_()
         
     def searchClicked(self):
-        labels = ['time','pest','loc']
+        labels = ['time', 'pest', 'loc']
         search_text = str(self.ui.record_search.text())
         self.showId = [False for i in range(len(self.recordFull['time']))]
         self.record = {'img':[], 'time':[], 'pest':[], 'loc':[]}
@@ -202,7 +215,7 @@ class WindowRecord(PageWindow.PageWindow):
             for label in labels:
                 if search_text in str(self.recordFull[label][i]):
                     self.showId[i] = True
-        labels = ['img','time','pest','loc']
+        labels = ['img', 'time', 'pest', 'loc']
         for i in range(len(self.recordFull['time'])):
             if self.showId[i]:
                 for label in labels:
