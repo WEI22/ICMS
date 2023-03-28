@@ -31,6 +31,13 @@ class WindowRegister(PageWindow.PageWindow):
             database='db',
             port='5432'
         )
+        # self.con = psycopg2.connect(
+        #     host='192.168.42.15',
+        #     user='postgres',
+        #     password='1234',
+        #     database='db',
+        #     port='5432'
+        # )
 
         # self.con = sqlite3.connect(r"C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\webui\db.sqlite3")
 

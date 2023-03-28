@@ -1,4 +1,5 @@
 import os
+import base64
 from django import forms
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -13,7 +14,6 @@ def home(request):
 
 def create_account(request):
     if request.method == 'POST':
-        # print(request.POST)
         form = RegisterForm(request.POST)
         custom_form = CustomRegisterForm(request.POST)
         if form.is_valid() and custom_form.is_valid():
@@ -65,8 +65,8 @@ def upload_data(request):
                 location="",
                 author=request.user.id,
                 host="",
-                number=1,
-                cum_num=1,
+                number=0,
+                cum_num=0,
                 image=request.FILES['image'])
             image.save()
             img_obj = image.image.url
@@ -84,9 +84,11 @@ def profile(request): # TODO: add back button, dynamic table
     if request.method == "POST":
         if "open" in request.POST:
             id = int(request.POST['open'])
-            path = str(images.get(id=id).image).replace('/', '\\')
-            path = os.path.join(r"\media", path)
-            return render(request, 'xxhungry/usertable.html', {'images': images, 'img': path})
+            img = images.get(id=id).image_data
+            base64_data = base64.b64encode(img).decode('utf-8')
+            # path = str(images.get(id=id).image).replace('/', '\\')
+            # path = os.path.join(r"\media", path)
+            return render(request, 'xxhungry/usertable.html', {'images': images, 'img': base64_data})
         elif "edit" in request.POST:
             id = int(request.POST['edit'])
             obj = images.get(id=id)

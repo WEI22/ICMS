@@ -7,6 +7,7 @@ import sys
 from datetime import datetime
 
 import psycopg2
+from psycopg2.extensions import Binary
 import cv2
 import numpy as np
 import tensorflow as tf
@@ -42,6 +43,13 @@ class WindowHome(PageWindow):
             database='db',
             port='5432'
         )
+        # self.con = psycopg2.connect(
+        #     host='192.168.42.15',
+        #     user='postgres',
+        #     password='1234',
+        #     database='db',
+        #     port='5432'
+        # )
         self.con.set_session()
         # self.con = sqlite3.connect(r"C:\Users\User\Desktop\Github\ICMS\webui\db.sqlite3")
         
@@ -77,11 +85,13 @@ class WindowHome(PageWindow):
                 detected_img, pred_bbox = self.detect(frame) # boxes, scores, classes, valid_detections
                 num_detections = int(pred_bbox[3][0])
                 class_indexes = pred_bbox[2][0][:num_detections]
+                _, img_data = cv2.imencode('.jpg', frame)
+                binary_data = Binary(img_data)
 
                 classes = "\n".join([self.classes[int(i)] for i in class_indexes])
-                sql_query = f"INSERT INTO web_image VALUES(DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                sql_query = f"INSERT INTO web_image VALUES(DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                 try:
-                    cur.execute(sql_query, (classes, '', 0, '', 0, 0, f"saved\\{saved_name}", today.date(), today.time()))
+                    cur.execute(sql_query, (classes, '', 0, '', 0, 0, f"saved\\{saved_name}", binary_data, today.date(), today.time()))
                 except Exception as e:
                     print(e)
                 self.con.commit()
@@ -138,8 +148,3 @@ class WindowHome(PageWindow):
         pred_bbox = [boxes.numpy(), scores.numpy(), classes.numpy(), valid_detections.numpy()]
         frame = utils.draw_bbox(frame, pred_bbox)
         return frame, pred_bbox
-
-if __name__ == '__main__':
-    app = QtGui.QGuiApplication(sys.argv)
-    window = WindowHome()
-    sys.exit(app.exec_())
