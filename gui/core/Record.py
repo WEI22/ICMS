@@ -21,14 +21,13 @@ class WindowRecord(PageWindow.PageWindow):
         self.sidebar()
 
         self.setupLogoutMsgBox()
-        # self.con = sqlite3.connect(r"C:\Users\User\Desktop\Github\ICMS\webui\db.sqlite3")
-        self.con = psycopg2.connect(
-            host='192.168.100.43',
-            user='postgres',
-            password='1234',
-            database='db',
-            port='5432'
-        )
+        # self.con = psycopg2.connect(
+        #     host='192.168.100.43',
+        #     user='postgres',
+        #     password='1234',
+        #     database='db',
+        #     port='5432'
+        # )
         # self.con = psycopg2.connect(
         #     host='192.168.42.15',
         #     user='postgres',
@@ -36,6 +35,7 @@ class WindowRecord(PageWindow.PageWindow):
         #     database='db',
         #     port='5432'
         # )
+        self.con = sqlite3.connect(r"/home/pi/ICMS/gui/db.sqlite3")
 
         self.recordFull = {'img': [], 'time': [], 'pest': [], 'loc': []}
         self.record = {'img': [], 'time': [], 'pest': [], 'loc': []}

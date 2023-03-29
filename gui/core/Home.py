@@ -6,6 +6,7 @@ import os
 import sys
 import time
 from datetime import datetime
+import sqlite3
 
 import psycopg2
 from psycopg2.extensions import Binary
@@ -38,13 +39,13 @@ class WindowHome(PageWindow):
         self.ui.camera_capture.clicked.connect(self.capture)
         self.ui.sidebar_logout.clicked.connect(self.logout)
 
-        self.con = psycopg2.connect(
-            host='192.168.100.43',
-            user='postgres',
-            password='1234',
-            database='db',
-            port='5432'
-        )
+        # self.con = psycopg2.connect(
+        #     host='192.168.100.43',
+        #     user='postgres',
+        #     password='1234',
+        #     database='db',
+        #     port='5432'
+        # )
         # self.con = psycopg2.connect(
         #     host='192.168.42.15',
         #     user='postgres',
@@ -52,8 +53,7 @@ class WindowHome(PageWindow):
         #     database='db',
         #     port='5432'
         # )
-        self.con.set_session()
-        # self.con = sqlite3.connect(r"C:\Users\User\Desktop\Github\ICMS\webui\db.sqlite3")
+        self.con = sqlite3.connect(r"/home/pi/ICMS/gui/db.sqlite3")
         
         self.model = tf.saved_model.load(MODEL_PATH, tags=[tag_constants.SERVING])
         self.infer = self.model.signatures['serving_default']
