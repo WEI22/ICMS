@@ -18,29 +18,13 @@ sys.path.insert(0, BASE_DIR)
 from ui import Register
 
 class WindowRegister(PageWindow.PageWindow):
-    def __init__(self, parent = None):
+    def __init__(self, con, parent = None):
         QtWidgets.QWidget.__init__(self,parent)
         self.ui = Register.Ui_Dialog()
         self.ui.setupUi(self)
         self.sidebar()
 
-        self.con = psycopg2.connect(
-            host='192.168.100.43',
-            user='postgres',
-            password='1234',
-            database='db',
-            port='5432'
-        )
-        # self.con = psycopg2.connect(
-        #     host='192.168.42.15',
-        #     user='postgres',
-        #     password='1234',
-        #     database='db',
-        #     port='5432'
-        # )
-
-        # self.con = sqlite3.connect(r"C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\webui\db.sqlite3")
-
+        self.con = con
         self.ui.sidebar_home.setEnabled(False)
         self.ui.sidebar_record.setEnabled(False)
         self.ui.sidebar_logout.setEnabled(False)

@@ -14,29 +14,14 @@ sys.path.insert(0, BASE_DIR)
 from ui import Record
 
 class WindowRecord(PageWindow.PageWindow):
-    def __init__(self, parent = None):
+    def __init__(self, con, parent = None):
         QtWidgets.QWidget.__init__(self, parent)
         self.ui = Record.Ui_Dialog()
         self.ui.setupUi(self)
         self.sidebar()
 
         self.setupLogoutMsgBox()
-        # self.con = sqlite3.connect(r"C:\Users\User\Desktop\Github\ICMS\webui\db.sqlite3")
-        self.con = psycopg2.connect(
-            host='192.168.100.43',
-            user='postgres',
-            password='1234',
-            database='db',
-            port='5432'
-        )
-        # self.con = psycopg2.connect(
-        #     host='192.168.42.15',
-        #     user='postgres',
-        #     password='1234',
-        #     database='db',
-        #     port='5432'
-        # )
-
+        self.con = con
         self.recordFull = {'img': [], 'time': [], 'pest': [], 'loc': []}
         self.record = {'img': [], 'time': [], 'pest': [], 'loc': []}
         self.tableElement = {'img': [], 'time': [], 'pest': [], 'loc': [], 'layout': []}
@@ -88,7 +73,7 @@ class WindowRecord(PageWindow.PageWindow):
 #                     self.tableElement[label][i].setPixmap(QtGui.QPixmap(str(self.record[label][i])))
                 
         for i in range(len(self.record['img'])):
-            self.tableElement['img'][i].clicked.connect(lambda i=i: self.imageClicked(self.record['img_data'][i]))
+            self.tableElement['img'][i].clicked.connect(lambda i=i: self.imageClicked(self.record['img_data'][i], self.record['img'][i]))
 
     def addLine(self, i):
         horizontalLayout = QtWidgets.QHBoxLayout()
@@ -104,10 +89,11 @@ class WindowRecord(PageWindow.PageWindow):
         img.setFont(font)
         img.setStyleSheet("border: 0.5px solid black")
         image = QtGui.QPixmap("Image/share.png")
-        image = image.scaled(24,24,QtCore.Qt.KeepAspectRatio)
+        image = image.scaled(24, 24, QtCore.Qt.KeepAspectRatio)
         img.setPixmap(image)
         img.setAlignment(QtCore.Qt.AlignCenter)
         img.setObjectName("record_table_date%d"%i)
+        img.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         horizontalLayout.addWidget(img)
         
         time = QtWidgets.QLabel(self.ui.scrollAreaWidgetContents)
@@ -193,17 +179,21 @@ class WindowRecord(PageWindow.PageWindow):
         self.tableElement['loc'].append(loc)
         self.tableElement['layout'].append(horizontalLayout)
         
-    def imageClicked(self, imagePath):
+    def imageClicked(self, image_data, image_path):
         dialog = QtWidgets.QDialog()
         layout = QtWidgets.QVBoxLayout()
         label = QtWidgets.QLabel()
-        qimage = QImage.fromData(imagePath)
+        qimage = QImage.fromData(image_data)
         pixmap = QPixmap.fromImage(qimage)
         label.setPixmap(pixmap)
         layout.addWidget(label)
         dialog.setLayout(layout)
         # dialog.setWindowTitle(imagePath[imagePath.rfind('\\')+1:])
-        dialog.setWindowFlag(QtCore.Qt.WindowContextHelpButtonHint,False)
+        try:
+            dialog.setWindowTitle(str(os.path.basename(image_path)))
+        except Exception as e:
+            print(e)
+        dialog.setWindowFlag(QtCore.Qt.WindowContextHelpButtonHint, False)
         dialog.exec_()
         
     def searchClicked(self):

@@ -1,10 +1,11 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
-from ui import Home
+from ui import Camera
 from core.PageWindow import PageWindow
 
 import os
 import sys
 from datetime import datetime
+import sqlite3
 
 import psycopg2
 from psycopg2.extensions import Binary
@@ -24,10 +25,10 @@ import tools.utils as utils
 
 class WindowHome(PageWindow):
 
-    def __init__(self, parent=None):
+    def __init__(self, con, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
         PageWindow.__init__(self)
-        self.ui = Home.Ui_Dialog()
+        self.ui = Camera.Ui_Dialog()
         self.ui.setupUi(self)
         self.sidebar()
 
@@ -36,23 +37,8 @@ class WindowHome(PageWindow):
         self.ui.camera_capture.clicked.connect(self.capture)
         self.ui.sidebar_logout.clicked.connect(self.logout)
 
-        self.con = psycopg2.connect(
-            host='192.168.100.43',
-            user='postgres',
-            password='1234',
-            database='db',
-            port='5432'
-        )
-        # self.con = psycopg2.connect(
-        #     host='192.168.42.15',
-        #     user='postgres',
-        #     password='1234',
-        #     database='db',
-        #     port='5432'
-        # )
-        self.con.set_session()
-        # self.con = sqlite3.connect(r"C:\Users\User\Desktop\Github\ICMS\webui\db.sqlite3")
-        
+        self.con = con
+
         self.model = tf.saved_model.load(MODEL_PATH, tags=[tag_constants.SERVING])
         self.infer = self.model.signatures['serving_default']
         with open(CLASSES_PATH, "r") as f:
@@ -86,12 +72,13 @@ class WindowHome(PageWindow):
                 num_detections = int(pred_bbox[3][0])
                 class_indexes = pred_bbox[2][0][:num_detections]
                 _, img_data = cv2.imencode('.jpg', frame)
-                binary_data = Binary(img_data)
+                # binary_data = Binary(img_data) # for postgresql only
 
                 classes = "\n".join([self.classes[int(i)] for i in class_indexes])
-                sql_query = f"INSERT INTO web_image VALUES(DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                # sql_query = f"INSERT INTO web_image VALUES(DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)" # for postgresql
+                sql_query = f"INSERT INTO web_image(pest, location, author, host, number, cum_num, image, image_data, date_created, time_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                 try:
-                    cur.execute(sql_query, (classes, '', 0, '', 0, 0, f"saved\\{saved_name}", binary_data, today.date(), today.time()))
+                    cur.execute(sql_query, (classes, "", 0, "", 0, 0, f"saved\\{saved_name}", img_data, str(today.date()), str(today.time())))
                 except Exception as e:
                     print(e)
                 self.con.commit()

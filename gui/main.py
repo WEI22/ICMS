@@ -1,8 +1,9 @@
 import os
 import sys
 import time
+import sqlite3
 from ui import Loading
-from core import PageWindow, Home, Register, Record, Upload
+from core import PageWindow, Camera, Register, Record, Upload
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.uic import loadUi
 
@@ -29,17 +30,18 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.stacked_widget = QtWidgets.QStackedWidget()
         self.setCentralWidget(self.stacked_widget)
-        
-        self.m_pages = {}
 
-        self.window_register = Register.WindowRegister()
-        self.window_home = Home.WindowHome()
-        self.window_record = Record.WindowRecord()
+        self.m_pages = {}
+        self.con = sqlite3.connect(r"C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\gui\db.sqlite3")
+
+        self.window_register = Register.WindowRegister(self.con)
+        self.window_home = Camera.WindowHome(self.con)
+        self.window_record = Record.WindowRecord(self.con)
         
         self.register(self.window_register, 'register')
         self.register(self.window_home, 'home')
         self.register(self.window_record, 'record')
-        
+
         # Login page (Remember me option)
         self.goto('register')
     
@@ -47,9 +49,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.m_pages[name] = widget
         self.stacked_widget.addWidget(widget)
         if isinstance(widget, PageWindow.PageWindow):
-            # self.window_record.con.commit()
-            # self.window_record.retrieve()
-            # self.window_record.update()
             widget.gotoSignal.connect(self.goto)
             
     @QtCore.pyqtSlot(str)
@@ -57,19 +56,12 @@ class MainWindow(QtWidgets.QMainWindow):
         if name in self.m_pages:
             widget = self.m_pages[name]
             self.stacked_widget.setCurrentWidget(widget)
-            # self.showMaximized()
             self.setWindowTitle(widget.windowTitle())
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv) 
-    # myapp = MainWindow()
-    # myapp.show()
-    # splash = SplashScreen()
-    # splash.show()
-    # splash.progress()
 
     myapp = MainWindow()
     myapp.show()
 
-    # splash.finish(myapp)
     sys.exit(app.exec_())
