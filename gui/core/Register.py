@@ -28,6 +28,7 @@ class WindowRegister(PageWindow.PageWindow):
         self.ui.sidebar_home.setEnabled(False)
         self.ui.sidebar_record.setEnabled(False)
         self.ui.sidebar_logout.setEnabled(False)
+        self.ui.sidebar_camera.setEnabled(False)
 
         self.view_icon = QtGui.QPixmap("Image\Register\\view.png")
         self.hidden_icon = QtGui.QPixmap("Image\Register\\hidden.png")

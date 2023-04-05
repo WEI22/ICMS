@@ -110,7 +110,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="sidebar_camera">
+      <widget class="ClickableLabel" name="sidebar_camera">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(0,0,0)</string>
        </property>
@@ -171,7 +171,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0">
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0">
      <property name="spacing">
       <number>0</number>
      </property>
@@ -249,7 +249,7 @@
   <customwidget>
    <class>ClickableLabel</class>
    <extends>QLabel</extends>
-   <header location="global">clickablelabel.h</header>
+   <header location="global">clickableLabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

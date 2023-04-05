@@ -5,9 +5,7 @@ from core.PageWindow import PageWindow
 import os
 import sys
 from datetime import datetime
-import sqlite3
 
-import psycopg2
 from psycopg2.extensions import Binary
 import cv2
 import numpy as np
@@ -23,11 +21,10 @@ CLASSES_PATH = r"C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\pest_detec
 
 import tools.utils as utils
 
-class WindowHome(PageWindow):
+class WindowCamera(PageWindow):
 
     def __init__(self, con, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
-        PageWindow.__init__(self)
         self.ui = Camera.Ui_Dialog()
         self.ui.setupUi(self)
         self.sidebar()

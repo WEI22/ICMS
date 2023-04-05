@@ -3,7 +3,8 @@ import sys
 import time
 import sqlite3
 from ui import Loading
-from core import PageWindow, Camera, Register, Record, Upload
+from core import PageWindow, Home, Camera, Register
+from core import Record as Record
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.uic import loadUi
 
@@ -35,15 +36,17 @@ class MainWindow(QtWidgets.QMainWindow):
         self.con = sqlite3.connect(r"C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\gui\db.sqlite3")
 
         self.window_register = Register.WindowRegister(self.con)
-        self.window_home = Camera.WindowHome(self.con)
+        self.window_home = Home.WindowHome(self.con)
+        self.window_camera = Camera.WindowCamera(self.con)
         self.window_record = Record.WindowRecord(self.con)
         
         self.register(self.window_register, 'register')
         self.register(self.window_home, 'home')
+        self.register(self.window_camera, 'camera')
         self.register(self.window_record, 'record')
 
         # Login page (Remember me option)
-        self.goto('register')
+        self.goto('home')
     
     def register(self, widget, name):
         self.m_pages[name] = widget
