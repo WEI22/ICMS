@@ -1,34 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>sidebar</class>
+ <widget class="QWidget" name="sidebar">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1013</width>
-    <height>703</height>
+    <width>224</width>
+    <height>853</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>widget</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
-   <property name="spacing">
-    <number>10</number>
-   </property>
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <property name="spacing">
@@ -57,7 +42,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QWidget" name="widget_2" native="true">
+      <widget class="QWidget" name="widget" native="true">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(0, 0, 0);</string>
        </property>
@@ -98,7 +83,7 @@
       </widget>
      </item>
      <item>
-      <widget class="ClickableLabel" name="sidebar_camera">
+      <widget class="QLabel" name="sidebar_camera">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(0,0,0)</string>
        </property>
@@ -149,98 +134,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QWidget" name="widget_3" native="true">
+      <widget class="QWidget" name="widget_2" native="true">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(0, 0, 0);
 </string>
        </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <layout class="QHBoxLayout" name="record_top" stretch="1,2,0,1">
-       <property name="spacing">
-        <number>20</number>
-       </property>
-       <property name="leftMargin">
-        <number>50</number>
-       </property>
-       <property name="rightMargin">
-        <number>50</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="record_title">
-         <property name="font">
-          <font>
-           <pointsize>20</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Pest Record</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="ClickableLabel" name="record_search_btn">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap>Image/User/search.png</pixmap>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="record_search">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <property name="placeholderText">
-          <string>Search</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QTableWidget" name="tableWidget">
-       <column>
-        <property name="text">
-         <string>Image</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Time</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Pest</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Location</string>
-        </property>
-       </column>
       </widget>
      </item>
     </layout>
@@ -251,7 +149,7 @@
   <customwidget>
    <class>ClickableLabel</class>
    <extends>QLabel</extends>
-   <header location="global">clickableLabel.h</header>
+   <header location="global">clickablelabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

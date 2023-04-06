@@ -1,156 +1,142 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QGraphicsScene
+from PyQt5.QtGui import QPainter
+from PyQt5.QtChart import QChart, QBarSet, QBarSeries, QBarCategoryAxis
+
 from ui import Home
 from core.PageWindow import PageWindow
 
+import random
 import os
-import sys
-import time
-from datetime import datetime
-import sqlite3
 
-import psycopg2
-from psycopg2.extensions import Binary
-import cv2
-from picamera2 import Picamera2
-import numpy as np
-import tensorflow as tf
-from tensorflow.python.saved_model import tag_constants
+from datetime import datetime
+from collections import Counter
 
 CURRENT_DIR = os.getcwd()
-BASE_DIR = os.path.dirname(CURRENT_DIR)
-sys.path.insert(0, BASE_DIR)
-
-MODEL_PATH = r"/home/pi/ICMS/pest_detection/checkpoints"
-CLASSES_PATH = r"/home/pi/ICMS/pest_detection/obj.names"
-
-import tools.utils as utils
 
 class WindowHome(PageWindow):
 
-    def __init__(self, parent=None):
+    def __init__(self, con, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
-        PageWindow.__init__(self)
-        self.ui = Home.Ui_Dialog()
+        self.ui = Home.Ui_Form()
         self.ui.setupUi(self)
         self.sidebar()
 
         self.setupLogoutMsgBox()
+        self.updateGraphicView()
 
-        self.ui.camera_capture.clicked.connect(self.capture)
-        self.ui.sidebar_logout.clicked.connect(self.logout)
+        self.con = con
 
-        # self.con = psycopg2.connect(
-        #     host='192.168.100.43',
-        #     user='postgres',
-        #     password='1234',
-        #     database='db',
-        #     port='5432'
-        # )
-        # self.con = psycopg2.connect(
-        #     host='192.168.42.15',
-        #     user='postgres',
-        #     password='1234',
-        #     database='db',
-        #     port='5432'
-        # )
-        self.con = sqlite3.connect(r"/home/pi/ICMS/gui/db.sqlite3")
-        
-        self.model = tf.saved_model.load(MODEL_PATH, tags=[tag_constants.SERVING])
-        self.infer = self.model.signatures['serving_default']
-        with open(CLASSES_PATH, "r") as f:
-            self.classes = list(map(lambda x: str(x).replace("\n", ""), f.readlines()))
+        self.ui.today_button.clicked.connect(lambda: self.selectTimeFrame("today"))
+        self.ui.week_button.clicked.connect(lambda: self.selectTimeFrame("week"))
+        self.ui.month_button.clicked.connect(lambda: self.selectTimeFrame("month"))
 
-        self.fps = 10
-        self.cap = Picamera2()
-        self.cap.video_configuration.main.format = "RGB888"
-        self.cap.configure("video")
-        self.cap.start()
-        time.sleep(1)
+        current_time = datetime.now()
+        self.ui.time_label.setText(str(current_time.time())[:-7])
+        self.ui.date_label.setText(str(current_time.date()))
 
-        self.isCapturing = False
-        self.isDetecting = False
+        self.pest_dict = self.generatePestDict()
 
-        self.start()
+        self.showPestNumber()
+        self.showChart()
 
-    def setFPS(self, fps):
-        self.fps = fps
+        self.startTimer()
+        self.startSlideshowTimer()
 
-    def nextFrameSlot(self):
-        frame = self.cap.capture_array("main")
+    def selectTimeFrame(self, time_frame):
+        if time_frame == "today":
+            self.ui.today_button.setEnabled(False)
+            self.ui.week_button.setEnabled(True)
+            self.ui.month_button.setEnabled(True)
+            self.ui.week_button.setChecked(False)
+            self.ui.month_button.setChecked(False)
 
-        if self.ui.camera_real.isChecked():
-            frame, _ = self.detect(frame)
+        elif time_frame == "week":
+            self.ui.today_button.setEnabled(True)
+            self.ui.week_button.setEnabled(False)
+            self.ui.month_button.setEnabled(True)
+            self.ui.today_button.setChecked(False)
+            self.ui.month_button.setChecked(False)
 
-        if self.isCapturing:
-            today = datetime.now()
-            saved_name = f"img_{datetime.strftime(today, '%d%m%y%H%M%S')}.jpg"
-            cv2.imwrite(f".\\saved\\original\\{saved_name}", frame)
+        elif time_frame == "month":
+            self.ui.today_button.setEnabled(True)
+            self.ui.week_button.setEnabled(True)
+            self.ui.month_button.setEnabled(False)
+            self.ui.today_button.setChecked(False)
+            self.ui.week_button.setChecked(False)
 
-            cur = self.con.cursor()
-            if not self.isDetecting:
-                detected_img, pred_bbox = self.detect(frame) # boxes, scores, classes, valid_detections
-                num_detections = int(pred_bbox[3][0])
-                class_indexes = pred_bbox[2][0][:num_detections]
-                _, img_data = cv2.imencode('.jpg', frame)
-                binary_data = Binary(img_data)
+    def showPestNumber(self):
+        pest_num = sum(self.pest_dict.values())
+        self.ui.pest_number.setText(str(pest_num))
 
-                classes = "\n".join([self.classes[int(i)] for i in class_indexes])
-                sql_query = f"INSERT INTO web_image VALUES(DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-                try:
-                    cur.execute(sql_query, (classes, '', 0, '', 0, 0, f"saved\\{saved_name}", binary_data, today.date(), today.time()))
-                except Exception as e:
-                    print(e)
-                self.con.commit()
-                cv2.imwrite(f"saved\\{saved_name}", frame)
+    def showChart(self):
+        pest_types = {"army_worm": 0, "legume_blister_beetle": 1, "red_spider": 2, "rice_gall_midge": 3, "rice_leaf_roller": 4, "rice_leafhopper": 5, "rice_water_weevil": 6, "wheat_phloeothrips": 7, "white_backed_plant_hopper": 8, "yellow_rice_borer": 9}
+        pest_bars = [QBarSet(pest) for pest in pest_types]
 
-            self.isCapturing = False
+        pest_dict = {}
+        for i in self.data:
+            if i[-2] not in pest_dict and i[1] != "":
+                pest_dict[i[-2]] = Counter(i[1].split("\n"))
+            elif i[1] != "":
+                pest_dict[i[-2]].update(i[1].split("\n"))
 
-        # My webcam yields frames in BGR format
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        img = QtGui.QImage(frame, frame.shape[1], frame.shape[0], QtGui.QImage.Format_RGB888)
-        pix = QtGui.QPixmap.fromImage(img)
-        self.ui.camera_video.setPixmap(pix)
+        pest_series = QBarSeries()
+        axis_x = QBarCategoryAxis()
 
-    def start(self):
+        for date, pest in pest_dict.items():
+            for key, value in pest.items():
+                pest_bars[pest_types[key]] << value
+            axis_x.append(date)
+
+        for i in pest_bars:
+            pest_series.append(i)
+
+        chart = QChart()
+        chart.addSeries(pest_series)
+        chart.setAnimationOptions(QChart.SeriesAnimations)
+        chart.createDefaultAxes()
+        chart.setAxisX(axis_x, pest_series)
+
+        self.ui.chart.setChart(chart)
+
+    def updateGraphicView(self):
+        self.ui.graphicsView.setRenderHint(QPainter.Antialiasing)
+        self.ui.graphicsView.setRenderHint(QPainter.SmoothPixmapTransform)
+        self.ui.graphicsView.setScene(QGraphicsScene())
+
+        pic_path = os.path.join(CURRENT_DIR, "saved")
+        pic_list = os.listdir(pic_path)
+
+        pic_chosen = random.choice(pic_list)
+        pixmap = QtGui.QPixmap(os.path.join(pic_path, pic_chosen))
+        pixmap = pixmap.scaled(420, 320, QtCore.Qt.KeepAspectRatio)
+        self.ui.graphicsView.scene().addPixmap(pixmap)
+
+    def generatePestDict(self):
+        self.data = self.con.execute("SELECT * FROM web_image").fetchall()
+        pest_list = list(map(lambda x: x[1], self.data))
+        pest_list = list(map(lambda x: x.split("\n"), pest_list))
+        pest_list = [i for j in pest_list for i in j]
+        pest_list = filter(lambda x: x != "", pest_list)
+        return Counter(pest_list)
+
+    def checkUpdate(self):
+        current_time = datetime.now()
+        updated_pest_dict = self.generatePestDict()
+        self.ui.time_label.setText(str(current_time.time())[:-7])
+        self.ui.date_label.setText(str(current_time.date()))
+        if updated_pest_dict != self.pest_dict:
+            self.pest_dict = updated_pest_dict
+            self.showPestNumber()
+            self.showChart()
+
+    def startTimer(self):
         self.timer = QtCore.QTimer()
-        self.timer.timeout.connect(self.nextFrameSlot)
-        self.timer.start(1000 // self.fps)
+        self.timer.timeout.connect(self.checkUpdate)
+        self.timer.start(1000)
 
-    def stop(self):
-        self.timer.stop()
-
-    def capture(self):
-        if not self.isCapturing:
-            self.isCapturing = True
-        else:
-            self.isCapturing = False
-
-    def deleteLater(self):
-        self.cap.release()
-        super(QtWidgets.QWidget, self).deleteLater()
-
-    def detect(self, frame):
-        image_data = cv2.resize(frame, (416, 416))
-        image_data = image_data / 255.
-        image_data = image_data[np.newaxis, ...].astype(np.float32)
-
-        batch_data = tf.constant(image_data)
-        pred_bbox = self.infer(batch_data)
-
-        for key, value in pred_bbox.items():
-            boxes = value[:, :, 0:4]
-            pred_conf = value[:, :, 4:]
-
-        boxes, scores, classes, valid_detections = tf.image.combined_non_max_suppression(
-            boxes=tf.reshape(boxes, (tf.shape(boxes)[0], -1, 1, 4)),
-            scores=tf.reshape(
-                pred_conf, (tf.shape(pred_conf)[0], -1, tf.shape(pred_conf)[-1])),
-            max_output_size_per_class=50,
-            max_total_size=50,
-            iou_threshold=0.45,
-            score_threshold=0.25
-        )
-
-        pred_bbox = [boxes.numpy(), scores.numpy(), classes.numpy(), valid_detections.numpy()]
-        frame = utils.draw_bbox(frame, pred_bbox)
-        return frame, pred_bbox
+    def startSlideshowTimer(self):
+        self.slideshow_timer = QtCore.QTimer()
+        self.slideshow_timer.timeout.connect(self.updateGraphicView)
+        self.slideshow_timer.start(5000)

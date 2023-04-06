@@ -9,7 +9,7 @@ class USER(models.Model):
     email = models.EmailField(("email"))
     password1 = models.CharField(("password1"), max_length=128)
 
-class Image(models.Model):
+class IMAGE(models.Model):
     pest = models.CharField(max_length=500)
     location = models.CharField(max_length=200)
     author = models.IntegerField()
