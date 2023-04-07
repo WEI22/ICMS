@@ -44,6 +44,7 @@ Make sure PyQt5, Pillow, passlib has been installed
 
 ```
 pip install PyQt5 passlib Pillow
+sudo apt-get install python3-pyqt5.qtchart
 ```
 
 To launch:
