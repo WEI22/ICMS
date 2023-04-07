@@ -108,10 +108,11 @@ class WindowHome(PageWindow):
         pic_path = os.path.join(CURRENT_DIR, "saved")
         pic_list = os.listdir(pic_path)
 
-        pic_chosen = random.choice(pic_list)
-        pixmap = QtGui.QPixmap(os.path.join(pic_path, pic_chosen))
-        pixmap = pixmap.scaled(420, 320, QtCore.Qt.KeepAspectRatio)
-        self.ui.graphicsView.scene().addPixmap(pixmap)
+        if pic_list:
+            pic_chosen = random.choice(pic_list)
+            pixmap = QtGui.QPixmap(os.path.join(pic_path, pic_chosen))
+            pixmap = pixmap.scaled(420, 320, QtCore.Qt.KeepAspectRatio)
+            self.ui.graphicsView.scene().addPixmap(pixmap)
 
     def generatePestDict(self):
         self.data = self.con.execute("SELECT * FROM web_image").fetchall()
