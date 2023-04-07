@@ -9,7 +9,7 @@ CURRENT_DIR = os.getcwd()
 BASE_DIR = os.path.dirname(CURRENT_DIR)
 sys.path.insert(0, BASE_DIR)
 
-from ui import Record_remastered as Record
+from ui import Record
 
 class WindowRecord(PageWindow.PageWindow):
     def __init__(self, con, parent=None):
