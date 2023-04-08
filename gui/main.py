@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import sqlite3
+from passlib.hash import pbkdf2_sha256
 from ui import Loading
 from core import PageWindow, Home, Camera, Register
 from core import Record as Record
@@ -46,8 +47,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.register(self.window_record, 'record')
 
         # Login page (Remember me option)
-        self.goto('home')
-    
+        try:
+            with open("log") as f:
+                if pbkdf2_sha256.verify("HiThisisJesus", f.readline()):
+                    self.goto("home")
+                else:
+                    self.goto("register")
+        except:
+            pass
+
     def register(self, widget, name):
         self.m_pages[name] = widget
         self.stacked_widget.addWidget(widget)

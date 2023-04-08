@@ -23,8 +23,9 @@ class WindowRecord(PageWindow.PageWindow):
         self.con = con
 
         self.ui.sidebar_logout.clicked.connect(self.logout)
-        # self.ui.record_search_btn.clicked.connect(self.searchClicked)
-        # self.ui.record_search.returnPressed.connect(self.searchClicked)
+        self.ui.sidebar_logout.clicked.connect(self.logout)
+        self.ui.record_search_btn.clicked.connect(self.search)
+        self.ui.record_search.returnPressed.connect(self.search)
 
         self.data = self.con.execute("SELECT * FROM web_image").fetchall()
         self.ui.tableWidget.setColumnWidth(0, 200)
@@ -35,10 +36,12 @@ class WindowRecord(PageWindow.PageWindow):
 
         self.startTimer()
 
-    def updateTable(self):
-        self.ui.tableWidget.setRowCount(len(self.data))
+    def updateTable(self, data=None):
+        if data == None:
+            data = self.data
+        self.ui.tableWidget.setRowCount(len(data))
 
-        for n, i in enumerate(self.data):
+        for n, i in enumerate(data):
             image_item = self.getImageLabel(i[-3])
             time_item = QtWidgets.QTableWidgetItem(f"{i[-2]}\n{i[-1][:-7]}")
             pest_item = QtWidgets.QTableWidgetItem(i[1].replace(",", "\n"))
@@ -87,3 +90,11 @@ class WindowRecord(PageWindow.PageWindow):
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.checkUpdate)
         self.timer.start(2000)
+
+    def stopTimer(self):
+        self.timer.stop()
+
+    def search(self):
+        search_text = self.ui.record_search.text()
+        results = list(filter(lambda x: search_text in x[1], self.data))
+        self.updateTable(results)
