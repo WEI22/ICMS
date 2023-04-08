@@ -6,7 +6,9 @@ from core import PageWindow
 import os
 import sys
 import re
+from datetime import datetime
 import psycopg2
+from passlib.hash import pbkdf2_sha256
 
 EMAIL_REGEX = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 SIGNUP_URL = "http://192.168.100.43:8000/create-account/"
@@ -59,6 +61,12 @@ class WindowRegister(PageWindow.PageWindow):
         if password_from_db and password == password_from_db[0]:
             self.ui.login_password_text.setText("")
             self.ui.login_msg_register.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+
+            if self.ui.login_remember.isChecked():
+                hash = pbkdf2_sha256.hash("HiThisisJesus")
+                with open("log", "w") as f:
+                    f.write(hash)
+
             self.homeClicked()
         elif password_from_db is None:
             self.ui.login_msg.setText("Cannot find your email/username! ")

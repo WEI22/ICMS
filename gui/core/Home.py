@@ -3,13 +3,14 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QGraphicsScene
 from PyQt5.QtGui import QPainter
 from PyQt5.QtChart import QChart, QBarSet, QBarSeries, QBarCategoryAxis
+from PyQt5.QtChart import QChart, QPieSeries, QPieSlice
 
 from ui import Home
 from core.PageWindow import PageWindow
 
 import random
 import os
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from collections import Counter
 
 CURRENT_DIR = os.getcwd()
@@ -27,6 +28,7 @@ class WindowHome(PageWindow):
 
         self.con = con
 
+        self.ui.sidebar_logout.clicked.connect(self.logout)
         self.ui.today_button.clicked.connect(lambda: self.selectTimeFrame("today"))
         self.ui.week_button.clicked.connect(lambda: self.selectTimeFrame("week"))
         self.ui.month_button.clicked.connect(lambda: self.selectTimeFrame("month"))
@@ -37,8 +39,10 @@ class WindowHome(PageWindow):
 
         self.pest_dict = self.generatePestDict()
 
+        self.timeframe = "today"
         self.showPestNumber()
-        self.showChart()
+        # self.showBarChart()
+        self.showPieChart()
 
         self.startTimer()
         self.startSlideshowTimer()
@@ -51,12 +55,16 @@ class WindowHome(PageWindow):
             self.ui.week_button.setChecked(False)
             self.ui.month_button.setChecked(False)
 
+            self.timeframe = "today"
+
         elif time_frame == "week":
             self.ui.today_button.setEnabled(True)
             self.ui.week_button.setEnabled(False)
             self.ui.month_button.setEnabled(True)
             self.ui.today_button.setChecked(False)
             self.ui.month_button.setChecked(False)
+
+            self.timeframe = "week"
 
         elif time_frame == "month":
             self.ui.today_button.setEnabled(True)
@@ -65,11 +73,27 @@ class WindowHome(PageWindow):
             self.ui.today_button.setChecked(False)
             self.ui.week_button.setChecked(False)
 
+            self.timeframe = "month"
+
+        self.showPieChart()
+        self.showPestNumber()
+
     def showPestNumber(self):
-        pest_num = sum(self.pest_dict.values())
+        today_date = date.today()
+        pest_counter = Counter()
+        for i in self.data:
+            data_date = datetime.strptime(i[-2], "%Y-%m-%d").date()
+            if self.timeframe == "today" and data_date == today_date:
+                pest_counter.update(i[1].split("\n"))
+            elif self.timeframe == "week" and today_date - data_date <= timedelta(days=7):
+                pest_counter.update(i[1].split("\n"))
+            elif self.timeframe == "month" and today_date - data_date <= timedelta(days=30):
+                pest_counter.update(i[1].split("\n"))
+        pest_counter.pop("")
+        pest_num = sum(pest_counter.values())
         self.ui.pest_number.setText(str(pest_num))
 
-    def showChart(self):
+    def showBarChart(self): # Deprecated
         pest_types = {"army_worm": 0, "legume_blister_beetle": 1, "red_spider": 2, "rice_gall_midge": 3, "rice_leaf_roller": 4, "rice_leafhopper": 5, "rice_water_weevil": 6, "wheat_phloeothrips": 7, "white_backed_plant_hopper": 8, "yellow_rice_borer": 9}
         pest_bars = [QBarSet(pest) for pest in pest_types]
 
@@ -96,6 +120,44 @@ class WindowHome(PageWindow):
         chart.setAnimationOptions(QChart.SeriesAnimations)
         chart.createDefaultAxes()
         chart.setAxisX(axis_x, pest_series)
+
+        self.ui.chart.setChart(chart)
+
+    def showPieChart(self):
+        pest_counter = Counter()
+        today_date = date.today()
+        for i in self.data:
+            data_date = datetime.strptime(i[-2], '%Y-%m-%d').date()
+            if self.timeframe == "today" and data_date == today_date:
+                pest_counter.update(i[1].split("\n"))
+            elif self.timeframe == "week" and today_date - data_date <= timedelta(days=7):
+                pest_counter.update(i[1].split("\n"))
+            elif self.timeframe == "month" and today_date - data_date <= timedelta(days=30):
+                pest_counter.update(i[1].split("\n"))
+
+        pest_counter.pop("")
+        if pest_counter:
+            self.series = QPieSeries()
+            slices = list()
+            for key, value in pest_counter.items():
+                slice_ = QPieSlice(key, value)
+                slice_.setLabelVisible()
+                slices.append(slice_)
+                self.series.append(slice_)
+
+            for slice_ in slices:
+                label = "<p align='center'>{}% {}</p>".format(round(slice_.percentage()*100, 2), slice_.label())
+                slice_.setLabel(label)
+
+            chart = QChart()
+            chart.legend().hide()
+            chart.addSeries(self.series)
+            chart.createDefaultAxes()
+            chart.setAnimationOptions(QChart.SeriesAnimations)
+
+        else:
+            chart = QChart()
+            chart.setTitle("No Pest Detected")
 
         self.ui.chart.setChart(chart)
 
@@ -129,7 +191,7 @@ class WindowHome(PageWindow):
         if updated_pest_dict != self.pest_dict:
             self.pest_dict = updated_pest_dict
             self.showPestNumber()
-            self.showChart()
+            self.showPieChart()
 
     def startTimer(self):
         self.timer = QtCore.QTimer()

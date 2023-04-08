@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets, QtCore
+import os
 
 class PageWindow(QtWidgets.QDialog):
     gotoSignal = QtCore.pyqtSignal(str)
@@ -35,4 +36,5 @@ class PageWindow(QtWidgets.QDialog):
     def logout(self):
         respond = self.logout_msgbox.exec_()
         if respond == QtWidgets.QMessageBox.Yes:
+            os.remove("log")
             self.goto("register")
