@@ -16,8 +16,10 @@ CURRENT_DIR = os.getcwd()
 BASE_DIR = os.path.dirname(CURRENT_DIR)
 sys.path.insert(0, BASE_DIR)
 
-MODEL_PATH = r"C:\Users\User\Documents\UM\Year 3\Sem 1\KIX2001\Crop Monitoring System\pest_detection\yolov4_tiny\checkpoints"
-CLASSES_PATH = r"C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\pest_detection\obj.names"
+PEST_MODEL_PATH = r"C:\Users\User\Documents\UM\Year 3\Sem 1\KIX2001\Crop Monitoring System\pest_detection\yolov4_tiny\checkpoints"
+DISEASE_MODEL_PATH = r"C:\Users\User\Documents\UM\Year 3\Sem 1\KIX2001\Crop Monitoring System\crop_disease\yolov4_tiny\checkpoints"
+PEST_CLASSES_PATH = r"C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\pest_detection\obj.names"
+DISEASE_CLASSES_PATH = r"C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\crop_disease\yolov4-tiny\obj.names"
 
 import tools.utils as utils
 
@@ -33,13 +35,20 @@ class WindowCamera(PageWindow):
 
         self.ui.camera_capture.clicked.connect(self.capture)
         self.ui.sidebar_logout.clicked.connect(self.logout)
+        self.ui.pest_detection_button.toggled.connect(lambda: self.btnChecked("pest"))
+        self.ui.disease_detection_button.toggled.connect(lambda: self.btnChecked("disease"))
 
         self.con = con
 
-        self.model = tf.saved_model.load(MODEL_PATH, tags=[tag_constants.SERVING])
-        self.infer = self.model.signatures['serving_default']
-        with open(CLASSES_PATH, "r") as f:
-            self.classes = list(map(lambda x: str(x).replace("\n", ""), f.readlines()))
+        self.pest_model = tf.saved_model.load(PEST_MODEL_PATH, tags=[tag_constants.SERVING])
+        self.pest_infer = self.pest_model.signatures['serving_default']
+        with open(PEST_CLASSES_PATH, "r") as f:
+            self.pest_classes = list(map(lambda x: str(x).replace("\n", ""), f.readlines()))
+
+        self.disease_model = tf.saved_model.load(DISEASE_MODEL_PATH, tags=[tag_constants.SERVING])
+        self.disease_infer = self.disease_model.signatures['serving_default']
+        with open(DISEASE_CLASSES_PATH, "r") as f:
+            self.disease_classes = list(map(lambda x: str(x).replace("\n", ""), f.readlines()))
 
         self.fps = 10
         self.cap = cv2.VideoCapture(0)
@@ -71,7 +80,7 @@ class WindowCamera(PageWindow):
                 _, img_data = cv2.imencode('.jpg', frame)
                 # binary_data = Binary(img_data) # for postgresql only
 
-                classes = "\n".join([self.classes[int(i)] for i in class_indexes])
+                classes = "\n".join([self.pest_classes[int(i)] for i in class_indexes])
                 # sql_query = f"INSERT INTO web_image VALUES(DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)" # for postgresql
                 sql_query = f"INSERT INTO web_image(pest, location, author, host, number, cum_num, image, image_data, date_created, time_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                 try:
@@ -113,7 +122,14 @@ class WindowCamera(PageWindow):
         image_data = image_data[np.newaxis, ...].astype(np.float32)
 
         batch_data = tf.constant(image_data)
-        pred_bbox = self.infer(batch_data)
+
+        if self.ui.pest_detection_button.isChecked():
+            model = self.pest_infer
+            model_class = utils.read_class_names(PEST_CLASSES_PATH)
+        else:
+            model = self.disease_infer
+            model_class = utils.read_class_names(DISEASE_CLASSES_PATH)
+        pred_bbox = model(batch_data)
 
         for key, value in pred_bbox.items():
             boxes = value[:, :, 0:4]
@@ -130,5 +146,11 @@ class WindowCamera(PageWindow):
         )
 
         pred_bbox = [boxes.numpy(), scores.numpy(), classes.numpy(), valid_detections.numpy()]
-        frame = utils.draw_bbox(frame, pred_bbox)
+        frame = utils.draw_bbox(frame, pred_bbox, classes=model_class)
         return frame, pred_bbox
+
+    def btnChecked(self, i):
+        if i == "pest":
+            self.ui.disease_detection_button.setChecked(False)
+        elif i == "disease":
+            self.ui.pest_detection_button.setChecked(False)

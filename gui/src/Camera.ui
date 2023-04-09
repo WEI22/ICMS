@@ -25,7 +25,7 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,5">
+  <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0">
    <property name="spacing">
     <number>0</number>
    </property>
@@ -186,7 +186,7 @@
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout" stretch="2,0,1,0,5">
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -194,17 +194,14 @@
         <number>50</number>
        </property>
        <property name="topMargin">
-        <number>0</number>
+        <number>100</number>
        </property>
        <property name="rightMargin">
         <number>50</number>
        </property>
        <property name="bottomMargin">
-        <number>50</number>
+        <number>200</number>
        </property>
-       <item>
-        <widget class="QWidget" name="widget_4" native="true"/>
-       </item>
        <item>
         <widget class="QPushButton" name="camera_capture">
          <property name="font">
@@ -218,7 +215,28 @@
         </widget>
        </item>
        <item>
-        <widget class="QWidget" name="widget_5" native="true"/>
+        <widget class="QRadioButton" name="pest_detection_button">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Pest</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="disease_detection_button">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Disease</string>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="camera_real">
@@ -229,13 +247,6 @@
          </property>
          <property name="text">
           <string>Real Time</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QWidget" name="widget_3" native="true">
-         <property name="enabled">
-          <bool>true</bool>
          </property>
         </widget>
        </item>

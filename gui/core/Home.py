@@ -89,7 +89,9 @@ class WindowHome(PageWindow):
                 pest_counter.update(i[1].split("\n"))
             elif self.timeframe == "month" and today_date - data_date <= timedelta(days=30):
                 pest_counter.update(i[1].split("\n"))
-        pest_counter.pop("")
+
+        if "" in pest_counter:
+            pest_counter.pop("")
         pest_num = sum(pest_counter.values())
         self.ui.pest_number.setText(str(pest_num))
 
@@ -135,7 +137,8 @@ class WindowHome(PageWindow):
             elif self.timeframe == "month" and today_date - data_date <= timedelta(days=30):
                 pest_counter.update(i[1].split("\n"))
 
-        pest_counter.pop("")
+        if "" in pest_counter:
+            pest_counter.pop("")
         if pest_counter:
             self.series = QPieSeries()
             slices = list()
