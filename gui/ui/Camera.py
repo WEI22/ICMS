@@ -100,6 +100,7 @@ class Ui_Dialog(object):
         font = QtGui.QFont()
         font.setPointSize(12)
         self.pest_detection_button.setFont(font)
+        self.pest_detection_button.setChecked(True)
         self.pest_detection_button.setObjectName("pest_detection_button")
         self.verticalLayout.addWidget(self.pest_detection_button)
         self.disease_detection_button = QtWidgets.QRadioButton(Dialog)

@@ -72,14 +72,14 @@ class RobotCar:
         self.speed = speed
 
     def left(self):
-        self.motor1.stop()
-        self.motor2.stop()
+        self.motor1.run("backward", self.speed)
+        self.motor2.run("backward", self.speed)
         self.motor3.run("forward", self.speed)
         self.motor4.run("forward", self.speed)
 
     def right(self):
         self.motor1.run("forward", self.speed)
         self.motor2.run("forward", self.speed)
-        self.motor3.stop()
-        self.motor4.stop()
+        self.motor3.run("backward", self.speed)
+        self.motor4.run("backward", self.speed)
 

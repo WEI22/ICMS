@@ -160,8 +160,20 @@
    </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="spacing">
+      <number>10</number>
+     </property>
+     <property name="topMargin">
+      <number>10</number>
+     </property>
+     <property name="rightMargin">
+      <number>10</number>
+     </property>
+     <property name="bottomMargin">
+      <number>10</number>
+     </property>
      <item>
-      <layout class="QHBoxLayout" name="record_top" stretch="1,2,0,1">
+      <layout class="QHBoxLayout" name="record_top" stretch="0,0,0,0">
        <property name="spacing">
         <number>20</number>
        </property>
@@ -171,13 +183,6 @@
        <property name="rightMargin">
         <number>50</number>
        </property>
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
        <item>
         <widget class="QLabel" name="record_title">
          <property name="font">
@@ -193,6 +198,28 @@
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="table_combobox">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <item>
+          <property name="text">
+           <string>Pest</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Disease</string>
+          </property>
+         </item>
         </widget>
        </item>
        <item>
@@ -220,7 +247,7 @@
       </layout>
      </item>
      <item>
-      <widget class="QTableWidget" name="tableWidget">
+      <widget class="QTableWidget" name="table">
        <column>
         <property name="text">
          <string>Image</string>

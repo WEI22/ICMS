@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm, CustomRegisterForm, ImageForm
-from .models import IMAGE, USER
+from .models import PEST, USER
 
 def home(request):
     return render(request, 'xxhungry/index.html')
@@ -60,7 +60,7 @@ def upload_data(request):
         form = ImageForm(request.POST, request.FILES)
         # print(form.is_valid())
         if form.is_valid():
-            image = IMAGE(
+            image = PEST(
                 pest="",
                 location="",
                 author=request.user.id,
@@ -78,7 +78,7 @@ def common_disease(request):
 
 @login_required
 def profile(request): # TODO: add back button, dynamic table
-    images = IMAGE.objects.all()
+    images = PEST.objects.all()
     path = ""
     obj = False
     if request.method == "POST":
@@ -110,7 +110,7 @@ def profile(request): # TODO: add back button, dynamic table
         elif "search" in request.POST:
             search = request.POST['search']
             if search:
-                result = IMAGE.objects.filter(pest__contains=search).values() | IMAGE.objects.filter(location__contains=search).values() | IMAGE.objects.filter(host__contains=search).values()
+                result = PEST.objects.filter(pest__contains=search).values() | PEST.objects.filter(location__contains=search).values() | PEST.objects.filter(host__contains=search).values()
                 return render(request, 'xxhungry/usertable.html', {'images': result, 'img': path, 'obj': obj})
 
 

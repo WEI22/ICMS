@@ -50,6 +50,7 @@ class WindowCamera(PageWindow):
         with open(DISEASE_CLASSES_PATH, "r") as f:
             self.disease_classes = list(map(lambda x: str(x).replace("\n", ""), f.readlines()))
 
+        self.current_model = None
         self.fps = 10
         self.cap = cv2.VideoCapture(0)
 
@@ -70,7 +71,13 @@ class WindowCamera(PageWindow):
         if self.isCapturing:
             today = datetime.now()
             saved_name = f"img_{datetime.strftime(today, '%d%m%y%H%M%S')}.jpg"
-            cv2.imwrite(f".\\saved\\original\\{saved_name}", frame)
+            # cv2.imwrite(f".\\saved\\original\\{saved_name}", frame)
+            if self.current_model == "pest":
+                saved_path = f"saved\\pest\\{saved_name}"
+                cv2.imwrite(f".\\saved\\pest\\original\\{saved_name}", frame)
+            elif self.current_model == "disease":
+                saved_path = f"saved\\disease\\{saved_name}"
+                cv2.imwrite(f".\\saved\\disease\\original\\{saved_name}", frame)
 
             cur = self.con.cursor()
             if not self.isDetecting:
@@ -80,16 +87,18 @@ class WindowCamera(PageWindow):
                 _, img_data = cv2.imencode('.jpg', frame)
                 # binary_data = Binary(img_data) # for postgresql only
 
-                classes = "\n".join([self.pest_classes[int(i)] for i in class_indexes])
                 # sql_query = f"INSERT INTO web_image VALUES(DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)" # for postgresql
-                sql_query = f"INSERT INTO web_image(pest, location, author, host, number, cum_num, image, image_data, date_created, time_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-                try:
-                    cur.execute(sql_query, (classes, "", 0, "", 0, 0, f"saved\\{saved_name}", img_data, str(today.date()), str(today.time())))
-                except Exception as e:
-                    print(e)
+                # sql_query = f"INSERT INTO web_image(pest, location, author, host, number, cum_num, image, image_data, date_created, time_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                if self.current_model == "pest":
+                    classes = "\n".join([self.pest_classes[int(i)] for i in class_indexes])
+                    sql_query = f"INSERT INTO web_{self.current_model}(pest, location, author, host, number, cum_num, image, image_data, date_created, time_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                    cur.execute(sql_query, (classes, "", 0, "", 0, 0, saved_path, img_data, str(today.date()), str(today.time())))
+                elif self.current_model == "disease":
+                    classes = "\n".join([self.disease_classes[int(i)] for i in class_indexes])
+                    sql_query = f"INSERT INTO web_{self.current_model}(disease, location, author, crop, number, image, image_data, date_created, time_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                    cur.execute(sql_query, (classes, "", 0, "", 0, saved_path, img_data, str(today.date()), str(today.time())))
                 self.con.commit()
-                cv2.imwrite(f"saved\\{saved_name}", frame)
-
+                cv2.imwrite(saved_path, frame)
             self.isCapturing = False
 
         # My webcam yields frames in BGR format
@@ -123,10 +132,10 @@ class WindowCamera(PageWindow):
 
         batch_data = tf.constant(image_data)
 
-        if self.ui.pest_detection_button.isChecked():
+        if self.current_model == "pest":
             model = self.pest_infer
             model_class = utils.read_class_names(PEST_CLASSES_PATH)
-        else:
+        elif self.current_model == "disease":
             model = self.disease_infer
             model_class = utils.read_class_names(DISEASE_CLASSES_PATH)
         pred_bbox = model(batch_data)
@@ -152,5 +161,7 @@ class WindowCamera(PageWindow):
     def btnChecked(self, i):
         if i == "pest":
             self.ui.disease_detection_button.setChecked(False)
+            self.current_model = "pest"
         elif i == "disease":
             self.ui.pest_detection_button.setChecked(False)
+            self.current_model = "disease"

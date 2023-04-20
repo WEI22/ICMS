@@ -3,6 +3,7 @@ import sys
 import controller_ui
 # import RobotCar
 from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.Qt import Qt
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, *args, **kwargs):
@@ -16,14 +17,19 @@ class MainWindow(QtWidgets.QMainWindow):
         self.speed = 25
 
         self.ui.button_on_off.clicked.connect(self.off)
+
         self.ui.button_up.clicked.connect(self.moveForward)
         self.ui.button_up.released.connect(self.off)
+
         self.ui.button_down.clicked.connect(self.moveBackward)
         self.ui.button_down.released.connect(self.off)
+
         self.ui.button_left.clicked.connect(self.moveLeft)
         self.ui.button_left.released.connect(self.off)
+
         self.ui.button_right.clicked.connect(self.moveRight)
         self.ui.button_right.clicked.connect(self.off)
+
         self.ui.speed_controller.valueChanged.connect(self.controlSpeed)
 
     def off(self):
@@ -54,6 +60,24 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def controlSpeed(self):
         self.speed = self.ui.speed_controller.value()
+
+    def keyPressEvent(self, event):
+        if (event.key() == Qt.Key_W or event.key() == Qt.Key_Up) and not event.isAutoRepeat():
+            self.moveForward()
+        elif (event.key() == Qt.Key_S or event.key() == Qt.Key_Down) and not event.isAutoRepeat():
+            self.moveBackward()
+        elif (event.key() == Qt.Key_A or event.key() == Qt.Key_Left) and not event.isAutoRepeat():
+            self.moveLeft()
+        elif (event.key() == Qt.Key_D or event.key() == Qt.Key_Right) and not event.isAutoRepeat():
+            self.moveRight()
+
+    def keyReleaseEvent(self, event):
+        forward_key = event.key() == Qt.Key_W or event.key() == Qt.Key_Up
+        backward_key = event.key() == Qt.Key_S or event.key() == Qt.Key_Down
+        left_key = event.key() == Qt.Key_A or event.key() == Qt.Key_Left
+        right_key = event.key() == Qt.Key_D or event.key() == Qt.Key_Right
+        if not event.isAutoRepeat() and (forward_key or backward_key or left_key or right_key):
+            self.off()
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
