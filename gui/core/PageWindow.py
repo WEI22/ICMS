@@ -36,5 +36,8 @@ class PageWindow(QtWidgets.QDialog):
     def logout(self):
         respond = self.logout_msgbox.exec_()
         if respond == QtWidgets.QMessageBox.Yes:
-            os.remove("log")
+            try:
+                os.remove("log")
+            except:
+                pass
             self.goto("register")

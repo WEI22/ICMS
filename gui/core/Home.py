@@ -38,12 +38,14 @@ class WindowHome(PageWindow):
         self.ui.time_label.setText(str(current_time.time())[:-7])
         self.ui.date_label.setText(str(current_time.date()))
 
-        self.pest_dict = self.generatePestDict()
+        self.pest_data = self.con.execute("SELECT * FROM web_pest").fetchall()
+        self.disease_data = self.con.execute("SELECT * FROM web_disease").fetchall()
 
         self.timeframe = "today"
-        self.showPestNumber()
-        # self.showBarChart()
-        self.showPieChart()
+        self.showNumber(self.pest_data, "pest")
+        self.showNumber(self.disease_data, "disease")
+        self.showPieChart(self.pest_data, "pest")
+        self.showPieChart(self.disease_data, "disease")
 
         self.startTimer()
         self.startSlideshowTimer()
@@ -76,71 +78,46 @@ class WindowHome(PageWindow):
 
             self.timeframe = "month"
 
-        self.showPieChart()
-        self.showPestNumber()
+        self.showPieChart(self.pest_data, "pest")
+        self.showPieChart(self.disease_data, "disease")
+        self.showNumber(self.pest_data, "pest")
+        self.showNumber(self.disease_data, "disease")
 
-    def showPestNumber(self):
+    def showNumber(self, data, type):
         today_date = date.today()
-        pest_counter = Counter()
-        for i in self.data:
+        counter = Counter()
+        for i in data:
             data_date = datetime.strptime(i[-2], "%Y-%m-%d").date()
             if self.timeframe == "today" and data_date == today_date:
-                pest_counter.update(i[1].split("\n"))
+                counter.update(i[1].split("\n"))
             elif self.timeframe == "week" and today_date - data_date <= timedelta(days=7):
-                pest_counter.update(i[1].split("\n"))
+                counter.update(i[1].split("\n"))
             elif self.timeframe == "month" and today_date - data_date <= timedelta(days=30):
-                pest_counter.update(i[1].split("\n"))
-        pest_counter.pop("")
-        pest_num = sum(pest_counter.values())
-        self.ui.pest_number.setText(str(pest_num))
+                counter.update(i[1].split("\n"))
 
-    def showBarChart(self): # Deprecated
-        pest_types = {"army_worm": 0, "legume_blister_beetle": 1, "red_spider": 2, "rice_gall_midge": 3, "rice_leaf_roller": 4, "rice_leafhopper": 5, "rice_water_weevil": 6, "wheat_phloeothrips": 7, "white_backed_plant_hopper": 8, "yellow_rice_borer": 9}
-        pest_bars = [QBarSet(pest) for pest in pest_types]
+        if "" in counter:
+            counter.pop("")
+        num = sum(counter.values())
+        getattr(self.ui, f"{type}_number").setText(str(num))
 
-        pest_dict = {}
-        for i in self.data:
-            if i[-2] not in pest_dict and i[1] != "":
-                pest_dict[i[-2]] = Counter(i[1].split("\n"))
-            elif i[1] != "":
-                pest_dict[i[-2]].update(i[1].split("\n"))
-
-        pest_series = QBarSeries()
-        axis_x = QBarCategoryAxis()
-
-        for date, pest in pest_dict.items():
-            for key, value in pest.items():
-                pest_bars[pest_types[key]] << value
-            axis_x.append(date)
-
-        for i in pest_bars:
-            pest_series.append(i)
-
-        chart = QChart()
-        chart.addSeries(pest_series)
-        chart.setAnimationOptions(QChart.SeriesAnimations)
-        chart.createDefaultAxes()
-        chart.setAxisX(axis_x, pest_series)
-
-        self.ui.chart.setChart(chart)
-
-    def showPieChart(self):
-        pest_counter = Counter()
+    def showPieChart(self, data, type):
+        counter = Counter()
         today_date = date.today()
-        for i in self.data:
+        for i in data:
             data_date = datetime.strptime(i[-2], '%Y-%m-%d').date()
             if self.timeframe == "today" and data_date == today_date:
-                pest_counter.update(i[1].split("\n"))
+                counter.update(i[1].split("\n"))
             elif self.timeframe == "week" and today_date - data_date <= timedelta(days=7):
-                pest_counter.update(i[1].split("\n"))
+                counter.update(i[1].split("\n"))
             elif self.timeframe == "month" and today_date - data_date <= timedelta(days=30):
-                pest_counter.update(i[1].split("\n"))
+                counter.update(i[1].split("\n"))
 
-        pest_counter.pop("")
-        if pest_counter:
+        if "" in counter:
+            counter.pop("")
+        if counter:
             self.series = QPieSeries()
             slices = list()
-            for key, value in pest_counter.items():
+            for key, value in counter.items():
                 slice_ = QPieSlice(key, value)
                 slice_.setLabelVisible()
                 slices.append(slice_)
@@ -158,9 +135,9 @@ class WindowHome(PageWindow):
 
         else:
             chart = QChart()
-            chart.setTitle("No Pest Detected")
+            chart.setTitle(f"No {type.capitalize()} Detected")
 
-        self.ui.chart.setChart(chart)
+        getattr(self.ui, f"{type}_chart").setChart(chart)
 
     def updateGraphicView(self):
         self.ui.graphicsView.setRenderHint(QPainter.Antialiasing)
@@ -168,7 +145,11 @@ class WindowHome(PageWindow):
         self.ui.graphicsView.setScene(QGraphicsScene())
 
         pic_path = os.path.join(CURRENT_DIR, "saved")
+        type_list = os.listdir(pic_path)
+        type_chosen = random.choice(type_list)
+        pic_path = os.path.join(pic_path, type_chosen)
         pic_list = os.listdir(pic_path)
+        pic_list = list(filter(lambda x: str(x).endswith(".jpg"), pic_list))
 
         if pic_list:
             pic_chosen = random.choice(pic_list)
@@ -176,23 +157,21 @@ class WindowHome(PageWindow):
             pixmap = pixmap.scaled(420, 320, QtCore.Qt.KeepAspectRatio)
             self.ui.graphicsView.scene().addPixmap(pixmap)
 
-    def generatePestDict(self):
-        self.data = self.con.execute("SELECT * FROM web_image").fetchall()
-        pest_list = list(map(lambda x: x[1], self.data))
-        pest_list = list(map(lambda x: x.split("\n"), pest_list))
-        pest_list = [i for j in pest_list for i in j]
-        pest_list = filter(lambda x: x != "", pest_list)
-        return Counter(pest_list)
-
     def checkUpdate(self):
         current_time = datetime.now()
-        updated_pest_dict = self.generatePestDict()
+        updated_pest_data = self.con.execute("SELECT * FROM web_pest").fetchall()
+        updated_disease_data = self.con.execute("SELECT * FROM web_disease").fetchall()
         self.ui.time_label.setText(str(current_time.time())[:-7])
         self.ui.date_label.setText(str(current_time.date()))
-        if updated_pest_dict != self.pest_dict:
-            self.pest_dict = updated_pest_dict
-            self.showPestNumber()
-            self.showPieChart()
+        if updated_pest_data != self.pest_data:
+            self.pest_data = updated_pest_data
+            self.showNumber(self.pest_data, "pest")
+            self.showPieChart(self.pest_data, "pest")
+
+        if updated_disease_data != self.disease_data:
+            self.disease_data = updated_disease_data
+            self.showNumber(self.disease_data, "disease")
+            self.showPieChart(self.disease_data, "disease")
 
     def startTimer(self):
         self.timer = QtCore.QTimer()

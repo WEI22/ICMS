@@ -46,7 +46,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../Image/Register/ICMS.png</pixmap>
+        <pixmap>img/register/ICMS.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -87,7 +87,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../Image/Register/home.png</pixmap>
+        <pixmap>img/register/home.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -106,7 +106,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../Image/Register/camera.png</pixmap>
+        <pixmap>img/register/camera.png</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -122,7 +122,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../Image/Register/search.png</pixmap>
+        <pixmap>img/register/search.png</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -141,7 +141,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../Image/Register/exit.png</pixmap>
+        <pixmap>img/register/exit.png</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -160,8 +160,20 @@
    </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="spacing">
+      <number>10</number>
+     </property>
+     <property name="topMargin">
+      <number>10</number>
+     </property>
+     <property name="rightMargin">
+      <number>10</number>
+     </property>
+     <property name="bottomMargin">
+      <number>10</number>
+     </property>
      <item>
-      <layout class="QHBoxLayout" name="record_top" stretch="1,2,0,1">
+      <layout class="QHBoxLayout" name="record_top" stretch="0,0,0,0">
        <property name="spacing">
         <number>20</number>
        </property>
@@ -171,13 +183,6 @@
        <property name="rightMargin">
         <number>50</number>
        </property>
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
        <item>
         <widget class="QLabel" name="record_title">
          <property name="font">
@@ -196,12 +201,37 @@
         </widget>
        </item>
        <item>
+        <widget class="QComboBox" name="table_combobox">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <item>
+          <property name="text">
+           <string>Pest</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Disease</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
         <widget class="ClickableLabel" name="record_search_btn">
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
          <property name="text">
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap>Image/User/search.png</pixmap>
+          <pixmap>img/register/search.png</pixmap>
          </property>
         </widget>
        </item>
@@ -220,7 +250,7 @@
       </layout>
      </item>
      <item>
-      <widget class="QTableWidget" name="tableWidget">
+      <widget class="QTableWidget" name="table">
        <column>
         <property name="text">
          <string>Image</string>

@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Home</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_5">
+  <layout class="QHBoxLayout" name="horizontalLayout_8">
    <property name="spacing">
     <number>10</number>
    </property>
@@ -46,7 +46,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../Image/Register/ICMS.png</pixmap>
+        <pixmap>img/register/ICMS.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -87,7 +87,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../Image/Register/home.png</pixmap>
+        <pixmap>img/register/home.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -106,7 +106,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../Image/Register/camera.png</pixmap>
+        <pixmap>img/register/camera.png</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -122,7 +122,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../Image/Register/search.png</pixmap>
+        <pixmap>img/register/search.png</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -141,7 +141,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../Image/Register/exit.png</pixmap>
+        <pixmap>img/register/exit.png</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -159,17 +159,26 @@
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_6">
+    <layout class="QVBoxLayout" name="verticalLayout_10">
+     <property name="spacing">
+      <number>10</number>
+     </property>
+     <property name="topMargin">
+      <number>10</number>
+     </property>
+     <property name="rightMargin">
+      <number>10</number>
+     </property>
+     <property name="bottomMargin">
+      <number>10</number>
+     </property>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="3,2">
-       <property name="topMargin">
-        <number>10</number>
-       </property>
-       <property name="rightMargin">
+      <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="2,1">
+       <property name="spacing">
         <number>10</number>
        </property>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_9" stretch="1,3">
+        <layout class="QVBoxLayout" name="verticalLayout_9">
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0">
            <item>
@@ -210,11 +219,11 @@
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="2,2,1">
            <item>
             <widget class="QWidget" name="widget_5" native="true">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -249,7 +258,7 @@
                    <string/>
                   </property>
                   <property name="pixmap">
-                   <pixmap>../Image/Home/bug.png</pixmap>
+                   <pixmap>img/home/bug.png</pixmap>
                   </property>
                  </widget>
                 </item>
@@ -257,6 +266,73 @@
               </item>
               <item>
                <widget class="QLabel" name="pest_number">
+                <property name="font">
+                 <font>
+                  <pointsize>16</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">border: none;</string>
+                </property>
+                <property name="text">
+                 <string>0</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QWidget" name="widget_6" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">border: none; background-color: white; border-radius: 5px;</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_7" stretch="1,2">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_7">
+                <item>
+                 <widget class="QLabel" name="disease_num_label">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Number of Disease</string>
+                  </property>
+                  <property name="scaledContents">
+                   <bool>true</bool>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="disease_image">
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="pixmap">
+                   <pixmap>img/home/virus.png</pixmap>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QLabel" name="disease_number">
                 <property name="font">
                  <font>
                   <pointsize>16</pointsize>
@@ -380,7 +456,7 @@ QPushButton:checked {
              <item>
               <widget class="QFrame" name="frame_5">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -431,13 +507,15 @@ QPushButton:checked {
                   <property name="font">
                    <font>
                     <pointsize>14</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
                    </font>
                   </property>
                   <property name="text">
                    <string>Location</string>
                   </property>
                   <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                   <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
                   </property>
                  </widget>
                 </item>
@@ -463,36 +541,74 @@ QPushButton:checked {
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <property name="rightMargin">
-        <number>10</number>
-       </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
-        <widget class="QLabel" name="detected_pest_label">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="rightMargin">
+          <number>10</number>
          </property>
-         <property name="text">
-          <string>Detected Pests</string>
-         </property>
-        </widget>
+         <item>
+          <widget class="QLabel" name="detected_pest_label">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Detected Pests</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QChartView" name="pest_chart">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border: none; border-radius: 5px</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
-        <widget class="QChartView" name="chart">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+        <layout class="QVBoxLayout" name="verticalLayout_6">
+         <property name="rightMargin">
+          <number>10</number>
          </property>
-         <property name="styleSheet">
-          <string notr="true">border: none; border-radius: 5px</string>
-         </property>
-        </widget>
+         <item>
+          <widget class="QLabel" name="detected_disease_label">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Detected Disease</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QChartView" name="disease_chart">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border: none; border-radius: 5px</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </item>
