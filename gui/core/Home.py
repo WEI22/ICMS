@@ -134,7 +134,7 @@ class WindowHome(PageWindow):
 
         else:
             chart = QChart()
-            chart.setTitle(f"No {type.capitalized()} Detected")
+            chart.setTitle(f"No {type.capitalize()} Detected")
 
         getattr(self.ui, f"{type}_chart").setChart(chart)
 

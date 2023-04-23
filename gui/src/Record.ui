@@ -46,7 +46,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../Image/Register/ICMS.png</pixmap>
+        <pixmap>img/register/ICMS.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -87,7 +87,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../Image/Register/home.png</pixmap>
+        <pixmap>img/register/home.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -106,7 +106,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../Image/Register/camera.png</pixmap>
+        <pixmap>img/register/camera.png</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -122,7 +122,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../Image/Register/search.png</pixmap>
+        <pixmap>img/register/search.png</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -141,7 +141,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../Image/Register/exit.png</pixmap>
+        <pixmap>img/register/exit.png</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -224,11 +224,14 @@
        </item>
        <item>
         <widget class="ClickableLabel" name="record_search_btn">
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
          <property name="text">
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap>Image/User/search.png</pixmap>
+          <pixmap>img/register/search.png</pixmap>
          </property>
         </widget>
        </item>

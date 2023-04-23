@@ -46,7 +46,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../Image/Register/ICMS.png</pixmap>
+        <pixmap>img/register/ICMS.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -87,7 +87,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../Image/Register/home.png</pixmap>
+        <pixmap>img/register/home.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -106,7 +106,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../Image/Register/camera.png</pixmap>
+        <pixmap>img/register/camera.png</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -122,7 +122,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../Image/Register/search.png</pixmap>
+        <pixmap>img/register/search.png</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -141,7 +141,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>../Image/Register/exit.png</pixmap>
+        <pixmap>img/register/exit.png</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -173,7 +173,10 @@
       <number>10</number>
      </property>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="2,1">
+       <property name="spacing">
+        <number>10</number>
+       </property>
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_9">
          <item>
@@ -216,11 +219,11 @@
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="2,2,1">
            <item>
             <widget class="QWidget" name="widget_5" native="true">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -255,7 +258,7 @@
                    <string/>
                   </property>
                   <property name="pixmap">
-                   <pixmap>../Image/Home/bug.png</pixmap>
+                   <pixmap>img/home/bug.png</pixmap>
                   </property>
                  </widget>
                 </item>
@@ -287,7 +290,7 @@
            <item>
             <widget class="QWidget" name="widget_6" native="true">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -322,7 +325,7 @@
                    <string/>
                   </property>
                   <property name="pixmap">
-                   <pixmap>../Image/Home/virus.png</pixmap>
+                   <pixmap>img/home/virus.png</pixmap>
                   </property>
                  </widget>
                 </item>
@@ -453,7 +456,7 @@ QPushButton:checked {
              <item>
               <widget class="QFrame" name="frame_5">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -504,13 +507,15 @@ QPushButton:checked {
                   <property name="font">
                    <font>
                     <pointsize>14</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
                    </font>
                   </property>
                   <property name="text">
                    <string>Location</string>
                   </property>
                   <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                   <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
                   </property>
                  </widget>
                 </item>

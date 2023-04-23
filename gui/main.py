@@ -64,11 +64,11 @@ class MainWindow(QtWidgets.QMainWindow):
         try:
             with open("log") as f:
                 if pbkdf2_sha256.verify("HiThisisJesus", f.readline()):
-                    self.goto("Home")
+                    self.goto("home")
                 else:
                     self.goto("register")
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
     def register(self, widget, name):
         self.m_pages[name] = widget
