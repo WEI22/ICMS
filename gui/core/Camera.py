@@ -50,7 +50,8 @@ class WindowCamera(PageWindow):
         with open(DISEASE_CLASSES_PATH, "r") as f:
             self.disease_classes = list(map(lambda x: str(x).replace("\n", ""), f.readlines()))
 
-        self.current_model = None
+        self.current_model = "pest"
+        self.ui.pest_detection_button.setChecked(True)
         self.fps = 10
         self.cap = cv2.VideoCapture(0)
 

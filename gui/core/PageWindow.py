@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets, QtCore
 import os
 
-class PageWindow(QtWidgets.QDialog):
+class PageWindow(QtWidgets.QWidget):
     gotoSignal = QtCore.pyqtSignal(str)
     
     def goto(self, name):

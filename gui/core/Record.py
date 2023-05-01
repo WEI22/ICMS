@@ -1,8 +1,8 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtGui import QPixmap, QImage
 from core import PageWindow
 import os
 import sys
+from collections import Counter
 from core.clickableLabel import ClickableLabel
 
 CURRENT_DIR = os.getcwd()
@@ -20,9 +20,8 @@ class WindowRecord(PageWindow.PageWindow):
 
         self.setupLogoutMsgBox()
         self.con = con
-        self.current_table = 0
+        self.current_table = "web_pest"
 
-        self.ui.sidebar_logout.clicked.connect(self.logout)
         self.ui.sidebar_logout.clicked.connect(self.logout)
         self.ui.record_search_btn.clicked.connect(self.search)
         self.ui.record_search.returnPressed.connect(self.search)
@@ -34,6 +33,7 @@ class WindowRecord(PageWindow.PageWindow):
         self.ui.table.setColumnWidth(1, 200)
         self.ui.table.setColumnWidth(2, 200)
         self.ui.table.setColumnWidth(3, 200)
+        self.ui.table.setColumnWidth(4, 75)
 
         self.updateTable()
         self.startTimer()
@@ -44,13 +44,19 @@ class WindowRecord(PageWindow.PageWindow):
         for n, i in enumerate(self.data):
             image_item = self.getImageLabel(i[-3])
             time_item = QtWidgets.QTableWidgetItem(f"{i[-2]}\n{i[-1][:-7]}")
-            item = QtWidgets.QTableWidgetItem(i[1].replace(",", "\n"))
+            pest = Counter(i[1].split(","))
+            pest.pop("")
+            pest = [f"{key} x{value}" for key, value in pest.items()]
+            pest = "\n".join(pest)
+            item = QtWidgets.QTableWidgetItem(pest)
             location_item = QtWidgets.QTableWidgetItem(i[2])
+            delete_item = self.getItemLabel(i[0], i[-4])
 
             self.ui.table.setCellWidget(n, 0, image_item)
             self.ui.table.setItem(n, 1, time_item)
             self.ui.table.setItem(n, 2, item)
             self.ui.table.setItem(n, 3, location_item)
+            self.ui.table.setCellWidget(n, 4, delete_item)
 
         self.ui.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
         self.ui.table.resizeRowsToContents()
@@ -67,6 +73,16 @@ class WindowRecord(PageWindow.PageWindow):
         image_label.clicked.connect(lambda: self.showFullImage(image))
         return image_label
 
+    def getItemLabel(self, index, image_path):
+        item_label = ClickableLabel(self)
+        item_label.setText("")
+        item_label.setAlignment(QtCore.Qt.AlignCenter)
+        pixmap = QtGui.QPixmap(r"src/img/user/delete.png")
+        item_label.clicked.connect(lambda: self.showDeleteDialog(index, image_path))
+        item_label.setPixmap(pixmap)
+        item_label.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        return item_label
+
     def showFullImage(self, image):
         dialog = QtWidgets.QDialog()
         layout = QtWidgets.QVBoxLayout()
@@ -80,10 +96,27 @@ class WindowRecord(PageWindow.PageWindow):
         dialog.setWindowFlag(QtCore.Qt.WindowContextHelpButtonHint, False)
         dialog.exec_()
 
+    def showDeleteDialog(self, index, image_path):
+        delete_msgbox = QtWidgets.QMessageBox()
+        delete_msgbox.setWindowTitle("Delete")
+        delete_msgbox.setText("Are you sure?")
+        delete_msgbox.setIcon(QtWidgets.QMessageBox.Question)
+        delete_msgbox.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        delete_msgbox.setDefaultButton(QtWidgets.QMessageBox.No)
+        respond = delete_msgbox.exec_()
+        if respond == QtWidgets.QMessageBox.Yes:
+            dirname = os.path.dirname(image_path)
+            basename = os.path.basename(image_path)
+            original_image_path = os.path.join(dirname, "original", basename)
+            os.remove(image_path)
+            os.remove(original_image_path)
+            self.con.execute(f"DELETE FROM {self.current_table} WHERE id={index}")
+            self.con.commit()
+
     def checkUpdate(self):
-        if self.current_table == 0:
+        if self.current_table == "web_pest":
             updated_data = self.con.execute("SELECT * FROM web_pest").fetchall()
-        elif self.current_table == 1:
+        elif self.current_table == "web_disease":
             updated_data = self.con.execute("SELECT * FROM web_disease").fetchall()
         if updated_data != self.data:
             self.data = updated_data
@@ -103,11 +136,12 @@ class WindowRecord(PageWindow.PageWindow):
         self.updateTable(results)
 
     def changeTable(self, index):
-        self.current_table = index
         if index == 0:
+            self.current_table = "web_pest"
             self.ui.record_title.setText("Pest Record")
             self.data = self.con.execute("SELECT * FROM web_pest").fetchall()
         elif index == 1:
+            self.current_table = "web_disease"
             self.ui.record_title.setText("Disease Record")
             self.data = self.con.execute("SELECT * FROM web_disease").fetchall()
         self.updateTable()
