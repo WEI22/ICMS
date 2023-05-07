@@ -116,7 +116,7 @@ class Ui_Dialog(object):
         self.verticalLayout.addLayout(self.record_top)
         self.table = QtWidgets.QTableWidget(Dialog)
         self.table.setObjectName("table")
-        self.table.setColumnCount(4)
+        self.table.setColumnCount(5)
         self.table.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.table.setHorizontalHeaderItem(0, item)
@@ -126,6 +126,8 @@ class Ui_Dialog(object):
         self.table.setHorizontalHeaderItem(2, item)
         item = QtWidgets.QTableWidgetItem()
         self.table.setHorizontalHeaderItem(3, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.table.setHorizontalHeaderItem(4, item)
         self.verticalLayout.addWidget(self.table)
         self.horizontalLayout.addLayout(self.verticalLayout)
 
