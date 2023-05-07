@@ -33,8 +33,8 @@ class WindowRegister(PageWindow.PageWindow):
         self.ui.sidebar_logout.setEnabled(False)
         self.ui.sidebar_camera.setEnabled(False)
 
-        self.view_icon = QtGui.QPixmap(r"src\img\register\view.png")
-        self.hidden_icon = QtGui.QPixmap(r"src\img\register\hidden.png")
+        self.view_icon = QtGui.QPixmap(r"src/img/register/view.png")
+        self.hidden_icon = QtGui.QPixmap(r"src/img/register/hidden.png")
 
         self.ui.login_btn.clicked.connect(self.login)
         self.ui.login_password_text.returnPressed.connect(self.login)

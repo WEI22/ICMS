@@ -48,7 +48,7 @@ class MainWindow(QtWidgets.QMainWindow):
             print(e)
 
         self.m_pages = {}
-        self.con = sqlite3.connect(r"C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\gui\db.sqlite3")
+        self.con = sqlite3.connect(r"/home/pi/ICMS/gui/db.sqlite3")
 
         self.window_register = Register.WindowRegister(self.con)
         self.window_home = Home.WindowHome(self.con)

@@ -21,10 +21,10 @@ CURRENT_DIR = os.getcwd()
 BASE_DIR = os.path.dirname(CURRENT_DIR)
 sys.path.insert(0, BASE_DIR)
 
-PEST_MODEL_PATH = r"C:\Users\User\Documents\UM\Year 3\Sem 1\KIX2001\Crop Monitoring System\pest_detection\yolov4_tiny\checkpoints"
-DISEASE_MODEL_PATH = r"C:\Users\User\Documents\UM\Year 3\Sem 1\KIX2001\Crop Monitoring System\crop_disease\yolov4_tiny\checkpoints"
-PEST_CLASSES_PATH = r"C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\pest_detection\obj.names"
-DISEASE_CLASSES_PATH = r"C:\Users\User\Documents\UM\Year 3\Sem 2\KIX3001\ICMS\crop_disease\yolov4-tiny\obj.names"
+PEST_MODEL_PATH = r"/home/pi/ICMS/pest_detection/checkpoints"
+DISEASE_MODEL_PATH = r"/home/pi/ICMS/crop_disease/yolov4-tiny/checkpoints"
+PEST_CLASSES_PATH = r"/home/pi/ICMS/pest_detection/obj.names"
+DISEASE_CLASSES_PATH = r"/home/pi/ICMS/crop_disease/yolov4-tiny/obj.names"
 
 import tools.utils as utils
 
@@ -83,11 +83,11 @@ class WindowCamera(PageWindow):
             saved_name = f"img_{datetime.strftime(today, '%d%m%y%H%M%S')}.jpg"
             # cv2.imwrite(f".\\saved\\original\\{saved_name}", frame)
             if self.current_model == "pest":
-                saved_path = f"saved\\pest\\{saved_name}"
-                cv2.imwrite(f".\\saved\\pest\\original\\{saved_name}", frame)
+                saved_path = f"saved/pest/{saved_name}"
+                cv2.imwrite(f"./saved/pest/original/{saved_name}", frame)
             elif self.current_model == "disease":
-                saved_path = f"saved\\disease\\{saved_name}"
-                cv2.imwrite(f".\\saved\\disease\\original\\{saved_name}", frame)
+                saved_path = f"saved/disease/{saved_name}"
+                cv2.imwrite(f"./saved/disease/original/{saved_name}", frame)
 
             cur = self.con.cursor()
             if not self.isDetecting:
@@ -101,6 +101,7 @@ class WindowCamera(PageWindow):
                 # sql_query = f"INSERT INTO web_image(pest, location, author, host, number, cum_num, image, image_data, date_created, time_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                 if self.current_model == "pest":
                     classes = "\n".join([self.pest_classes[int(i)] for i in class_indexes])
+                    print(classes)
                     sql_query = f"INSERT INTO web_{self.current_model}(pest, location, author, host, number, cum_num, image, image_data, date_created, time_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                     cur.execute(sql_query, (classes, "", 0, "", 0, 0, saved_path, img_data, str(today.date()), str(today.time())))
                 elif self.current_model == "disease":

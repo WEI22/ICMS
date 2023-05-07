@@ -46,7 +46,8 @@ class WindowRecord(PageWindow.PageWindow):
             image_item = self.getImageLabel(i[-3])
             time_item = QtWidgets.QTableWidgetItem(f"{i[-2]}\n{i[-1][:-7]}")
             pest = Counter(i[1].split(","))
-            pest.pop("")
+            if "" in pest:
+                pest.pop("")
             pest = [f"{key} x{value}" for key, value in pest.items()]
             pest = "\n".join(pest)
             item = QtWidgets.QTableWidgetItem(pest)
