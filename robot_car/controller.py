@@ -17,16 +17,16 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.ui.button_on_off.clicked.connect(self.off)
 
-        self.ui.button_up.clicked.connect(self.moveForward)
+        self.ui.button_up.pressed.connect(self.moveForward)
         self.ui.button_up.released.connect(self.off)
 
-        self.ui.button_down.clicked.connect(self.moveBackward)
+        self.ui.button_down.pressed.connect(self.moveBackward)
         self.ui.button_down.released.connect(self.off)
 
-        self.ui.button_left.clicked.connect(self.moveLeft)
+        self.ui.button_left.pressed.connect(self.moveLeft)
         self.ui.button_left.released.connect(self.off)
 
-        self.ui.button_right.clicked.connect(self.moveRight)
+        self.ui.button_right.pressed.connect(self.moveRight)
         self.ui.button_right.released.connect(self.off)
 
     def off(self):
