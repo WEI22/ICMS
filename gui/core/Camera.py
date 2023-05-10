@@ -11,6 +11,7 @@ import sqlite3
 import psycopg2
 from psycopg2.extensions import Binary
 from picamera2 import Picamera2
+from libcamera import Transform
 
 import cv2
 import numpy as np
@@ -60,6 +61,7 @@ class WindowCamera(PageWindow):
         self.fps = 10
         self.cap = Picamera2()
         self.cap.video_configuration.main.format = "RGB888"
+        self.cap.video_configuration.main.transform = Transform(vflip=True)
         self.cap.configure("video")
         self.cap.start()
         time.sleep(1)
