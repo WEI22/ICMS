@@ -71,7 +71,7 @@ class WindowCamera(PageWindow):
         self.isCapturing = False
         self.isDetecting = False
 
-        self.car = RobotCar.RobotCar()
+        self.car = RobotCar()
         self.status = False
 
         self.ui.horn_button.clicked.connect(self.off)
