@@ -97,7 +97,10 @@ class WindowCamera(PageWindow):
         frame = self.cap.capture_array("main")
 
         if self.ui.camera_real.isChecked():
-            frame, _ = self.detect(frame)
+            self.isDetecting = True
+            frame, pred_bbox = self.detect(frame)
+        elif not self.ui.camera_real.isChecked():
+            self.isDetecting = False
 
         if self.isCapturing:
             today = datetime.now()
@@ -113,24 +116,24 @@ class WindowCamera(PageWindow):
             cur = self.con.cursor()
             if not self.isDetecting:
                 detected_img, pred_bbox = self.detect(frame) # boxes, scores, classes, valid_detections
-                num_detections = int(pred_bbox[3][0])
-                class_indexes = pred_bbox[2][0][:num_detections]
-                _, img_data = cv2.imencode('.jpg', frame)
-                # binary_data = Binary(img_data) # for postgresql only
 
-                # sql_query = f"INSERT INTO web_image VALUES(DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)" # for postgresql
-                # sql_query = f"INSERT INTO web_image(pest, location, author, host, number, cum_num, image, image_data, date_created, time_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-                if self.current_model == "pest":
-                    classes = "\n".join([self.pest_classes[int(i)] for i in class_indexes])
-                    print(classes)
-                    sql_query = f"INSERT INTO web_{self.current_model}(pest, location, author, host, number, cum_num, image, image_data, date_created, time_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-                    cur.execute(sql_query, (classes, "", 0, "", 0, 0, saved_path, img_data, str(today.date()), str(today.time())))
-                elif self.current_model == "disease":
-                    classes = "\n".join([self.disease_classes[int(i)] for i in class_indexes])
-                    sql_query = f"INSERT INTO web_{self.current_model}(disease, location, author, crop, number, image, image_data, date_created, time_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
-                    cur.execute(sql_query, (classes, "", 0, "", 0, saved_path, img_data, str(today.date()), str(today.time())))
-                self.con.commit()
-                cv2.imwrite(saved_path, frame)
+            num_detections = int(pred_bbox[3][0])
+            class_indexes = pred_bbox[2][0][:num_detections]
+            _, img_data = cv2.imencode('.jpg', frame)
+            # binary_data = Binary(img_data) # for postgresql only
+
+            # sql_query = f"INSERT INTO web_image VALUES(DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)" # for postgresql
+            # sql_query = f"INSERT INTO web_image(pest, location, author, host, number, cum_num, image, image_data, date_created, time_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            if self.current_model == "pest":
+                classes = "\n".join([self.pest_classes[int(i)] for i in class_indexes])
+                sql_query = f"INSERT INTO web_{self.current_model}(pest, location, author, host, number, cum_num, image, image_data, date_created, time_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                cur.execute(sql_query, (classes, "", 0, "", 0, 0, saved_path, img_data, str(today.date()), str(today.time())))
+            elif self.current_model == "disease":
+                classes = "\n".join([self.disease_classes[int(i)] for i in class_indexes])
+                sql_query = f"INSERT INTO web_{self.current_model}(disease, location, author, crop, number, image, image_data, date_created, time_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                cur.execute(sql_query, (classes, "", 0, "", 0, saved_path, img_data, str(today.date()), str(today.time())))
+            self.con.commit()
+            cv2.imwrite(saved_path, frame)
             self.isCapturing = False
 
         # My webcam yields frames in BGR format
