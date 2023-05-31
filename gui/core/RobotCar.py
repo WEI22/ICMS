@@ -74,3 +74,20 @@ class RobotCar:
         self.motor3.run("backward")
         self.motor4.run("backward")
 
+class ServoMotor:
+
+    def __init__(self, servo_pin):
+
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(servo_pin, GPIO.OUT)
+
+        self.servo = GPIO.PWM(servo_pin, 50)
+        self.servo.start(0)
+
+    def rotate(self, val):
+
+        if 0.05 <= val <= 0.1:
+            self.servo.ChangeDutyCycle(val)
+
+    def backToZero(self):
+        self.servo.ChangeDutyCycle(0.075)

@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.Qt import Qt
 from ui import Camera
 from core.PageWindow import PageWindow
-from core.RobotCar import RobotCar
+from core.RobotCar import RobotCar, ServoMotor
 
 import os
 import sys
@@ -72,6 +72,8 @@ class WindowCamera(PageWindow):
         self.isDetecting = False
 
         self.car = RobotCar()
+        self.servo = ServoMotor(13)
+        self.duty_cycle = 0.075
         self.status = False
 
         self.start()
@@ -224,10 +226,14 @@ class WindowCamera(PageWindow):
             self.moveRight()
 
         elif event.key() == Qt.Key_Q and not event.isAutoRepeat():
-            # control servo - right
-            pass
+            self.duty_cycle -= 0.005
+            self.servo.rotate(self.duty_cycle)
+
         elif event.key() == Qt.Key_E and not event.isAutoRepeat():
-            pass
+            self.duty_cycle += 0.005
+            self.servo.rotate(self.duty_cycle)
+        elif event.key() == Qt.Key_Z and not event.isAutoRepeat():
+            self.servo.backToZero()
 
     def keyReleaseEvent(self, event):
         forward_key = event.key() == Qt.Key_W or event.key() == Qt.Key_Up
