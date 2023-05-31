@@ -74,20 +74,6 @@ class WindowCamera(PageWindow):
         self.car = RobotCar()
         self.status = False
 
-        self.ui.horn_button.clicked.connect(self.off)
-
-        self.ui.up_button.pressed.connect(self.moveForward)
-        self.ui.up_button.released.connect(self.off)
-
-        self.ui.down_button.pressed.connect(self.moveBackward)
-        self.ui.down_button.released.connect(self.off)
-
-        self.ui.left_button.pressed.connect(self.moveLeft)
-        self.ui.left_button.released.connect(self.off)
-
-        self.ui.right_button.pressed.connect(self.moveRight)
-        self.ui.right_button.released.connect(self.off)
-
         self.start()
 
     def setFPS(self, fps):
@@ -236,6 +222,12 @@ class WindowCamera(PageWindow):
             self.moveLeft()
         elif (event.key() == Qt.Key_D or event.key() == Qt.Key_Right) and not event.isAutoRepeat():
             self.moveRight()
+
+        elif event.key() == Qt.Key_Q and not event.isAutoRepeat():
+            # control servo - right
+            pass
+        elif event.key() == Qt.Key_E and not event.isAutoRepeat():
+            pass
 
     def keyReleaseEvent(self, event):
         forward_key = event.key() == Qt.Key_W or event.key() == Qt.Key_Up

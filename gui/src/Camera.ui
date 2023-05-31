@@ -183,7 +183,7 @@
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_4" stretch="3,1">
+      <layout class="QVBoxLayout" name="verticalLayout_4" stretch="3,0">
        <property name="spacing">
         <number>10</number>
        </property>
@@ -255,73 +255,17 @@
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <property name="spacing">
-          <number>10</number>
+        <widget class="QLabel" name="instruction_text">
+         <property name="font">
+          <font>
+           <pointsize>10</pointsize>
+          </font>
          </property>
-         <item>
-          <widget class="QPushButton" name="left_button">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset>
-             <normaloff>img/camera/left.png</normaloff>img/camera/left.png</iconset>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout">
-           <property name="spacing">
-            <number>10</number>
-           </property>
-           <item>
-            <widget class="QPushButton" name="up_button">
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>img/camera/up.png</normaloff>img/camera/up.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="horn_button">
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>img/camera/stop-button.png</normaloff>img/camera/stop-button.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="down_button">
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>img/camera/down.png</normaloff>img/camera/down.png</iconset>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="QPushButton" name="right_button">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset>
-             <normaloff>img/camera/right.png</normaloff>img/camera/right.png</iconset>
-           </property>
-          </widget>
-         </item>
-        </layout>
+         <property name="text">
+          <string>Use W, A, S, D to control robocar
+Use Q, E to rotate camera</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
