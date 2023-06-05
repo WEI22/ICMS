@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+import time
 
 class Motor:
 
@@ -82,11 +83,10 @@ class ServoMotor:
         GPIO.setup(servo_pin, GPIO.OUT)
 
         self.servo = GPIO.PWM(servo_pin, 50)
-        self.servo.start(0)
+        self.servo.start(5)
 
     def rotate(self, val):
-        if 5 <= val <= 10:
-            self.servo.ChangeDutyCycle(val)
+        self.servo.ChangeDutyCycle(val)
 
     def backToZero(self):
-        self.servo.ChangeDutyCycle(7.5)
+        self.servo.ChangeDutyCycle(5)
