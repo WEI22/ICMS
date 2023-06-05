@@ -85,9 +85,8 @@ class ServoMotor:
         self.servo.start(0)
 
     def rotate(self, val):
-
-        if 0.05 <= val <= 0.1:
+        if 5 <= val <= 10:
             self.servo.ChangeDutyCycle(val)
 
     def backToZero(self):
-        self.servo.ChangeDutyCycle(0.075)
+        self.servo.ChangeDutyCycle(7.5)

@@ -226,15 +226,25 @@ class WindowCamera(PageWindow):
             self.moveRight()
 
         elif event.key() == Qt.Key_Q and not event.isAutoRepeat():
-            if 0.05 <= self.duty_cycle <= 0.1:
-                self.duty_cycle -= 0.005
+            if 5 <= self.duty_cycle <= 10:
+                self.duty_cycle -= 0.5
                 self.servo.rotate(self.duty_cycle)
+                print("Camera turn left")
+            elif self.duty_cycle < 5:
+                self.duty_cycle = 5
+            elif self.duty_cycle > 10:
+                self.duty_cycle = 10
 
         elif event.key() == Qt.Key_E and not event.isAutoRepeat():
-            if 0.05 <= self.duty_cycle <= 0.1:
-                self.duty_cycle += 0.005
+            if 5 <= self.duty_cycle <= 10:
+                self.duty_cycle += 0.5
                 self.servo.rotate(self.duty_cycle)
-                
+                print("Camera turn right")
+            elif self.duty_cycle < 5:
+                self.duty_cycle = 5
+            elif self.duty_cycle > 10:
+                self.duty_cycle = 10
+
         elif event.key() == Qt.Key_Z and not event.isAutoRepeat():
             self.servo.backToZero()
 
