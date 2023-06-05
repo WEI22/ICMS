@@ -2,12 +2,13 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.Qt import Qt
 from ui import Camera
 from core.PageWindow import PageWindow
-from core.RobotCar import RobotCar, ServoMotor
+from core.RobotCar import RobotCar
 
 import os
 import sys
 from datetime import datetime
 import time
+import subprocess
 import sqlite3
 
 import psycopg2
@@ -72,8 +73,6 @@ class WindowCamera(PageWindow):
         self.isDetecting = False
 
         self.car = RobotCar()
-        self.servo = ServoMotor(13)
-        self.duty_cycle = 0.075
         self.status = False
 
         self.start()
@@ -226,14 +225,13 @@ class WindowCamera(PageWindow):
             self.moveRight()
 
         elif event.key() == Qt.Key_Q and not event.isAutoRepeat():
-            self.servo.rotate(3) 
+            subprocess.run("python ./core/RobotCar.py 13 1")
 
         elif event.key() == Qt.Key_E and not event.isAutoRepeat():
-            self.servo.rotate(8)
+            subprocess.run("python ./core/RobotCar.py 13 10")
 
         elif event.key() == Qt.Key_Z and not event.isAutoRepeat():
-            self.servo.backToZero()
-            self.duty_cycle = 5
+            subprocess.run("python ./core/RobotCar.py 13 5")
 
     def keyReleaseEvent(self, event):
         forward_key = event.key() == Qt.Key_W or event.key() == Qt.Key_Up

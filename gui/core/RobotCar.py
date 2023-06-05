@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import time
+import sys
 
 class Motor:
 
@@ -75,18 +76,39 @@ class RobotCar:
         self.motor3.run("backward")
         self.motor4.run("backward")
 
-class ServoMotor:
+    def __del__(self):
+        del self.motor1
+        del self.motor2
+        del self.motor3
+        del self.motor4
+        GPIO.cleanup()
 
-    def __init__(self, servo_pin):
+if __name__ == "__main__":
+    if sys.argv[1] == "servo":
+
+        servo_pin = int(sys.argv[2])
+        val = int(sys.argv[3])
 
         GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
         GPIO.setup(servo_pin, GPIO.OUT)
 
-        self.servo = GPIO.PWM(servo_pin, 50)
-        self.servo.start(5)
+        servo = GPIO.PWM(servo_pin, 50)
+        servo.start(val)
+        time.sleep(1)
+        GPIO.cleanup()
+        del servo
 
-    def rotate(self, val):
-        self.servo.ChangeDutyCycle(val)
-
-    def backToZero(self):
-        self.servo.ChangeDutyCycle(5)
+    elif sys.argv[1] == "motor":
+        r = RobotCar()
+        if sys.argv[2] == "forward":
+            r.forward()
+        elif sys.argv[2] == "backward":
+            r.backward()
+        elif sys.argv[2] == "left":
+            r.left()
+        elif sys.argv[2] == "right":
+            r.right()
+        elif sys.argv[2] == "stop":
+            r.stop()
+        del r
