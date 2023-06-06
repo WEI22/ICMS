@@ -73,6 +73,7 @@ class WindowCamera(PageWindow):
         self.isDetecting = False
 
         self.car = RobotCar()
+        self.duty_cycle = 5
         self.status = False
 
         self.start()
@@ -225,13 +226,26 @@ class WindowCamera(PageWindow):
             self.moveRight()
 
         elif event.key() == Qt.Key_Q and not event.isAutoRepeat():
-            subprocess.run("python ./core/RobotCar.py 13 1")
+            if 1 <= self.duty_cycle <= 10:
+                self.duty_cycle -= 1
+                subprocess.run(['python', 'core/RobotCar.py', 'servo', '13', str(self.duty_cycle)])
+            elif self.duty_cycle < 1:
+                self.duty_cycle = 1
+            elif self.duty_cycle > 10:
+                self.duty_cycle = 10
 
         elif event.key() == Qt.Key_E and not event.isAutoRepeat():
-            subprocess.run("python ./core/RobotCar.py 13 10")
+            if 1 <= self.duty_cycle <= 10:
+                self.duty_cycle += 1
+                subprocess.run(['python', 'core/RobotCar.py', 'servo', '13', str(self.duty_cycle)])
+            elif self.duty_cycle < 1:
+                self.duty_cycle = 1
+            elif self.duty_cycle > 10:
+                self.duty_cycle = 10
 
         elif event.key() == Qt.Key_Z and not event.isAutoRepeat():
-            subprocess.run("python ./core/RobotCar.py 13 5")
+            self.duty_cycle = 5
+            subprocess.run(['python', 'core/RobotCar.py', 'servo', '13', '5'])
 
     def keyReleaseEvent(self, event):
         forward_key = event.key() == Qt.Key_W or event.key() == Qt.Key_Up

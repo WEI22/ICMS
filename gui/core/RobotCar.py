@@ -87,7 +87,7 @@ if __name__ == "__main__":
     if sys.argv[1] == "servo":
 
         servo_pin = int(sys.argv[2])
-        val = int(sys.argv[3])
+        val = float(sys.argv[3])
 
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
@@ -95,7 +95,7 @@ if __name__ == "__main__":
 
         servo = GPIO.PWM(servo_pin, 50)
         servo.start(val)
-        time.sleep(1)
+        time.sleep(0.2)
         GPIO.cleanup()
         del servo
 
