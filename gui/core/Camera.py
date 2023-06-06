@@ -2,7 +2,6 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.Qt import Qt
 from ui import Camera
 from core.PageWindow import PageWindow
-from core.RobotCar import RobotCar
 
 import os
 import sys
@@ -72,7 +71,6 @@ class WindowCamera(PageWindow):
         self.isCapturing = False
         self.isDetecting = False
 
-        self.car = RobotCar()
         self.duty_cycle = 5
         self.status = False
 
@@ -193,27 +191,32 @@ class WindowCamera(PageWindow):
         if self.status:
             print("Car Stop")
             self.status = False
-            self.car.stop()
+            # self.car.stop()
+            subprocess.run(['python', 'core/RobotCar.py', 'motor', 'stop'])
 
     def moveForward(self):
         self.status = True
         print("Moving Forward")
-        self.car.forward()
+        # self.car.forward()
+        subprocess.run(['python', 'core/RobotCar.py', 'motor', 'forward'])
 
     def moveBackward(self):
         self.status = True
         print("Moving Backward")
-        self.car.backward()
+        # self.car.backward()
+        subprocess.run(['python', 'core/RobotCar.py', 'motor', 'backward'])
 
     def moveLeft(self):
         self.status = True
         print("Moving Left")
-        self.car.left()
+        # self.car.left()
+        subprocess.run(['python', 'core/RobotCar.py', 'motor', 'left'])
 
     def moveRight(self):
         self.status = True
         print("Moving Right")
-        self.car.right()
+        # self.car.right()
+        subprocess.run(['python', 'core/RobotCar.py', 'motor', 'right'])
 
     def keyPressEvent(self, event):
         if (event.key() == Qt.Key_W or event.key() == Qt.Key_Up) and not event.isAutoRepeat():
