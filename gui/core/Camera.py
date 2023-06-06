@@ -64,7 +64,7 @@ class WindowCamera(PageWindow):
         self.fps = 10
         self.cap = Picamera2()
         self.cap.video_configuration.main.format = "RGB888"
-        self.cap.video_configuration.transform = Transform(vflip=True)
+        # self.cap.video_configuration.transform = Transform(vflip=True)
         self.cap.configure("video")
         self.cap.start()
         time.sleep(1)
