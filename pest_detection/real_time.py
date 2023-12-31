@@ -8,7 +8,7 @@ from absl import app, flags, logging
 from absl.flags import FLAGS
 
 import sys
-sys.path.insert(0, r"C:\Users\User\Documents\UM\Year 3\Sem 1\KIX2001\Crop Monitoring System\tensorflow-yolov4-tflite")
+sys.path.insert(0, r"/home/pi/ICMS/tools/tensorflow-yolov4-tflite")
 
 import core.utils as utils
 from core.yolov4 import filter_boxes
@@ -16,26 +16,22 @@ from tensorflow.python.saved_model import tag_constants
 from PIL import Image
 import cv2
 import numpy as np
+from picamera2 import Picamera2
+import time
 
 def main(_argv):
 
-    vid = cv2.VideoCapture(0)
+    camera = Picamera2()
+    camera.video_configuration.main.format = "RGB888"
+    camera.configure("video")
+    camera.start()
+    time.sleep(1)
 
-    saved_model_loaded = tf.saved_model.load(r"C:\Users\User\Documents\UM\Year 3\Sem 1\KIX2001\Crop Monitoring System\pest_detection\yolov4_tiny\checkpoints", tags=[tag_constants.SERVING])
+    saved_model_loaded = tf.saved_model.load(r"/home/pi/ICMS/pest_detection/checkpoints", tags=[tag_constants.SERVING])
     infer = saved_model_loaded.signatures['serving_default']
-
     frame_id = 0
     while True:
-        return_value, frame = vid.read()
-        if return_value:
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            image = Image.fromarray(frame)
-        else:
-            if frame_id == vid.get(cv2.CAP_PROP_FRAME_COUNT):
-                print("Video processing complete")
-                break
-            raise ValueError("No image! Try with another video format")
-
+        frame = camera.capture_array("main")
         frame_size = frame.shape[:2]
         image_data = cv2.resize(frame, (416, 416))
         image_data = image_data / 255.
@@ -67,7 +63,7 @@ def main(_argv):
 
         result = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         cv2.namedWindow("result", cv2.WINDOW_AUTOSIZE)
-        cv2.imshow("result", result)
+        cv2.imshow("result", image)
         if cv2.waitKey(1) & 0xFF == ord('q'): break
 
         frame_id += 1

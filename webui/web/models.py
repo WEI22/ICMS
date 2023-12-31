@@ -9,16 +9,31 @@ class USER(models.Model):
     email = models.EmailField(("email"))
     password1 = models.CharField(("password1"), max_length=128)
 
-class Image(models.Model):
-    pest = models.CharField(max_length=200)
-    location = models.CharField(max_length=500)
+class PEST(models.Model):
+    pest = models.CharField(max_length=500)
+    location = models.CharField(max_length=200)
     author = models.IntegerField()
     host = models.CharField(max_length=200)
     number = models.IntegerField()
     cum_num = models.IntegerField()
     image = models.ImageField(upload_to='images')
+    image_data = models.BinaryField(null=True)
     date_created = models.DateField(default=timezone.now)
     time_created = models.TimeField(default=timezone.now)
 
     def __str__(self):
         return self.pest
+
+class DISEASE(models.Model):
+    disease = models.CharField(max_length=500)
+    location = models.CharField(max_length=200)
+    author = models.IntegerField()
+    crop = models.CharField(max_length=200)
+    number = models.IntegerField()
+    image = models.ImageField(upload_to='image')
+    image_data = models.BinaryField(null=True)
+    date_created = models.DateField(default=timezone.now)
+    time_created = models.TimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.disease
