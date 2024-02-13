@@ -1,8 +1,5 @@
-<<<<<<< Updated upstream
-
 *.xml
-=======
 *.pyc
 *.xml
 .idea/*
->>>>>>> Stashed changes
+.venv/*
