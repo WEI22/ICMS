@@ -1,4 +1,3 @@
-import time
 import tensorflow as tf
 
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
