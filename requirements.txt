@@ -1,4 +1,4 @@
-tensorflow
+# tensorflow
 opencv-python
 Django
 PyQt5
@@ -9,3 +9,5 @@ matplotlib
 flatbuffers==23.3.3
 psycopg2
 PyQtChart
+mindspore
+mindyolo

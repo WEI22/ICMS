@@ -9,6 +9,8 @@ from core import Record as Record
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.uic import loadUi
 
+sys.path.insert(0, r"C:\Users\limhong1\Downloads\ICMS\gui")
+
 class SplashScreen(QtWidgets.QSplashScreen):
     def __init__(self):
         super(QtWidgets.QSplashScreen, self).__init__()
@@ -48,7 +50,7 @@ class MainWindow(QtWidgets.QMainWindow):
             print(e)
 
         self.m_pages = {}
-        self.con = sqlite3.connect(r"/home/pi/ICMS/gui/db.sqlite3")
+        self.con = sqlite3.connect(r"C:\Users\limhong1\Downloads\ICMS\gui\db.sqlite3")
 
         self.window_register = Register.WindowRegister(self.con)
         self.window_home = Home.WindowHome(self.con)

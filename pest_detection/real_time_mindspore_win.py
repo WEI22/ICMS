@@ -8,12 +8,13 @@ from mindspore import context
 
 from mindyolo.utils import logger
 from mindyolo.utils.utils import set_seed
+
+sys.path.insert(0, r"C:\Users\limhong1\Downloads\ICMS\mindyolo")
+
 from deploy.predict import detect
 
-sys.path.insert(0, r"C:\Users\User\Documents\UM\Year 4\Huawei Competition\project\mindyolo")
-
 seed = 2
-conf_thres = 0.25
+conf_thres = 0.5
 iou_thres = 0.65
 conf_free = False
 nms_time_limit = 60.0
@@ -35,9 +36,9 @@ class_names = [ 'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'tr
            'microwave', 'oven', 'toaster', 'sink', 'refrigerator', 'book', 'clock', 'vase', 'scissors', 'teddy bear',
            'hair drier', 'toothbrush' ]
 
-config = r"C:\Users\User\Documents\UM\Year 4\Huawei Competition\project\mindyolo\configs\yolov7\yolov7-tiny.yaml"
+config = r"C:\Users\limhong1\Downloads\ICMS\mindyolo\configs\yolov7\yolov7-tiny.yaml"
 model_type = "MindIR"
-model_path = r"C:\Users\User\Documents\UM\Year 4\Huawei Competition\project\mindyolo\weights\yolov7-tiny_300e_mAP375-d8972c94-c550e241.mindir"
+model_path = r"C:\Users\limhong1\Downloads\ICMS\mindyolo\weights\yolov7-tiny_300e_mAP375-d8972c94-c550e241.mindir"
 device_target = "CPU"
 
 save_dir_path = r"./runs_infer"
@@ -106,6 +107,7 @@ def draw_result(im, result_dict, data_names, is_coco_dataset=True):
 
 def main():
 
+    skip_factor = 2
     set_seed(seed)
 
     vid = cv2.VideoCapture(0)
@@ -126,8 +128,11 @@ def main():
         raise TypeError("the type only supposed MindX/Lite/MindIR/ONNX")
 
 
+    frame_count = 0
     while True:
         ret, frame = vid.read()
+
+        frame_count += 1
 
         result_dict = detect(
             network=network,
@@ -140,7 +145,14 @@ def main():
             is_coco_dataset=is_coco_dataset
         )
 
-        predicted_frame = draw_result(frame, result_dict, class_names)
+        print(result_dict)
+
+        if frame_count % skip_factor == 0 or frame_count == 1:
+
+            predicted_frame = draw_result(frame, result_dict, class_names)
+
+        # else:
+        #     predicted_frame = frame
 
         cv2.imshow("frame", predicted_frame)
 
