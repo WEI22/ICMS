@@ -9,7 +9,7 @@ class PageWindow(QtWidgets.QWidget):
     
     # Sidebar utilities
     def sidebar(self):
-        labels = ['record', 'home', 'camera', 'logout']
+        labels = ['record', 'home', 'camera']
         for label in labels:
             getattr(self.ui, 'sidebar_' + label).clicked.connect(getattr(self, label+'Clicked'))
 
@@ -19,25 +19,5 @@ class PageWindow(QtWidgets.QWidget):
     def cameraClicked(self):
         self.goto('camera')
 
-    def logoutClicked(self):
-        self.goto('logout')
-
     def recordClicked(self):
         self.goto('record')
-
-    def setupLogoutMsgBox(self):
-        self.logout_msgbox = QtWidgets.QMessageBox()
-        self.logout_msgbox.setWindowTitle("Logout")
-        self.logout_msgbox.setText("Are you sure?")
-        self.logout_msgbox.setIcon(QtWidgets.QMessageBox.Question)
-        self.logout_msgbox.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        self.logout_msgbox.setDefaultButton(QtWidgets.QMessageBox.No)
-
-    def logout(self):
-        respond = self.logout_msgbox.exec_()
-        if respond == QtWidgets.QMessageBox.Yes:
-            try:
-                os.remove("log")
-            except:
-                pass
-            self.goto("register")

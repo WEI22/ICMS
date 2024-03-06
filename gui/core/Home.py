@@ -24,12 +24,10 @@ class WindowHome(PageWindow):
         self.ui.setupUi(self)
         self.sidebar()
 
-        self.setupLogoutMsgBox()
         self.updateGraphicView()
 
         self.con = con
 
-        self.ui.sidebar_logout.clicked.connect(self.logout)
         self.ui.today_button.clicked.connect(lambda: self.selectTimeFrame("today"))
         self.ui.week_button.clicked.connect(lambda: self.selectTimeFrame("week"))
         self.ui.month_button.clicked.connect(lambda: self.selectTimeFrame("month"))

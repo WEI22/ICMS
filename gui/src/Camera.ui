@@ -12,8 +12,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1222</width>
-    <height>855</height>
+    <width>1038</width>
+    <height>807</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -42,7 +42,7 @@
     <number>0</number>
    </property>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <layout class="QVBoxLayout" name="verticalLayout_2" stretch="5,1,2,2,2,1">
      <property name="spacing">
       <number>0</number>
      </property>
@@ -58,7 +58,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>img/register/ICMS.png</pixmap>
+        <pixmap>img/logo.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -142,25 +142,6 @@
       </widget>
      </item>
      <item>
-      <widget class="ClickableLabel" name="sidebar_logout">
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(0, 0, 0);</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap>img/register/exit.png</pixmap>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QWidget" name="widget_2" native="true">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(0, 0, 0);
@@ -171,7 +152,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="3,1">
+    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="3">
      <item>
       <widget class="QLabel" name="camera_video">
        <property name="text">
@@ -181,93 +162,6 @@
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_4" stretch="3,0">
-       <property name="spacing">
-        <number>10</number>
-       </property>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
-         <property name="spacing">
-          <number>10</number>
-         </property>
-         <property name="leftMargin">
-          <number>10</number>
-         </property>
-         <property name="topMargin">
-          <number>10</number>
-         </property>
-         <property name="rightMargin">
-          <number>10</number>
-         </property>
-         <property name="bottomMargin">
-          <number>10</number>
-         </property>
-         <item>
-          <widget class="QPushButton" name="camera_capture">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Capture</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="pest_detection_button">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Pest</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="disease_detection_button">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Disease</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="camera_real">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Real Time</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QLabel" name="instruction_text">
-         <property name="font">
-          <font>
-           <pointsize>10</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Use W, A, S, D to control robocar
-Use Q, E to rotate camera</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
      </item>
     </layout>
    </item>
