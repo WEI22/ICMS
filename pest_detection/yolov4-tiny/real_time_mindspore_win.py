@@ -21,24 +21,41 @@ nms_time_limit = 60.0
 img_size = 640
 ms_mode = 0
 ms_enable_graph_kernel = False
-is_coco_dataset = True
+is_coco_dataset = False
 single_cls = False
 
 # FIXME: change to correct number of classes
-num_class = 80
-class_names = [ 'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train', 'truck', 'boat', 'traffic light',
-           'fire hydrant', 'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse', 'sheep', 'cow',
-           'elephant', 'bear', 'zebra', 'giraffe', 'backpack', 'umbrella', 'handbag', 'tie', 'suitcase', 'frisbee',
-           'skis', 'snowboard', 'sports ball', 'kite', 'baseball bat', 'baseball glove', 'skateboard', 'surfboard',
-           'tennis racket', 'bottle', 'wine glass', 'cup', 'fork', 'knife', 'spoon', 'bowl', 'banana', 'apple',
-           'sandwich', 'orange', 'broccoli', 'carrot', 'hot dog', 'pizza', 'donut', 'cake', 'chair', 'couch',
-           'potted plant', 'bed', 'dining table', 'toilet', 'tv', 'laptop', 'mouse', 'remote', 'keyboard', 'cell phone',
-           'microwave', 'oven', 'toaster', 'sink', 'refrigerator', 'book', 'clock', 'vase', 'scissors', 'teddy bear',
-           'hair drier', 'toothbrush' ]
+# num_class = 80
+# class_names = [ 'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train', 'truck', 'boat', 'traffic light',
+#            'fire hydrant', 'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse', 'sheep', 'cow',
+#            'elephant', 'bear', 'zebra', 'giraffe', 'backpack', 'umbrella', 'handbag', 'tie', 'suitcase', 'frisbee',
+#            'skis', 'snowboard', 'sports ball', 'kite', 'baseball bat', 'baseball glove', 'skateboard', 'surfboard',
+#            'tennis racket', 'bottle', 'wine glass', 'cup', 'fork', 'knife', 'spoon', 'bowl', 'banana', 'apple',
+#            'sandwich', 'orange', 'broccoli', 'carrot', 'hot dog', 'pizza', 'donut', 'cake', 'chair', 'couch',
+#            'potted plant', 'bed', 'dining table', 'toilet', 'tv', 'laptop', 'mouse', 'remote', 'keyboard', 'cell phone',
+#            'microwave', 'oven', 'toaster', 'sink', 'refrigerator', 'book', 'clock', 'vase', 'scissors', 'teddy bear',
+#            'hair drier', 'toothbrush' ]
+
+num_class = 102
+class_names = [ 'rice_leaf_roller', 'rice_leaf_caterpillar', 'paddy_stem_maggot', 'asiatic_rice_borer', 'yellow_rice_borer', 'rice_gall_midge', 'Rice_Stemfly', 'brown_plant_hopper',
+           'white_backed_plant_hopper', 'small_brown_plant_hopper', 'rice_water_weevil', 'rice_leafhopper', 'grain_spreader_thrips', 'rice_shell_pest', 'grub', 'mole_cricket',
+           'wireworm', 'white_margined_moth', 'black_cutworm', 'large_cutworm', 'yellow_cutworm', 'red_spider', 'corn_borer', 'army_worm',
+           'aphids', 'Potosiabre_vitarsis', 'peach_borer', 'english_grain_aphid', 'green_bug', 'bird_cherry-oataphid', 'wheat_blossom_midge', 'penthaleus_major',
+           'longlegged_spider_mite', 'wheat_phloeothrips', 'wheat_sawfly', 'cerodonta_denticornis', 'beet_fly', 'flea_beetle', 'cabbage_army_worm', 'beet_army_worm',
+           'Beet_spot_flies', 'meadow_moth', 'beet_weevil', 'sericaorient_alismots_chulsky', 'alfalfa_weevil', 'flax_budworm', 'alfalfa_plant_bug', 'tarnished_plant_bug',
+           'Locustoidea', 'lytta_polita', 'legume_blister_beetle', 'blister_beetle', 'therioaphis_maculata_Buckton', 'odontothrips_loti', 'Thrips', 'alfalfa_seed_chalcid',
+           'Pieris_canidia', 'Apolygus_lucorum', 'Limacodidae', 'Viteus_vitifoliae', 'Colomerus_vitis', 'Brevipoalpus_lewisi_McGregor', 'oides_decempunctata', 'Polyphagotars_onemus_latus',
+           'Pseudococcus_comstocki_Kuwana', 'parathrene_regalis', 'Ampelophaga', 'Lycorma_delicatula', 'Xylotrechus', 'Cicadella_viridis', 'Miridae', 'Trialeurodes_vaporariorum',
+           'Erythroneura_apicalis', 'Papilio_xuthus', 'Panonchus_citri_McGregor', 'Phyllocoptes_oleiverus_ashmead', 'Icerya_purchasi_Maskell', 'Unaspis_yanonensis', 'Ceroplastes_rubens', 'Chrysomphalus_aonidum',
+           'Parlatoria_zizyphus_Lucus', 'Nipaecoccus_vastalor', 'Aleurocanthus_spiniferus', 'Tetradacus_c_Bactrocera_minax', 'Dacus_dorsalis(Hendel)', 'Bactrocera_tsuneonis', 'Prodenia_litura', 'Adristyrannus',
+           'Phyllocnistis_citrella_Stainton', 'Toxoptera_citricidus', 'Toxoptera_aurantii', 'Aphis_citricola_Vander_Goot', 'Scirtothrips_dorsalis_Hood', 'Dasineura_sp', 'Lawana_imitata_Melichar', 'Salurnis_marginella_Guerr',
+           'Deporaus_marginatus_Pascoe', 'Chlumetia_transversa', 'Mango_flat_beak_leafhopper', 'Rhytidodera_bowrinii_white', 'Sternochetus_frigidus', 'Cicadellidae' ]
 
 config = r"C:\Users\limhong1\Downloads\ICMS\mindyolo\configs\yolov7\yolov7-tiny.yaml"
-model_type = "MindIR"
-model_path = r"C:\Users\limhong1\Downloads\ICMS\mindyolo\weights\yolov7-tiny_300e_mAP375-d8972c94-c550e241.mindir"
+model_type = "ONNX"
+# model_path = r"C:\Users\User\Documents\UM\Year 4\Huawei Competition\project\mindyolo\weights\yolov7-tiny_300e_mAP375-d8972c94-c550e241.mindir"
+model_path = r"C:\Users\User\Documents\UM\Year 4\Huawei Competition\project\mindyolo\weights\best-pest_detection.onnx"
+# model_path = r"C:\Users\User\Documents\UM\Year 4\Huawei Competition\project\mindyolo\yolov7-tiny.onnx"
 device_target = "CPU"
 
 save_dir_path = r"./runs_infer"
@@ -105,12 +122,24 @@ def draw_result(im, result_dict, data_names, is_coco_dataset=True):
 
     return im
 
+def get_center_of_bbox(result_dict):
+
+    if result_dict["bbox"] == []:
+        return
+
+    bbox = result_dict["bbox"][0]
+    x_l, y_t, w, h = bbox
+    x_r, y_b = x_l + w, y_t + h
+    x, y = (x_l + x_r) / 2, (y_b + y_t) / 2
+
+    return x, y
+
 def main():
 
     skip_factor = 2
     set_seed(seed)
 
-    vid = cv2.VideoCapture(0)
+    vid = cv2.VideoCapture("http://192.168.100.86:8000/stream.mjpg")
 
     if model_type == "MindX":
         from deploy.infer_engine.mindx import MindXModel
@@ -134,25 +163,24 @@ def main():
 
         frame_count += 1
 
-        result_dict = detect(
-            network=network,
-            img=frame,
-            conf_thres=conf_thres,
-            iou_thres=iou_thres,
-            conf_free=conf_free,
-            nms_time_limit=nms_time_limit,
-            img_size=img_size,
-            is_coco_dataset=is_coco_dataset
-        )
-
-        print(result_dict)
-
         if frame_count % skip_factor == 0 or frame_count == 1:
+            result_dict = detect(
+                network=network,
+                img=frame,
+                conf_thres=conf_thres,
+                iou_thres=iou_thres,
+                conf_free=conf_free,
+                nms_time_limit=nms_time_limit,
+                img_size=img_size,
+                is_coco_dataset=is_coco_dataset
+            )
+            predicted_frame = draw_result(frame, result_dict, class_names, is_coco_dataset)
 
-            predicted_frame = draw_result(frame, result_dict, class_names)
+            center = get_center_of_bbox(result_dict)
 
-        # else:
-        #     predicted_frame = frame
+            if center is not None:
+                x, y = center
+                cv2.circle(predicted_frame, (int(x), int(y)), 5, (0, 0, 255), -1)
 
         cv2.imshow("frame", predicted_frame)
 
