@@ -39,24 +39,18 @@ class WindowCamera(PageWindow):
         self.ui.setupUi(self)
         self.sidebar()
 
-        self.setupLogoutMsgBox()
-
-        self.ui.camera_capture.clicked.connect(self.capture)
-        self.ui.sidebar_logout.clicked.connect(self.logout)
-        self.ui.pest_detection_button.toggled.connect(lambda: self.btnChecked("pest"))
-        self.ui.disease_detection_button.toggled.connect(lambda: self.btnChecked("disease"))
-
         self.con = con
 
-        self.pest_model = tf.saved_model.load(PEST_MODEL_PATH, tags=[tag_constants.SERVING])
-        self.pest_infer = self.pest_model.signatures['serving_default']
-        with open(PEST_CLASSES_PATH, "r") as f:
-            self.pest_classes = list(map(lambda x: str(x).replace("\n", ""), f.readlines()))
+        # TODO add model here
+        # self.pest_model = tf.saved_model.load(PEST_MODEL_PATH, tags=[tag_constants.SERVING])
+        # self.pest_infer = self.pest_model.signatures['serving_default']
+        # with open(PEST_CLASSES_PATH, "r") as f:
+        #     self.pest_classes = list(map(lambda x: str(x).replace("\n", ""), f.readlines()))
 
-        self.disease_model = tf.saved_model.load(DISEASE_MODEL_PATH, tags=[tag_constants.SERVING])
-        self.disease_infer = self.disease_model.signatures['serving_default']
-        with open(DISEASE_CLASSES_PATH, "r") as f:
-            self.disease_classes = list(map(lambda x: str(x).replace("\n", ""), f.readlines()))
+        # self.disease_model = tf.saved_model.load(DISEASE_MODEL_PATH, tags=[tag_constants.SERVING])
+        # self.disease_infer = self.disease_model.signatures['serving_default']
+        # with open(DISEASE_CLASSES_PATH, "r") as f:
+        #     self.disease_classes = list(map(lambda x: str(x).replace("\n", ""), f.readlines()))
 
         self.current_model = "pest"
         self.ui.pest_detection_button.setChecked(True)
@@ -194,66 +188,67 @@ class WindowCamera(PageWindow):
             # self.car.stop()
             subprocess.run(['python', 'core/RobotCar.py', 'motor', 'stop'])
 
-    def moveForward(self):
-        self.status = True
-        print("Moving Forward")
-        # self.car.forward()
-        subprocess.run(['python', 'core/RobotCar.py', 'motor', 'forward'])
+    # Robocar movement
+    # def moveForward(self):
+    #     self.status = True
+    #     print("Moving Forward")
+    #     # self.car.forward()
+    #     subprocess.run(['python', 'core/RobotCar.py', 'motor', 'forward'])
 
-    def moveBackward(self):
-        self.status = True
-        print("Moving Backward")
-        # self.car.backward()
-        subprocess.run(['python', 'core/RobotCar.py', 'motor', 'backward'])
+    # def moveBackward(self):
+    #     self.status = True
+    #     print("Moving Backward")
+    #     # self.car.backward()
+    #     subprocess.run(['python', 'core/RobotCar.py', 'motor', 'backward'])
 
-    def moveLeft(self):
-        self.status = True
-        print("Moving Left")
-        # self.car.left()
-        subprocess.run(['python', 'core/RobotCar.py', 'motor', 'left'])
+    # def moveLeft(self):
+    #     self.status = True
+    #     print("Moving Left")
+    #     # self.car.left()
+    #     subprocess.run(['python', 'core/RobotCar.py', 'motor', 'left'])
 
-    def moveRight(self):
-        self.status = True
-        print("Moving Right")
-        # self.car.right()
-        subprocess.run(['python', 'core/RobotCar.py', 'motor', 'right'])
+    # def moveRight(self):
+    #     self.status = True
+    #     print("Moving Right")
+    #     # self.car.right()
+    #     subprocess.run(['python', 'core/RobotCar.py', 'motor', 'right'])
 
-    def keyPressEvent(self, event):
-        if (event.key() == Qt.Key_W or event.key() == Qt.Key_Up) and not event.isAutoRepeat():
-            self.moveForward()
-        elif (event.key() == Qt.Key_S or event.key() == Qt.Key_Down) and not event.isAutoRepeat():
-            self.moveBackward()
-        elif (event.key() == Qt.Key_A or event.key() == Qt.Key_Left) and not event.isAutoRepeat():
-            self.moveLeft()
-        elif (event.key() == Qt.Key_D or event.key() == Qt.Key_Right) and not event.isAutoRepeat():
-            self.moveRight()
+    # def keyPressEvent(self, event):
+    #     if (event.key() == Qt.Key_W or event.key() == Qt.Key_Up) and not event.isAutoRepeat():
+    #         self.moveForward()
+    #     elif (event.key() == Qt.Key_S or event.key() == Qt.Key_Down) and not event.isAutoRepeat():
+    #         self.moveBackward()
+    #     elif (event.key() == Qt.Key_A or event.key() == Qt.Key_Left) and not event.isAutoRepeat():
+    #         self.moveLeft()
+    #     elif (event.key() == Qt.Key_D or event.key() == Qt.Key_Right) and not event.isAutoRepeat():
+    #         self.moveRight()
 
-        elif event.key() == Qt.Key_Q and not event.isAutoRepeat():
-            if 1 <= self.duty_cycle <= 10:
-                self.duty_cycle -= 1
-                subprocess.run(['python', 'core/RobotCar.py', 'servo', '13', str(self.duty_cycle)])
-            elif self.duty_cycle < 1:
-                self.duty_cycle = 1
-            elif self.duty_cycle > 10:
-                self.duty_cycle = 10
+    #     elif event.key() == Qt.Key_Q and not event.isAutoRepeat():
+    #         if 1 <= self.duty_cycle <= 10:
+    #             self.duty_cycle -= 1
+    #             subprocess.run(['python', 'core/RobotCar.py', 'servo', '13', str(self.duty_cycle)])
+    #         elif self.duty_cycle < 1:
+    #             self.duty_cycle = 1
+    #         elif self.duty_cycle > 10:
+    #             self.duty_cycle = 10
 
-        elif event.key() == Qt.Key_E and not event.isAutoRepeat():
-            if 1 <= self.duty_cycle <= 10:
-                self.duty_cycle += 1
-                subprocess.run(['python', 'core/RobotCar.py', 'servo', '13', str(self.duty_cycle)])
-            elif self.duty_cycle < 1:
-                self.duty_cycle = 1
-            elif self.duty_cycle > 10:
-                self.duty_cycle = 10
+    #     elif event.key() == Qt.Key_E and not event.isAutoRepeat():
+    #         if 1 <= self.duty_cycle <= 10:
+    #             self.duty_cycle += 1
+    #             subprocess.run(['python', 'core/RobotCar.py', 'servo', '13', str(self.duty_cycle)])
+    #         elif self.duty_cycle < 1:
+    #             self.duty_cycle = 1
+    #         elif self.duty_cycle > 10:
+    #             self.duty_cycle = 10
 
-        elif event.key() == Qt.Key_Z and not event.isAutoRepeat():
-            self.duty_cycle = 5
-            subprocess.run(['python', 'core/RobotCar.py', 'servo', '13', '5'])
+    #     elif event.key() == Qt.Key_Z and not event.isAutoRepeat():
+    #         self.duty_cycle = 5
+    #         subprocess.run(['python', 'core/RobotCar.py', 'servo', '13', '5'])
 
-    def keyReleaseEvent(self, event):
-        forward_key = event.key() == Qt.Key_W or event.key() == Qt.Key_Up
-        backward_key = event.key() == Qt.Key_S or event.key() == Qt.Key_Down
-        left_key = event.key() == Qt.Key_A or event.key() == Qt.Key_Left
-        right_key = event.key() == Qt.Key_D or event.key() == Qt.Key_Right
-        if not event.isAutoRepeat() and (forward_key or backward_key or left_key or right_key):
-            self.off()
+    # def keyReleaseEvent(self, event):
+    #     forward_key = event.key() == Qt.Key_W or event.key() == Qt.Key_Up
+    #     backward_key = event.key() == Qt.Key_S or event.key() == Qt.Key_Down
+    #     left_key = event.key() == Qt.Key_A or event.key() == Qt.Key_Left
+    #     right_key = event.key() == Qt.Key_D or event.key() == Qt.Key_Right
+    #     if not event.isAutoRepeat() and (forward_key or backward_key or left_key or right_key):
+    #         self.off()

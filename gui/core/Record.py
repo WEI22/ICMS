@@ -18,12 +18,9 @@ class WindowRecord(PageWindow.PageWindow):
         self.ui.setupUi(self)
         self.sidebar()
 
-        self.setupLogoutMsgBox()
-
         self.con = con
         self.current_table = "web_pest"
 
-        self.ui.sidebar_logout.clicked.connect(self.logout)
         self.ui.record_search_btn.clicked.connect(self.search)
         self.ui.record_search.returnPressed.connect(self.search)
         self.ui.table_combobox.currentIndexChanged.connect(self.changeTable)
