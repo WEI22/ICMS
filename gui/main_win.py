@@ -4,7 +4,7 @@ import time
 import sqlite3
 from passlib.hash import pbkdf2_sha256
 from ui import Loading
-from core import PageWindow, Home, Camera_win, Register
+from core import PageWindow, Home, Camera_win, Register, Remote
 from core import Record as Record
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.uic import loadUi
@@ -52,25 +52,26 @@ class MainWindow(QtWidgets.QMainWindow):
         self.m_pages = {}
         self.con = sqlite3.connect(r"C:\Users\User\Documents\UM\Year 4\Huawei Competition\project\gui\db.sqlite3")
 
-        self.window_register = Register.WindowRegister(self.con)
+        # self.window_register = Register.WindowRegister(self.con)
         self.window_home = Home.WindowHome(self.con)
         self.window_camera = Camera_win.WindowCamera(self.con)
         self.window_record = Record.WindowRecord(self.con)
         
-        self.register(self.window_register, 'register')
+        # self.register(self.window_register, 'register')
         self.register(self.window_home, 'home')
         self.register(self.window_camera, 'camera')
         self.register(self.window_record, 'record')
 
         # Login page (Remember me option)
-        try:
-            with open("log") as f:
-                if pbkdf2_sha256.verify("HiThisisJesus", f.readline()):
-                    self.goto("home")
-                else:
-                    self.goto("register")
-        except Exception as e:
-            print(e)
+        # try:
+        #     with open("log") as f:
+        #         if pbkdf2_sha256.verify("HiThisisJesus", f.readline()):
+        #             self.goto("camera")
+        #         else:
+        #             self.goto("register")
+        # except Exception as e:
+        #     print(e)
+        self.goto("home")
 
     def register(self, widget, name):
         self.m_pages[name] = widget
@@ -84,6 +85,9 @@ class MainWindow(QtWidgets.QMainWindow):
             widget = self.m_pages[name]
             self.stacked_widget.setCurrentWidget(widget)
             self.setWindowTitle(widget.windowTitle())
+            
+    def closeEvent(self, event):
+        self.window_camera.ssh.close_ssh()
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv) 

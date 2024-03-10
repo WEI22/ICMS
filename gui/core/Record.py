@@ -21,12 +21,12 @@ class WindowRecord(PageWindow.PageWindow):
         self.setupLogoutMsgBox()
 
         self.con = con
-        self.current_table = "web_pest"
+        # self.current_table = "web_pest"
 
         self.ui.sidebar_logout.clicked.connect(self.logout)
         self.ui.record_search_btn.clicked.connect(self.search)
         self.ui.record_search.returnPressed.connect(self.search)
-        self.ui.table_combobox.currentIndexChanged.connect(self.changeTable)
+        # self.ui.table_combobox.currentIndexChanged.connect(self.changeTable)
 
         self.data = self.con.execute("SELECT * FROM web_pest").fetchall()
 
@@ -39,10 +39,12 @@ class WindowRecord(PageWindow.PageWindow):
         self.updateTable()
         self.startTimer()
 
-    def updateTable(self):
-        self.ui.table.setRowCount(len(self.data))
+    def updateTable(self, result=None):
+        if result is None:
+            result = self.data
+        self.ui.table.setRowCount(len(result))
 
-        for n, i in enumerate(self.data):
+        for n, i in enumerate(result):
             image_item = self.getImageLabel(i[-3])
             time_item = QtWidgets.QTableWidgetItem(f"{i[-2]}\n{i[-1][:-7]}")
             pest = Counter(i[1].split("\n"))
@@ -112,14 +114,11 @@ class WindowRecord(PageWindow.PageWindow):
             original_image_path = os.path.join(dirname, "original", basename)
             os.remove(image_path)
             os.remove(original_image_path)
-            self.con.execute(f"DELETE FROM {self.current_table} WHERE id={index}")
+            self.con.execute(f"DELETE FROM web_pest WHERE id={index}")
             self.con.commit()
 
     def checkUpdate(self):
-        if self.current_table == "web_pest":
-            updated_data = self.con.execute("SELECT * FROM web_pest").fetchall()
-        elif self.current_table == "web_disease":
-            updated_data = self.con.execute("SELECT * FROM web_disease").fetchall()
+        updated_data = self.con.execute("SELECT * FROM web_pest").fetchall()
         if updated_data != self.data:
             self.data = updated_data
             self.updateTable()
@@ -136,14 +135,3 @@ class WindowRecord(PageWindow.PageWindow):
         search_text = self.ui.record_search.text()
         results = list(filter(lambda x: search_text in x[1], self.data))
         self.updateTable(results)
-
-    def changeTable(self, index):
-        if index == 0:
-            self.current_table = "web_pest"
-            self.ui.record_title.setText("Pest Record")
-            self.data = self.con.execute("SELECT * FROM web_pest").fetchall()
-        elif index == 1:
-            self.current_table = "web_disease"
-            self.ui.record_title.setText("Disease Record")
-            self.data = self.con.execute("SELECT * FROM web_disease").fetchall()
-        self.updateTable()

@@ -183,7 +183,7 @@
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_4" stretch="3,0">
+      <layout class="QVBoxLayout" name="verticalLayout_4" stretch="3">
        <property name="spacing">
         <number>10</number>
        </property>
@@ -217,30 +217,6 @@
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="pest_detection_button">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Pest</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="disease_detection_button">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Disease</string>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QCheckBox" name="camera_real">
            <property name="font">
             <font>
@@ -253,19 +229,6 @@
           </widget>
          </item>
         </layout>
-       </item>
-       <item>
-        <widget class="QLabel" name="instruction_text">
-         <property name="font">
-          <font>
-           <pointsize>10</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Use W, A, S, D to control robocar
-Use Q, E to rotate camera</string>
-         </property>
-        </widget>
        </item>
       </layout>
      </item>

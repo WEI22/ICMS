@@ -219,7 +219,7 @@
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="2,2,1">
+          <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="2,1">
            <item>
             <widget class="QWidget" name="widget_5" native="true">
              <property name="sizePolicy">
@@ -266,73 +266,6 @@
               </item>
               <item>
                <widget class="QLabel" name="pest_number">
-                <property name="font">
-                 <font>
-                  <pointsize>16</pointsize>
-                  <weight>75</weight>
-                  <bold>true</bold>
-                 </font>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">border: none;</string>
-                </property>
-                <property name="text">
-                 <string>0</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QWidget" name="widget_6" native="true">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">border: none; background-color: white; border-radius: 5px;</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_7" stretch="1,2">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_7">
-                <item>
-                 <widget class="QLabel" name="disease_num_label">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Number of Disease</string>
-                  </property>
-                  <property name="scaledContents">
-                   <bool>true</bool>
-                  </property>
-                  <property name="wordWrap">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="disease_image">
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="pixmap">
-                   <pixmap>img/home/virus.png</pixmap>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <widget class="QLabel" name="disease_number">
                 <property name="font">
                  <font>
                   <pointsize>16</pointsize>
@@ -563,40 +496,6 @@ QPushButton:checked {
          </item>
          <item>
           <widget class="QChartView" name="pest_chart">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">border: none; border-radius: 5px</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_6">
-         <property name="rightMargin">
-          <number>10</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="detected_disease_label">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-             <weight>75</weight>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>Detected Disease</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QChartView" name="disease_chart">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>

@@ -39,13 +39,13 @@ class WindowHome(PageWindow):
         self.ui.date_label.setText(str(current_time.date()))
 
         self.pest_data = self.con.execute("SELECT * FROM web_pest").fetchall()
-        self.disease_data = self.con.execute("SELECT * FROM web_disease").fetchall()
+        # self.disease_data = self.con.execute("SELECT * FROM web_disease").fetchall()
 
         self.timeframe = "today"
         self.showNumber(self.pest_data, "pest")
-        self.showNumber(self.disease_data, "disease")
+        # self.showNumber(self.disease_data, "disease")
         self.showPieChart(self.pest_data, "pest")
-        self.showPieChart(self.disease_data, "disease")
+        # self.showPieChart(self.disease_data, "disease")
 
         self.startTimer()
         self.startSlideshowTimer()
@@ -79,9 +79,9 @@ class WindowHome(PageWindow):
             self.timeframe = "month"
 
         self.showPieChart(self.pest_data, "pest")
-        self.showPieChart(self.disease_data, "disease")
+        # self.showPieChart(self.disease_data, "disease")
         self.showNumber(self.pest_data, "pest")
-        self.showNumber(self.disease_data, "disease")
+        # self.showNumber(self.disease_data, "disease")
 
     def showNumber(self, data, type):
         today_date = date.today()
@@ -160,7 +160,7 @@ class WindowHome(PageWindow):
     def checkUpdate(self):
         current_time = datetime.now()
         updated_pest_data = self.con.execute("SELECT * FROM web_pest").fetchall()
-        updated_disease_data = self.con.execute("SELECT * FROM web_disease").fetchall()
+        # updated_disease_data = self.con.execute("SELECT * FROM web_disease").fetchall()
         self.ui.time_label.setText(str(current_time.time())[:-7])
         self.ui.date_label.setText(str(current_time.date()))
         if updated_pest_data != self.pest_data:
@@ -168,10 +168,10 @@ class WindowHome(PageWindow):
             self.showNumber(self.pest_data, "pest")
             self.showPieChart(self.pest_data, "pest")
 
-        if updated_disease_data != self.disease_data:
-            self.disease_data = updated_disease_data
-            self.showNumber(self.disease_data, "disease")
-            self.showPieChart(self.disease_data, "disease")
+        # if updated_disease_data != self.disease_data:
+        #     self.disease_data = updated_disease_data
+        #     self.showNumber(self.disease_data, "disease")
+        #     self.showPieChart(self.disease_data, "disease")
 
     def startTimer(self):
         self.timer = QtCore.QTimer()

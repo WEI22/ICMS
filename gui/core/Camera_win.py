@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.Qt import Qt
 from ui import Camera
 from core.PageWindow import PageWindow
+from core.Remote import Remote
 
 import os
 import sys
@@ -10,7 +11,7 @@ import time
 import subprocess
 import sqlite3
 
-sys.path.insert(0, r"C:\Users\limhong1\Downloads\ICMS\mindyolo")
+sys.path.insert(0, r"C:\Users\User\Documents\UM\Year 4\Huawei Competition\project\mindyolo")
 
 from deploy.predict import detect
 from deploy.infer_engine.onnxruntime import ONNXRuntimeModel
@@ -51,10 +52,11 @@ class WindowCamera(PageWindow):
 
         self.ui.camera_capture.clicked.connect(self.capture)
         self.ui.sidebar_logout.clicked.connect(self.logout)
-        self.ui.pest_detection_button.toggled.connect(lambda: self.btnChecked("pest"))
-        self.ui.disease_detection_button.toggled.connect(lambda: self.btnChecked("disease"))
+        # self.ui.pest_detection_button.toggled.connect(lambda: self.btnChecked("pest"))
+        # self.ui.disease_detection_button.toggled.connect(lambda: self.btnChecked("disease"))
 
         self.con = con
+        # self.ssh = Remote()
 
         set_seed(seed)
 
@@ -82,18 +84,24 @@ class WindowCamera(PageWindow):
            'Erythroneura_apicalis', 'Papilio_xuthus', 'Panonchus_citri_McGregor', 'Phyllocoptes_oleiverus_ashmead', 'Icerya_purchasi_Maskell', 'Unaspis_yanonensis', 'Ceroplastes_rubens', 'Chrysomphalus_aonidum',
            'Parlatoria_zizyphus_Lucus', 'Nipaecoccus_vastalor', 'Aleurocanthus_spiniferus', 'Tetradacus_c_Bactrocera_minax', 'Dacus_dorsalis(Hendel)', 'Bactrocera_tsuneonis', 'Prodenia_litura', 'Adristyrannus',
            'Phyllocnistis_citrella_Stainton', 'Toxoptera_citricidus', 'Toxoptera_aurantii', 'Aphis_citricola_Vander_Goot', 'Scirtothrips_dorsalis_Hood', 'Dasineura_sp', 'Lawana_imitata_Melichar', 'Salurnis_marginella_Guerr',
-           'Deporaus_marginatus_Pascoe', 'Chlumetia_transversa', 'Mango_flat_beak_leafhopper', 'Rhytidodera_bowrinii_white', 'Sternochetus_frigidus', 'Cicadellidae' ]
+           'Deporaus_marginatus_Pascoe', 'Chlumetia_transversa', 'Mango_flat_beak_leafhopper', 'Rhytidodera_bowrinii_white', 'Sternochetus_frigidus', 'Leafhoppers' ]
 
-        self.current_model = "pest"
-        self.ui.pest_detection_button.setChecked(True)
-        self.fps = 60
-        self.cap = cv2.VideoCapture("http:192.168.100.86:8000/stream.mjpg")
+        # self.current_model = "pest"
+        # self.ui.pest_detection_button.setChecked(True)
+        self.fps = 1000
+        # self.cap = cv2.VideoCapture("http:192.168.100.86:8000/stream.mjpg")
+        self.cap = cv2.VideoCapture(0)
         time.sleep(1)
 
         self.isCapturing = False
         self.isDetecting = False
 
-        self.duty_cycle = 5
+        self.pan_servo = 19
+        self.tilt_servo = 12
+
+        self.pan_angle = 90
+        self.tilt_angle = 90
+
         self.status = False
 
         self.start()
@@ -103,6 +111,7 @@ class WindowCamera(PageWindow):
 
     def nextFrameSlot(self):
         ret, frame = self.cap.read()
+        # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         if self.ui.camera_real.isChecked():
             self.isDetecting = True
@@ -129,9 +138,9 @@ class WindowCamera(PageWindow):
             today = datetime.now()
             saved_name = f"img_{datetime.strftime(today, '%d%m%y%H%M%S')}.jpg"
             # cv2.imwrite(f".\\saved\\original\\{saved_name}", frame)
-            if self.current_model == "pest":
-                saved_path = f"saved/pest/{saved_name}"
-                cv2.imwrite(f"./saved/pest/original/{saved_name}", frame)
+            # if self.current_model == "pest":
+            saved_path = f"saved/pest/{saved_name}"
+            cv2.imwrite(f"./saved/pest/original/{saved_name}", frame)
             # elif self.current_model == "disease":
             #     saved_path = f"saved/disease/{saved_name}"
             #     cv2.imwrite(f"./saved/disease/original/{saved_name}", frame)
@@ -159,10 +168,10 @@ class WindowCamera(PageWindow):
 
             # sql_query = f"INSERT INTO web_image VALUES(DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)" # for postgresql
             # sql_query = f"INSERT INTO web_image(pest, location, author, host, number, cum_num, image, image_data, date_created, time_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-            if self.current_model == "pest":
-                classes = "\n".join([self.pest_classes[int(i)] for i in class_indexes])
-                sql_query = f"INSERT INTO web_{self.current_model}(pest, location, author, host, number, cum_num, image, image_data, date_created, time_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-                cur.execute(sql_query, (classes, "", 0, "", 0, 0, saved_path, img_data, str(today.date()), str(today.time())))
+            # if self.current_model == "pest":
+            classes = "\n".join([self.pest_classes[int(i)] for i in class_indexes])
+            sql_query = f"INSERT INTO web_pest(pest, location, author, host, number, cum_num, image, image_data, date_created, time_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            cur.execute(sql_query, (classes, "", 0, "", 0, 0, saved_path, img_data, str(today.date()), str(today.time())))
             # elif self.current_model == "disease":
             #     classes = "\n".join([self.disease_classes[int(i)] for i in class_indexes])
             #     sql_query = f"INSERT INTO web_{self.current_model}(disease, location, author, crop, number, image, image_data, date_created, time_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
@@ -228,76 +237,90 @@ class WindowCamera(PageWindow):
     #     frame = utils.draw_bbox(frame, pred_bbox, classes=model_class)
     #     return frame, pred_bbox
 
-    def btnChecked(self, i):
-        if i == "pest":
-            self.ui.disease_detection_button.setChecked(False)
-            self.current_model = "pest"
-        elif i == "disease":
-            self.ui.pest_detection_button.setChecked(False)
+    # def btnChecked(self, i):
+    #     self.ui.disease_detection_button.setChecked(False)
+        # self.current_model = "pest"
+        # elif i == "disease":
+        #     self.ui.pest_detection_button.setChecked(False)
             # self.current_model = "disease"
 
     def off(self):
         if self.status:
             print("Car Stop")
             self.status = False
+            self.ssh.run_command("python robot_car.py motor stop")
             # self.car.stop()
             # subprocess.run(['python', 'core/RobotCar.py', 'motor', 'stop'])
 
     def moveForward(self):
         self.status = True
         print("Moving Forward")
+        self.ssh.run_command("python robot_car.py motor forward")
         # self.car.forward()
         # subprocess.run(['python', 'core/RobotCar.py', 'motor', 'forward'])
 
     def moveBackward(self):
         self.status = True
         print("Moving Backward")
+        self.ssh.run_command("python robot_car.py motor backward")
         # self.car.backward()
         # subprocess.run(['python', 'core/RobotCar.py', 'motor', 'backward'])
 
     def moveLeft(self):
         self.status = True
         print("Moving Left")
+        self.ssh.run_command("python robot_car.py motor left")
+
         # self.car.left()
         # subprocess.run(['python', 'core/RobotCar.py', 'motor', 'left'])
 
     def moveRight(self):
         self.status = True
         print("Moving Right")
+        self.ssh.run_command("python robot_car.py motor right")
+
         # self.car.right()
         # subprocess.run(['python', 'core/RobotCar.py', 'motor', 'right'])
 
     def keyPressEvent(self, event):
-        if (event.key() == Qt.Key_W or event.key() == Qt.Key_Up) and not event.isAutoRepeat():
+        if (event.key() == Qt.Key_W) and not event.isAutoRepeat():
             self.moveForward()
-        elif (event.key() == Qt.Key_S or event.key() == Qt.Key_Down) and not event.isAutoRepeat():
+
+        elif (event.key() == Qt.Key_S) and not event.isAutoRepeat():
             self.moveBackward()
-        elif (event.key() == Qt.Key_A or event.key() == Qt.Key_Left) and not event.isAutoRepeat():
+
+        elif (event.key() == Qt.Key_A) and not event.isAutoRepeat():
             self.moveLeft()
-        elif (event.key() == Qt.Key_D or event.key() == Qt.Key_Right) and not event.isAutoRepeat():
+
+        elif (event.key() == Qt.Key_D) and not event.isAutoRepeat():
             self.moveRight()
 
-        elif event.key() == Qt.Key_Q and not event.isAutoRepeat():
-            if 1 <= self.duty_cycle <= 10:
-                self.duty_cycle -= 1
-                # subprocess.run(['python', 'core/RobotCar.py', 'servo', '13', str(self.duty_cycle)])
-            elif self.duty_cycle < 1:
-                self.duty_cycle = 1
-            elif self.duty_cycle > 10:
-                self.duty_cycle = 10
+        elif (event.key() == Qt.Key_Space) and not event.isAutoRepeat():
+            self.ssh.run_command("python robot_car.py motor stop")
 
-        elif event.key() == Qt.Key_E and not event.isAutoRepeat():
-            if 1 <= self.duty_cycle <= 10:
-                self.duty_cycle += 1
-                # subprocess.run(['python', 'core/RobotCar.py', 'servo', '13', str(self.duty_cycle)])
-            elif self.duty_cycle < 1:
-                self.duty_cycle = 1
-            elif self.duty_cycle > 10:
-                self.duty_cycle = 10
+        elif (event.key() == Qt.Key_I) and not event.isAutoRepeat():
+            self.tilt_angle -= 10
+            if self.tilt_angle <= 30:
+               self.tilt_angle = 30
+            self.ssh.run_command(f"python robot_car.py servo {self.tilt_servo} {self.tilt_angle}")
 
-        elif event.key() == Qt.Key_Z and not event.isAutoRepeat():
-            self.duty_cycle = 5
-            # subprocess.run(['python', 'core/RobotCar.py', 'servo', '13', '5'])
+        elif (event.key() == Qt.Key_K) and not event.isAutoRepeat():
+            self.tilt_angle += 10
+            if self.tilt_angle >= 150:
+                self.tilt_angle = 150
+            self.ssh.run_command(f"python robot_car.py servo {self.tilt_servo} {self.tilt_angle}")
+
+        elif (event.key() == Qt.Key_J) and not event.isAutoRepeat():
+            self.pan_angle += 10
+            if self.pan_angle >= 180:
+                self.pan_angle = 18
+            self.ssh.run_command(f"python robot_car.py servo {self.pan_servo} {self.pan_angle}")
+
+        elif (event.key() == Qt.Key_L) and not event.isAutoRepeat():
+            self.pan_angle -= 10
+            if self.pan_angle <= 18:
+                self.pan_angle = 18
+            self.ssh.run_command(f"python robot_car.py servo {self.pan_servo} {self.pan_angle}")
 
     def keyReleaseEvent(self, event):
         forward_key = event.key() == Qt.Key_W or event.key() == Qt.Key_Up
